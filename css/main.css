@@ -488,6 +488,8 @@
     overflow: auto;
     padding: 50px 30px 20px;
     white-space: pre;
+    margin: auto;
+    overflow-wrap: normal;
 }
 .comment iframe,
 body::-webkit-scrollbar-track {
@@ -502,7 +504,7 @@ body::-webkit-scrollbar-track {
 .content iframe {
     display: block;
     margin: 15px auto;
-    max-width: 75%;
+    max-width: 90%;
 }
 .copycode {
     color: #5c6b72;
