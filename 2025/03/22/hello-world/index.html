@@ -42,9 +42,6 @@
 
 
 
-<script src="https://s4.zstatic.net/ajax/libs/gitalk/1.8.0/gitalk.min.js"></script>
-<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/gitalk/1.8.0/gitalk.min.css" />
-
 
 
 
@@ -191,10 +188,10 @@
     
     
     
-    <div id="comment">
-        <div id="gitalk-container"></div>
-    </div>
     
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
     
     
     
@@ -231,20 +228,23 @@
     <script src="/js/main.js"></script>
     
     
+<script
+    src="https://giscus.app/client.js"
+    data-repo="styundydsg/styundydsg.github.io"
+    data-repo-id="R_kgDOK0X3wA"
+    data-category="bnAnnouncements"
+    data-category-id="DIC_kwDOK0X3wM4Cok6S"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin
+    async
+></script>
 
-<script>
-    const gitalk = new Gitalk({
-        clientID: "Iv23li3wL3WQunraWQGc",
-        clientSecret: "31b2f36c8f7fc36b8368102bacab031e65cff52e",
-        repo: "styundydsg.github.io",
-        owner: "styundydsg",
-        admin: "stuundydsg".split(","),
-        language: "zh-CN",
-        id: location.pathname,
-        
-    })
-    gitalk.render("gitalk-container");
-</script>
 
 
 
