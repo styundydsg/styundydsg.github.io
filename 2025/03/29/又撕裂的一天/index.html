@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
-    <link rel="icon" href="/images/avatar.png" />
+    <link rel="icon" href="/images/anle.jpeg" />
     <link rel="preconnect" href="https://s4.zstatic.net" />
 <script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
 <link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
@@ -39,6 +39,9 @@
 <script src="/js/lib/preview.js"></script>
 
 
+<script src="https://s4.zstatic.net/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script src="/js/lib/crypto.js"></script>
+
 
 
 
@@ -49,7 +52,17 @@
 <link rel="stylesheet" href="/css/main.css" />
 
 <meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
 <body>
+<canvas id="fireworks" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 32767"></canvas>
+<script src="https://s4.zstatic.net/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+
+    
+    
     <div id="layout">
         <transition name="fade">
             <div id="loading" v-show="loading">
@@ -166,13 +179,47 @@
             2025/3/29
         </span>
         
+        <span class="category">
+            <a href="/categories/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                探索自我
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E5%BD%92%E5%9B%A0/" style="color: #ff7d73">
+                    归因
+                </a>
+            </span>
+            
+        </span>
         
     </div>
     
-    <div class="content" v-pre>
-        <p>每当我希望一些什么时,得到的总会是另外的打击.每次考试,每次祈祷,每次对生活有所希望,虽然接收了马克思主义,理解了自己的主观能动性之后,也尝试去掌控,但是怎么也做不到理想的样子,总会回想以前的没能做到的一些事.很多事情已经影响了我,刻在了我的意识,我永远也无法成为一个正常人了,无论是身体还是精神.<br>我曾经以为刻意地学习小声说话,轻拿轻放就是礼貌温柔.大学后才意识到这是以前家里砸东西,吼叫,家暴的影响,我不敢出声.我实在不能接受自己这种不完美的状态,就像一种烙印.我可以通过学习来改变一些事情,来成为别人,但是我无法成为自己.<br>只要有着这样的过去,只要被影响了,只要我的存在和我脑中的想象不符合,我就一直被折磨.我不能放过自己了.我也不愿意放过自己,逃避可耻.</p>
-
-    </div>
+    
+    <input
+        id="crypto"
+        :class="['input', cryptoStatus]"
+        :disabled="cryptoStatus === 'success'"
+        ref="crypto"
+        placeholder="文章被加密，请输入密码"
+        data-encrypted="U2FsdGVkX1+s9Aj5T6Acskpud61YFgwlhQ0yT5D0IkujLyBSwNsa7sjXuMO/clKjIku9IiWNvpoJ0tfzaR1/vdyWtqf3TQNndt+kxl6bjobZSbjDrtrHGMSCWV6Y+Z/g5D65pWYOWsBkzPmrVugbFgr2cmCx6VZqER2mTpR2b9aIxnyEDfqvvpfsu85y8UfHkdL5lCY69r9KSMEXBjYipHps3HDGLB9S8xh2HpuWGP8N7osOwAoNtyaXCPA/zMGbgJwRLAJa2M9ZhILVjnHzzddi1UGe0Yd/XaAmUuQ+cwQ5fkKmOGhJ3Qaf8sm1uMfFYD+OEFAq73OWf+drW9dOzOmqYSOHT6AQfjV893fgqqOYcARmFVd7Vx79Z95BbAgXZvWvfOXZm7GijSES+SnogXcstUN82YaW6AdnrqDv0qlAg6vDObjbX4PfLVRPOY36XjH8cwNwaL+o1OON9C4Zu7Z9DghhTEht3DGHZvSbivRRcIJDcRCE6DVsO0tebzS4WUgaKurJqJehhpr/Y37e9o5SqE6xwWQAr4KoQSQPEt0uapWHmbd7duofdVge8Y4wkGz3TWFQOQ9sWtzEYAsHRKU93A1HsogPA+Y6jjzMq91qsUIaZZgPvAw5KCCpOzslW57L3Vi1qvXsJqF2Qk/1xO4V8qigmZmegA/MkPeB0AIEa+4EW8hjH2xs4ifhyHiv95mhTEJYz6dSO6EYX2BYxz64nzQ51G9aD4Fg4ORo4/nijGxfzOHdns1c660g+3xWluBy06jJjcAawAyMLSx95HB6OReBTR6sz4DDPLJJIPKGxYiJxteA6hrrbeLt7FRopGovxkmMJzJh2G5/VBFUJ/YK+BL50YWTyXov/r6oy7hKDmysiKRNUFsjpUmE7igQo5+JPsW9x+badLbdVvp6n2aLXtdaFKhT2Ipisps0y5+17IlKzl7fSLAfvfK/t2oyBI01p8A/6Wi3FOv3j/bhXU/+7rugiPmvDBcrLxkixsOoa/ct3+9lpDUZAMCzQvE4PBjEoy6xSk02tzEnNPiPJ0ILM9v/suwD7q3K8W6CMEhgMO1mqNJmZ/r5cGZDTUZDFkhYHuxdi/sdFq7qO2DgudFFUZQbMMHotMq2sY/2Bwu7wLM3bmutKwRK57J/Dp+EqZBrxuXw8/P3xZmA9aOf7hqtmbjXJj+Du9+j7ArdsSrbk0iG4ZHX1yVSE0YOK2+rciOohdB2BAhtWmsBhDaEU43wE+gIPHYs+nECYjGaiNx0Kc7BFKeFzKLws7OtnaqZ"
+        data-shasum="08f9abf4ada0e8c0ec77676ff42d559ecd6aa7e03970277d1d9075278dacde91"
+        v-model="crypto"
+    />
+    <transition name="fade">
+        <div class="content" ref="content" v-show="cryptoStatus === 'success'"></div>
+    </transition>
     
     
     
@@ -237,6 +284,9 @@
 
 
 
+    
+
+    
     
 </body>
 </html>

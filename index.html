@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
-    <link rel="icon" href="/images/avatar.png" />
+    <link rel="icon" href="/images/anle.jpeg" />
     <link rel="preconnect" href="https://s4.zstatic.net" />
 <script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
 <link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
@@ -47,7 +47,17 @@
 <link rel="stylesheet" href="/css/main.css" />
 
 <meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
 <body>
+<canvas id="fireworks" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 32767"></canvas>
+<script src="https://s4.zstatic.net/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+
+    
+    
     <div id="layout">
         <transition name="fade">
             <div id="loading" v-show="loading">
@@ -186,6 +196,15 @@
     </a>
     <div class="category-and-date">
         
+        <span class="category">
+            <a href="/categories/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                探索自我
+            </a>
+        </span>
+        
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
@@ -193,21 +212,24 @@
             2025/3/29
         </span>
         
+        <span class="special">
+            <i class="fa-solid fa-lock fa-fw"></i>
+        </span>
+        
         
     </div>
     <div class="description">
         <div class="content" v-pre>
             
-            <p>每当我希望一些什么时,得到的总会是另外的打击.每次考试,每次祈祷,每次对生活有所希望,虽然接收了马克思主义,理解了自己的主观能动性之后,也尝试去掌控,但是怎么也做不到理想的样子,总会回想以前的没能做到的一些事.很多事情已经影响了我,刻在了我的意识,我永远也无法成为一个正常人了,无论是身体还是精神.<br>我曾经以为刻意地学习小声说话,轻拿轻放就是礼貌温柔.大学后才意识到这是以前家里砸东西,吼叫,家暴的影响,我不敢出声.我实在不能接受自己这种不完美的状态,就像一种烙印.我可以通过学习来改变一些事情,来成为别人,但是我无法成为自己.<br>只要有着这样的过去,只要被影响了,只要我的存在和我脑中的想象不符合,我就一直被折磨.我不能放过自己了.我也不愿意放过自己,逃避可耻.</p>
-
+                <div class="encrypted-prompt">
+                    <i class="fa-solid fa-lock"></i>
+                    本文已加密，请输入密码查看
+                </div>
+                
             
         </div>
     </div>
-    <div class="post-tags">
-        
-        
-        
-    </div>
+    
     <a href="/2025/03/29/%E5%8F%88%E6%92%95%E8%A3%82%E7%9A%84%E4%B8%80%E5%A4%A9/" class="go-post">阅读全文</a>
 </div>
 
@@ -216,6 +238,15 @@
         <h2 class="post-title">3月23日起床</h2>
     </a>
     <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                探索自我
+            </a>
+        </span>
         
         <span class="date">
             <span class="icon">
@@ -229,17 +260,30 @@
     <div class="description">
         <div class="content" v-pre>
             
+            
             <p>&nbsp; &nbsp; &nbsp; &nbsp;起床后感到非常压抑,打开手机看到首页推荐的暴雨狂风视频,黑乎乎的天,看了很久,想要出去走一下,可是又不知道能去哪里.每天只是呆在宿舍,想着出去走却也不会发生什么的.我追求自然,不会主动,比如社交什么的,感觉是为了利益去行动,又或者是亲近大自然,但也是单方面的,所以我希望存在一些外力来推动世界发生一些什么,这样就能够有一个理由让我去行动了.</p>
 <p><img src="/../PictureRecord/20250323.png" alt="狂风"></p>
 
             
+            
         </div>
     </div>
+    
     <div class="post-tags">
         
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
         
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/%E8%BF%B7%E8%8C%AB/" style="color: #00bcd4">迷茫</a>
+        </span>
         
     </div>
+    
     <a href="/2025/03/23/3%E6%9C%8823%E6%97%A5%E8%B5%B7%E5%BA%8A/" class="go-post">阅读全文</a>
 </div>
 
@@ -261,6 +305,7 @@
     <div class="description">
         <div class="content" v-pre>
             
+            
             <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
@@ -276,13 +321,16 @@
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
             
+            
         </div>
     </div>
+    
     <div class="post-tags">
         
         
         
     </div>
+    
     <a href="/2025/03/22/hello-world/" class="go-post">阅读全文</a>
 </div>
 
@@ -302,7 +350,7 @@
         <div id="card-style">
     <div id="card-div">
         <div class="avatar">
-            <img src="/images/avatar.png" alt="avatar" />
+            <img src="/images/anle.jpeg" alt="avatar" />
         </div>
         <div class="name">lAn_rEd</div>
         <div class="description">
@@ -354,6 +402,9 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+
+    
     
 </body>
 </html>
