@@ -195,7 +195,8 @@
     </div>
     
     <div class="content" v-pre>
-        <h5 id="代码实现："><a href="#代码实现：" class="headerlink" title="代码实现："></a>代码实现：</h5><pre><code class="language-c">    #include &quot;kernel/types.h&quot;
+        <p>这是关于mit6.s081课程中的lab01中primes实现的记录</p>
+<h5 id="代码实现："><a href="#代码实现：" class="headerlink" title="代码实现："></a>代码实现：</h5><pre><code class="language-c">    #include &quot;kernel/types.h&quot;
     #include &quot;user/user.h&quot;  // 使用xv6原生声明
 
     // 修改后的正确实现
@@ -218,7 +219,7 @@
         &#125;
         buf[i] = &#39;\0&#39;;
     &#125;
-
+&lt;!-- more --&gt;
     void sieve(int read_fd) &#123;
         int prime;
         if (read(read_fd, &amp;prime, sizeof(prime)) &lt;= 0) &#123;
@@ -309,10 +310,10 @@ qemu: $(OBJDIR)/kern/kernel.img
 </li>
 <li><p>是的，通常情况下，调用一次read方法就读取一个数据。通常情况下，当你从管道中读取数据时，一旦数据被读取，它就会从管道中消失。管道（pipe）是一种用于进程间通信的机制，它允许一个进程（写入端）将数据发送到另一个进程（读取端）。<br>&nbsp;</p>
 </li>
-<li><p>在Unix-like系统中，文件描述符（file descriptor）是一个非负整数，它用于唯一标识一个打开的文件或资源。文件描述符是由操作系统内核管理的，它们与文件、管道、套接字等资源相关联。</p>
+<li><p>在Unix-like系统中，文件描述符（file descriptor）是一个非负整数，它用于唯一标识一个打开的文件或资源。文件描述符是由操作系统内核管理的，它们与文件、管道、套接字等资源相关联。当你定义一个数组来充当文件描述符时，你实际上是在模拟文件描述符的行为。这不是真正的文件描述符，而是一种编程技巧，用于在用户空间中管理多个文件或资源。</p>
 </li>
 </ol>
-<p>当你定义一个数组来充当文件描述符时，你实际上是在模拟文件描述符的行为。这不是真正的文件描述符，而是一种编程技巧，用于在用户空间中管理多个文件或资源。</p>
+<h5 id="课程链接"><a href="#课程链接" class="headerlink" title="课程链接"></a>课程链接</h5><p><a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2021/labs/util.html">Lab: Xv6 and Unix utilities</a></p>
 
     </div>
     
