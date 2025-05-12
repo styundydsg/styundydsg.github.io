@@ -191,6 +191,82 @@
         
 
 <div class="post">
+    <a href="/2025/05/12/mit-6s081-lab01-06-primes/">
+        <h2 class="post-title">mit_6s081_lab01_06_primes</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/5/12
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            
+            <h5 id="代码实现："><a href="#代码实现：" class="headerlink" title="代码实现："></a>代码实现：</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span>  <span class="comment">// 使用xv6原生声明</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改后的正确实现</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">itoa</span><span class="params">(<span class="type">int</span> num, <span class="type">char</span>* buf)</span> &#123;</span><br><span class="line">    <span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (num == <span class="number">0</span>) &#123;</span><br><span class="line">        buf[i++] = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">int</span> start = i;</span><br><span class="line">        <span class="keyword">while</span> (num &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            buf[i++] = (num % <span class="number">10</span>) + <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">            num /= <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 反转数字部分</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = start; j &lt; (i + start)/<span class="number">2</span>; j++) &#123;</span><br><span class="line">            <span class="type">char</span> tmp = buf[j];</span><br><span class="line">            buf[j] = buf[i + start - j - <span class="number">1</span>];</span><br><span class="line">            buf[i + start - j - <span class="number">1</span>] = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    buf[i] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">sieve</span><span class="params">(<span class="type">int</span> read_fd)</span> &#123;</span><br><span class="line">    <span class="type">int</span> prime;</span><br><span class="line">    <span class="keyword">if</span> (read(read_fd, &amp;prime, <span class="keyword">sizeof</span>(prime)) &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        close(read_fd);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构建输出信息（完全使用xv6兼容方式）</span></span><br><span class="line">    <span class="type">char</span> buf[<span class="number">32</span>];</span><br><span class="line">    <span class="type">char</span> *p = buf;</span><br><span class="line">    memmove(p, <span class="string">&quot;prime &quot;</span>, <span class="number">6</span>);</span><br><span class="line">    p += <span class="number">6</span>;</span><br><span class="line">    itoa(prime, p);</span><br><span class="line">    <span class="keyword">while</span> (*p) p++;</span><br><span class="line">    *p++ = <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    write(<span class="number">1</span>, buf, p - buf);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> fd[<span class="number">2</span>];</span><br><span class="line">    pipe(fd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">        close(fd[<span class="number">1</span>]);</span><br><span class="line">        sieve(fd[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        close(fd[<span class="number">0</span>]);</span><br><span class="line">        <span class="type">int</span> num;</span><br><span class="line">     <span class="keyword">while</span> (read(read_fd, &amp;num, <span class="keyword">sizeof</span>(num)) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (num % prime != <span class="number">0</span>) &#123;</span><br><span class="line">                write(fd[<span class="number">1</span>], &amp;num, <span class="keyword">sizeof</span>(num));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        close(fd[<span class="number">1</span>]);</span><br><span class="line">        close(read_fd);</span><br><span class="line">        wait(<span class="number">0</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> fd[<span class="number">2</span>];</span><br><span class="line">    pipe(fd);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= <span class="number">35</span>; i++) &#123;</span><br><span class="line">        write(fd[<span class="number">1</span>], &amp;i, <span class="keyword">sizeof</span>(i));</span><br><span class="line">    &#125;</span><br><span class="line">    close(fd[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">    sieve(fd[<span class="number">0</span>]);</span><br><span class="line">    close(fd[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h5 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h5><ol>
+<li>在UPROGS中添加的文件primes.c前面需要有下划线，不然会有未定义问题</li>
+</ol>
+<hr>
+<h5 id="AI总结："><a href="#AI总结：" class="headerlink" title="AI总结："></a>AI总结：</h5><ol>
+<li><p>当我们执行 make qemu 时，实际上是在执行 Makefile 中定义的 qemu 目标<br>&nbsp;</p>
+</li>
+<li><p> 假设我们有以下 Makefile 内容：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">QEMU = qemu-system-i386 </span><br><span class="line">QEMUOPTS = -drive file=$(OBJDIR)/kern/kernel.img,index=0,media=disk,format=raw -serial mon:stdio -gdb tcp::$(GDBPORT)</span><br><span class="line">OBJDIR = build</span><br><span class="line"></span><br><span class="line">qemu: $(OBJDIR)/kern/kernel.img</span><br><span class="line">    $(QEMU)$(QEMUOPTS)</span><br></pre></td></tr></table></figure>
+<p> 执行 make qemu 时，会先检查 build&#x2F;kern&#x2F;kernel.img 是否存在，然后运行：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">qemu-system-i386 -drive file=build/kern/kernel.img,index=0,media=disk,format=raw -serial mon:stdio -gdb tcp::$(GDBPORT)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p> -drive file&#x3D;…,index&#x3D;…,media&#x3D;…,format&#x3D;…：指定虚拟硬盘的文件、索引、媒体类型和格式。<br> -serial mon:stdio：将串行端口输出到标准输入输出。<br> -gdb tcp::$(GDBPORT)：启用 GDB 调试服务，监听指定的端口。<br> &nbsp;</p>
+</li>
+<li><p>vim全选删除：ggdG<br>查找替换: :%s原&#x2F;目标&#x2F;g  g是全局<br>查找: &#x2F;&lt;查找字符串&gt;<br>find用法: find .（当前目录） -name &lt;？&gt;<br>&nbsp;</p>
+</li>
+<li><p>在Unix-like系统（包括xv6）中，write(1, buf, p - buf) 中的 1 是标准输出（stdout）的文件描述符。以下是详细解释：</p>
+<p> 文件描述符（File Descriptor）的含义<br> 在Unix系统中，所有输入&#x2F;输出资源（文件、管道、设备等）都被抽象为文件描述符。每个进程启动时会默认打开三个文件描述符：</p>
+<p> 0：标准输入（stdin，键盘输入）</p>
+<p> 1：标准输出（stdout，屏幕输出）</p>
+<p> 2：标准错误（stderr，错误信息输出）<br> &nbsp;<br> write(1, buf, p - buf);<br> 参数1：表示要向标准输出（屏幕&#x2F;终端）写入数据。</p>
+<p> 参数2：要写入的数据缓冲区（buf）。</p>
+<p> 参数3：要写入的字节数（p - buf 计算缓冲区长度）。</p>
+<p> 这行代码的作用是：将 buf 中从起始位置到 p 指针之间的内容输出到屏幕上。<br> &nbsp;</p>
+</li>
+<li><p>是的，通常情况下，调用一次read方法就读取一个数据。通常情况下，当你从管道中读取数据时，一旦数据被读取，它就会从管道中消失。管道（pipe）是一种用于进程间通信的机制，它允许一个进程（写入端）将数据发送到另一个进程（读取端）。<br>&nbsp;</p>
+</li>
+<li><p>在Unix-like系统中，文件描述符（file descriptor）是一个非负整数，它用于唯一标识一个打开的文件或资源。文件描述符是由操作系统内核管理的，它们与文件、管道、套接字等资源相关联。</p>
+</li>
+</ol>
+<p>当你定义一个数组来充当文件描述符时，你实际上是在模拟文件描述符的行为。这不是真正的文件描述符，而是一种编程技巧，用于在用户空间中管理多个文件或资源。</p>
+
+            
+            
+        </div>
+    </div>
+    
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/mit6-s081-labs/" style="color: #ffa2c4">mit6.s081_labs</a>
+        </span>
+        
+    </div>
+    
+    <a href="/2025/05/12/mit-6s081-lab01-06-primes/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2025/03/31/%E6%83%B3%E5%81%9A%E6%B8%B8%E6%88%8F%E7%9A%84%E7%AC%AC%E4%BA%8C%E5%A4%A9/">
         <h2 class="post-title">想做游戏的第二天</h2>
     </a>
@@ -236,7 +312,7 @@
         
         <span class="tag">
             
-            <a href="/tags/%E5%BD%92%E5%9B%A0/" style="color: #ffa2c4">归因</a>
+            <a href="/tags/%E5%BD%92%E5%9B%A0/" style="color: #03a9f4">归因</a>
         </span>
         
         <span class="tag">
@@ -338,12 +414,12 @@
         
         <span class="tag">
             
-            <a href="/tags/%E8%BF%B7%E8%8C%AB/" style="color: #03a9f4">迷茫</a>
+            <a href="/tags/%E8%BF%B7%E8%8C%AB/" style="color: #00bcd4">迷茫</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E6%97%A5%E8%AE%B0/" style="color: #ffa2c4">日记</a>
+            <a href="/tags/%E6%97%A5%E8%AE%B0/" style="color: #03a9f4">日记</a>
         </span>
         
     </div>
