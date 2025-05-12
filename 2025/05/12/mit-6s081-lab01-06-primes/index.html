@@ -185,7 +185,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/mit6-s081-labs/" style="color: #03a9f4">
+                <a href="/tags/mit6-s081-labs/" style="color: #00bcd4">
                     mit6.s081_labs
                 </a>
             </span>
@@ -196,6 +196,8 @@
     
     <div class="content" v-pre>
         <p>这是关于mit6.s081课程中的lab01中primes实现的记录</p>
+<span id="more"></span>
+
 <h5 id="代码实现："><a href="#代码实现：" class="headerlink" title="代码实现："></a>代码实现：</h5><pre><code class="language-c">    #include &quot;kernel/types.h&quot;
     #include &quot;user/user.h&quot;  // 使用xv6原生声明
 
@@ -219,7 +221,7 @@
         &#125;
         buf[i] = &#39;\0&#39;;
     &#125;
-&lt;!-- more --&gt;
+
     void sieve(int read_fd) &#123;
         int prime;
         if (read(read_fd, &amp;prime, sizeof(prime)) &lt;= 0) &#123;
