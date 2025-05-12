@@ -35,6 +35,11 @@
 <script src="/js/lib/highlight.js"></script>
 
 
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
 
 <script src="/js/lib/preview.js"></script>
 
@@ -47,7 +52,6 @@
 
 
 <link rel="stylesheet" href="/css/main.css" />
-
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 
@@ -176,6 +180,15 @@
             2025/5/12
         </span>
         
+        <span class="category">
+            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                操作系统
+            </a>
+        </span>
+        
         
         <span class="tags">
             <span class="icon">
@@ -197,19 +210,19 @@
     <div class="content" v-pre>
         <p>这是关于mit6.s081课程中的lab01中primes实现的记录</p>
 <span id="more"></span>
-
-<h5 id="代码实现："><a href="#代码实现：" class="headerlink" title="代码实现："></a>代码实现：</h5><pre><code class="language-c">    #include &quot;kernel/types.h&quot;
+<h5 id="代码实现：">代码实现：</h5>
+<pre><code class="language-c">    #include &quot;kernel/types.h&quot;
     #include &quot;user/user.h&quot;  // 使用xv6原生声明
 
     // 修改后的正确实现
     void itoa(int num, char* buf) &#123;
         int i = 0;
         if (num == 0) &#123;
-            buf[i++] = &#39;0&#39;;
+            buf[i++] = '0';
         &#125; else &#123;
             int start = i;
             while (num &gt; 0) &#123;
-                buf[i++] = (num % 10) + &#39;0&#39;;
+                buf[i++] = (num % 10) + '0';
                 num /= 10;
             &#125;
             // 反转数字部分
@@ -219,7 +232,7 @@
                 buf[i + start - j - 1] = tmp;
             &#125;
         &#125;
-        buf[i] = &#39;\0&#39;;
+        buf[i] = '\0';
     &#125;
 
     void sieve(int read_fd) &#123;
@@ -236,7 +249,7 @@
         p += 6;
         itoa(prime, p);
         while (*p) p++;
-        *p++ = &#39;\n&#39;;
+        *p++ = '\n';
 
         write(1, buf, p - buf);
 
@@ -279,14 +292,21 @@
     &#125;
 </code></pre>
 <hr>
-<h5 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h5><ol>
-<li>在UPROGS中添加的文件primes.c前面需要有下划线，不然会有未定义问题</li>
+<h5 id="注意事项：">注意事项：</h5>
+<ol>
+<li class="lvl-3">
+<p>在UPROGS中添加的文件primes.c前面需要有下划线，不然会有未定义问题</p>
+</li>
 </ol>
 <hr>
-<h5 id="AI总结："><a href="#AI总结：" class="headerlink" title="AI总结："></a>AI总结：</h5><ol>
-<li><p>当我们执行 make qemu 时，实际上是在执行 Makefile 中定义的 qemu 目标<br>&nbsp;</p>
+<h5 id="AI总结：">AI总结：</h5>
+<ol>
+<li class="lvl-3">
+<p>当我们执行 make qemu 时，实际上是在执行 Makefile 中定义的 qemu 目标<br>
+ </p>
 </li>
-<li><p> 假设我们有以下 Makefile 内容：</p>
+<li class="lvl-3">
+<p>假设我们有以下 Makefile 内容：</p>
 <pre><code>QEMU = qemu-system-i386 
 QEMUOPTS = -drive file=$(OBJDIR)/kern/kernel.img,index=0,media=disk,format=raw -serial mon:stdio -gdb tcp::$(GDBPORT)
 OBJDIR = build
@@ -294,28 +314,44 @@ OBJDIR = build
 qemu: $(OBJDIR)/kern/kernel.img
     $(QEMU)$(QEMUOPTS)
 </code></pre>
-<p> 执行 make qemu 时，会先检查 build&#x2F;kern&#x2F;kernel.img 是否存在，然后运行：</p>
+<p>执行 make qemu 时，会先检查 build/kern/kernel.img 是否存在，然后运行：</p>
 <pre><code>qemu-system-i386 -drive file=build/kern/kernel.img,index=0,media=disk,format=raw -serial mon:stdio -gdb tcp::$(GDBPORT)
 </code></pre>
-<p> -drive file&#x3D;…,index&#x3D;…,media&#x3D;…,format&#x3D;…：指定虚拟硬盘的文件、索引、媒体类型和格式。<br> -serial mon:stdio：将串行端口输出到标准输入输出。<br> -gdb tcp::$(GDBPORT)：启用 GDB 调试服务，监听指定的端口。<br> &nbsp;</p>
+<p>-drive file=…,index=…,media=…,format=…：指定虚拟硬盘的文件、索引、媒体类型和格式。<br>
+-serial mon:stdio：将串行端口输出到标准输入输出。<br>
+-gdb tcp::$(GDBPORT)：启用 GDB 调试服务，监听指定的端口。<br>
+ </p>
 </li>
-<li><p>vim全选删除：ggdG<br>查找替换: :%s原&#x2F;目标&#x2F;g  g是全局<br>查找: &#x2F;&lt;查找字符串&gt;<br>find用法: find .（当前目录） -name &lt;？&gt;<br>&nbsp;</p>
+<li class="lvl-3">
+<p>vim全选删除：ggdG<br>
+查找替换: :%s原/目标/g  g是全局查找: /&lt;查找字符串&gt;<br>
+find用法: find .（当前目录） -name &lt;？&gt;<br>
+ </p>
 </li>
-<li><p>在Unix-like系统（包括xv6）中，write(1, buf, p - buf) 中的 1 是标准输出（stdout）的文件描述符。以下是详细解释：</p>
-<p> 文件描述符（File Descriptor）的含义<br> 在Unix系统中，所有输入&#x2F;输出资源（文件、管道、设备等）都被抽象为文件描述符。每个进程启动时会默认打开三个文件描述符：</p>
-<p> 0：标准输入（stdin，键盘输入）</p>
-<p> 1：标准输出（stdout，屏幕输出）</p>
-<p> 2：标准错误（stderr，错误信息输出）<br> &nbsp;<br> write(1, buf, p - buf);<br> 参数1：表示要向标准输出（屏幕&#x2F;终端）写入数据。</p>
-<p> 参数2：要写入的数据缓冲区（buf）。</p>
-<p> 参数3：要写入的字节数（p - buf 计算缓冲区长度）。</p>
-<p> 这行代码的作用是：将 buf 中从起始位置到 p 指针之间的内容输出到屏幕上。<br> &nbsp;</p>
+<li class="lvl-3">
+<p>在Unix-like系统（包括xv6）中，write(1, buf, p - buf) 中的 1 是标准输出（stdout）的文件描述符。以下是详细解释：</p>
+<p>文件描述符（File Descriptor）的含义在Unix系统中，所有输入/输出资源（文件、管道、设备等）都被抽象为文件描述符。每个进程启动时会默认打开三个文件描述符：</p>
+<p>0：标准输入（stdin，键盘输入）</p>
+<p>1：标准输出（stdout，屏幕输出）</p>
+<p>2：标准错误（stderr，错误信息输出）<br>
+ <br>
+write(1, buf, p - buf);<br>
+参数1：表示要向标准输出（屏幕/终端）写入数据。</p>
+<p>参数2：要写入的数据缓冲区（buf）。</p>
+<p>参数3：要写入的字节数（p - buf 计算缓冲区长度）。</p>
+<p>这行代码的作用是：将 buf 中从起始位置到 p 指针之间的内容输出到屏幕上。<br>
+ </p>
 </li>
-<li><p>是的，通常情况下，调用一次read方法就读取一个数据。通常情况下，当你从管道中读取数据时，一旦数据被读取，它就会从管道中消失。管道（pipe）是一种用于进程间通信的机制，它允许一个进程（写入端）将数据发送到另一个进程（读取端）。<br>&nbsp;</p>
+<li class="lvl-3">
+<p>是的，通常情况下，调用一次read方法就读取一个数据。通常情况下，当你从管道中读取数据时，一旦数据被读取，它就会从管道中消失。管道（pipe）是一种用于进程间通信的机制，它允许一个进程（写入端）将数据发送到另一个进程（读取端）。<br>
+ </p>
 </li>
-<li><p>在Unix-like系统中，文件描述符（file descriptor）是一个非负整数，它用于唯一标识一个打开的文件或资源。文件描述符是由操作系统内核管理的，它们与文件、管道、套接字等资源相关联。当你定义一个数组来充当文件描述符时，你实际上是在模拟文件描述符的行为。这不是真正的文件描述符，而是一种编程技巧，用于在用户空间中管理多个文件或资源。</p>
+<li class="lvl-3">
+<p>在Unix-like系统中，文件描述符（file descriptor）是一个非负整数，它用于唯一标识一个打开的文件或资源。文件描述符是由操作系统内核管理的，它们与文件、管道、套接字等资源相关联。当你定义一个数组来充当文件描述符时，你实际上是在模拟文件描述符的行为。这不是真正的文件描述符，而是一种编程技巧，用于在用户空间中管理多个文件或资源。</p>
 </li>
 </ol>
-<h5 id="课程链接"><a href="#课程链接" class="headerlink" title="课程链接"></a>课程链接</h5><p><a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2021/labs/util.html">Lab: Xv6 and Unix utilities</a></p>
+<h5 id="课程链接">课程链接</h5>
+<p><a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2021/labs/util.html">Lab: Xv6 and Unix utilities</a></p>
 
     </div>
     

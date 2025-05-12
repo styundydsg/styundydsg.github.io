@@ -35,6 +35,11 @@
 <script src="/js/lib/highlight.js"></script>
 
 
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
 
 <script src="/js/lib/preview.js"></script>
 
@@ -50,7 +55,6 @@
 
 
 <link rel="stylesheet" href="/css/main.css" />
-
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 
@@ -213,8 +217,8 @@
         :disabled="cryptoStatus === 'success'"
         ref="crypto"
         placeholder="文章被加密，请输入密码"
-        data-encrypted="U2FsdGVkX195SeboMDUMR2msa70/xv9zFyMuzga3O8bMQpJkHN+iWIWv8DGozj42tHyNdQqIx3/H1GuN1fOc4/ii5lGfsxOoLJwM+cA+mitlgDDjgz4gmIeInNvXevTRDNrchzuMCAVkdyLW8XJVvhijcEsockYcXbSQ+G+43V0DOTIk036N/Jr+b+AyaDce7KUQ1qy5pp3CrlMDLBfVV7lwtpbZ4QbWnH+ZSYZ3jq3Q50MJ5JhLAGUGFNY9GsrpN5BH3mBxNix7F8jqiUG3SU/rjaVdhrmHJu82gZYN14RhHu3PTWumsmTks+NjO8SS4Q/ESkj8MDzuma8q697f8E1ivB3aAWeQH5Z36111lF4VYzEcLA7Vtlq/JmsC2dPfAjkbpP9dosbJpR+1U8LUYEC9P0/gtQrIcg9bRm3tSL63JSUfbOWaDMAld5Bweh9RTfsXX5Xgob+LV9neCXPTautvZRbt7zS6tTbzaSC8KCJyPy66OJk2C2VTVxe0yxHXsGRGn4m6yi2kz816E30/QJ7OclXLWzCGCCMoBIfivMjuOTg8v6e0TYVAtZZHpcwdE25he5f3ge23ujUdwiHg4A6JHgDOS1DD7mAK93U99bD+SjrcTQ9KkkfjvX/QiC6TraYJtcfAaavRb0xdPtb4EtkzLbFAS/H6ITm5J57vYpVKNOvKgF6xS6tUZhAcR99gYTzBNVl9Q5F7QyLmg5XcIrpA2BXpN3zawfNU7P0/As/ojJHUcPksvMzOdX1S2h8qqOkq2DDO9p8KArDaDNJPz1czHY3LjdIFeIcCEaQIK9IrQFFujSUn6+NI18nnS1Yv7J7GnAB8tKRyaiSiePdsRB6hl+DZSRUecrCv7gqN3XdQ9Li4iGo173AlHL5SibfsoxcV9/z7wBRUVZn264u/bv3i7nRxtJG8Ner9LtkTXIPjSNb7nW2Pc+C+vtSB35EO9TZ0q7JsCO4xfxNbpRu3QWrhpvMwGrQo51F/9TRw6oz/B9yb8XDCPFwMsvSN9j2Vcrmvu6j1STwa5I/yDPt9t/MMAABxmRe2TgI0HUdNcQ84/pmX15rzEI9gArqjd9IpdUNafWzCEmYQtZZc6EvjSv8uhJ5b6rRoEHPNKRcPfk4ivfBnMRAitSVLQoNVdJoZ+jOB/FWLX5w4T/+9PuuzNa+Da4FmRI6vR0XwLiqy8dVYIXWkActSOHxskrykap+Aw7l1/+Bq5NJzWYRldypspUNT1Bt5fTUPJPPusK7zdCM2Y35huneK6s6d9QW9qFJp"
-        data-shasum="08f9abf4ada0e8c0ec77676ff42d559ecd6aa7e03970277d1d9075278dacde91"
+        data-encrypted="U2FsdGVkX1+0x1X5A4gSPDLTpzgJXURw24n1JvV4wyiH5bwOIvkyCk4wfqtmOctgfeFpNcCrc0LzTepqPhwB9vf3Lb+bfrWH8C3B4cUpg9pr731RCpMFoC0dMTiuVihUezjwuyxB4UF0NWiAzU8zymi8CKwTsoKHJvfEkUtreNYlE/d7t/q97ATnytfPr1UHX8dpqoOdvPbww+P4C/FcfEBX5T9/A2i4VVB92pdWUlaQcWSp8lmEMjaKdGIe0bIdVvFvmpwn5W0s5pzDTUbxpB/NgRxAmp4U2tgWY+4+vOllDPSZkJm1dmRTZ2pZZegvUt9qHpkNyE2dkSIGogQaztiOA7ACze3z2S/XTdY83LIv7L0sR31HfUSszeQUy/hGEijQQyggCegSzEmZyKoCFNX2zhUXsA5AxMLE/YximQeg9abLpeY71DH4srHQAmJSX9h0wkqjV3yJhRADdOzWLu+5Qq90NOBjSu3Q9oFms7ci+k6x/9HICBRdXFv5qFRqtToyltmTMTAy2Qdk4petq3ky6Xr7paB8JWo/XIWmjSNW5iwo/DDhNy+Hcik9rkfVbkteKzpqWQ//oayuv0XqXpIqHzn9/y7/xArtwxID1Lq2rnbO1JATk2XS4dseAwMy/IrGmgy9oZPRWU7Cc6hUczs1IaU9zm726WjtlciTrH4s24Vl25zWUgU4ccIFPn2vY/ZKxyZTGSQ1V0/ncv3kpDm9FXXx5Fnz/KJIOa54mDn3GS2QifxMt53Ia0lS657IvVG/rjI6uoqUU3/22UJxk6mrHygfHucmDPuM7WDH4h9xpqw2V7OJQXk8KZeTSuB336g6vFx99OhvnCxpV9hjoibpLCxWbGcTpK/di6LPX6NpovjhCVlW2qMhYz9QR4LepurdkOcwXh1FgM7Opi//Vpdn3Uv6QFDPRN3OtwX6nL9HS3LeS38AbuIEB8Jm1u68OUmg9LFdSlu6dWjjkCDt4QXesDxIy0aspiaBVk5M6cgasE/D7byk14W9yWG6ZkAgQyqbUwT5WSnjLXWJ1K6CRUgGNL/uD1pLmsKSn1smfIJNOvP2WOzKz38jD/aMUe7pCAL5tx3AUX6/yGdysIKinO54l6GcLPwlR/OV8Se9dQg/Ksq5qqYj7pnQ7VgOLW7tgNSCL+ojG1r079ZvCDFjJyN/Fomp3u/slTp9tbx2RI4iA94D4LGdKEmV3jeR9Sn5vKBA6r1oW0+Hp4iVbwxhpPhBG4qfGDOUI/2/1Uo4Rq+5PTRJAWmQYKI0IY5NqKX2"
+        data-shasum="004c18ed852506effb6b808bba824a2330fdf92802ccf253adfb0ed528b6c08c"
         v-model="crypto"
     />
     <transition name="fade">
