@@ -1,0 +1,541 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>mit_6s081_lab01_find | zero two</title>
+    <meta name="author" content="lAn_rEd" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/anle.jpeg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&amp;family=Lexend:wght@400;500;600;700;800;900&amp;family=Noto+Sans+SC:wght@400;500;600;700;800;900&amp;display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+<canvas id="fireworks" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 32767"></canvas>
+<script src="https://s4.zstatic.net/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+
+    
+    
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>ZERO TWO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;ZERO TWO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>mit_6s081_lab01_find</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/5/13
+        </span>
+        
+        <span class="category">
+            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                操作系统
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/mit6-s081-labs/" style="color: #00bcd4">
+                    mit6.s081_labs
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h5 id="知识点：">知识点：</h5>
+<ol>
+<li class="lvl-3">stat 命令用于显示文件或文件系统状态的详细信息。它提供了比 ls -l 更加详细的输出，包括时间戳、权限、所有者等信息。用法：stat [选项]… 文件…<br>
+显示文件或文件系统的状态。</li>
+</ol>
+<hr>
+<ol start="2">
+<li class="lvl-3">
+<p>‌dirent‌是C语言中用于文件操作的一个头文件，主要提供目录遍历功能，适用于需要访问文件系统的程序。在Linux等Unix-like系统中，它是标准库的一部分，但在Windows系统中需要使用其他API。dirent通过struct dirent结构体和一系列函数，如opendir(), readdir(), 和closedir()等，提供了基本的目录操作接口。</p>
+<p>dirent结构体<br>
+dirent结构体用于描述目录中的条目，主要成员包括：</p>
+<p>‌d_ino‌：文件的inode号码。<br>
+‌d_reclen‌：目录项的长度（以字节为单位）。<br>
+‌d_namlen‌：目录项名称的长度（不包括终止null字符）。<br>
+‌d_name‌：目录项的名称（以null结尾的字符串）。主要函数<br>
+‌opendir()‌：打开一个目录流，返回一个指向DIR结构的指针。如果无法打开目录，返回NULL。<br>
+‌readdir()‌：从目录流中读取下一个目录项，返回一个指向dirent结构体的指针。如果目录流中没有更多目录项，返回NULL。<br>
+‌closedir()‌：关闭一个目录流，释放与该目录流关联的系统资源。<br>
+‌rewinddir()‌：将目录流重置到开头。<br>
+‌seekdir()‌：将目录流移动到指定位置。<br>
+‌telldir()‌：返回目录流的当前位置。</p>
+ <span id="more"></span>
+</li>
+</ol>
+<hr>
+<ol start="3">
+<li class="lvl-3">
+<p>‌Linux的open函数的参数包括‌：</p>
+<p>‌pathname‌：这是要打开或创建的文件的路径名，可以是绝对路径或相对路径。</p>
+<p>‌flags‌：用于指定文件的打开方式，包括以下常见标志：</p>
+<p>‌O_RDONLY‌：以只读模式打开文件。<br>
+‌O_WRONLY‌：以只写模式打开文件。<br>
+‌O_RDWR‌：以读写模式打开文件。<br>
+‌O_CREAT‌：如果文件不存在，则创建该文件。<br>
+‌O_EXCL‌：与O_CREAT一起使用时，如果文件已存在，则返回错误。<br>
+‌O_TRUNC‌：如果文件已存在，则将其长度截断为0。<br>
+‌O_APPEND‌：以追加方式打开文件。<br>
+‌O_NONBLOCK‌：以非阻塞模式打开文件。<br>
+‌O_SYNC‌：每次写操作后都进行同步。<br>
+‌O_RSYNC‌：读操作等待所有写操作完成后再进行。</p>
+</li>
+</ol>
+<hr>
+<ol start="4">
+<li class="lvl-3">
+<p>在C语言编程中，struct dirent 和 struct stat 是两个常用的结构体，主要用于文件和目录操作。以下是对这两个结构体的详细解释：<br>
+a.<br>
+struct dirent<br>
+struct dirent 是在 &lt;dirent.h&gt; 头文件中定义的，用于表示目录中的一个条目（即文件或子目录）。它通常用于目录遍历。成员解释<br>
+ino_t d_ino：文件的inode号码。<br>
+off_t d_off：目录文件开头到本条目的偏移。<br>
+unsigned short d_reclen：当前条目的长度。<br>
+unsigned char d_type：文件类型（仅在某些系统中支持，如Linux 2.6及以上版本）。<br>
+char d_name[]：文件名。示例代码</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;dirent.h&gt;
+int main() &#123;
+    DIR *dir;
+    struct dirent *de;
+    dir = opendir(&quot;.&quot;); // 打开当前目录
+    if (dir == NULL) &#123;
+        perror(&quot;opendir&quot;);
+        return 1;
+    &#125;
+    while ((de = readdir(dir)) != NULL) &#123;
+        printf(&quot;File: %s\n&quot;, de-&gt;d_name);
+    &#125;
+    closedir(dir);
+    return 0;
+&#125;
+</code></pre>
+<p>b.<br>
+struct stat<br>
+struct stat 是在 &lt;sys/stat.h&gt; 头文件中定义的，用于表示文件的状态信息。它包含文件的详细信息，如大小、权限、所有者等。成员解释<br>
+dev_t st_dev：文件所在设备的ID。<br>
+ino_t st_ino：文件的inode号码。<br>
+mode_t st_mode：文件的类型和权限。<br>
+nlink_t st_nlink：文件的硬链接数。<br>
+uid_t st_uid：文件所有者的用户ID。<br>
+gid_t st_gid：文件所有者的组ID。<br>
+dev_t st_rdev：若文件为设备文件，此字段为设备类型。<br>
+off_t st_size：文件大小（字节数）。<br>
+blksize_t st_blksize：文件系统的块大小。<br>
+blkcnt_t st_blocks：文件占用的块数。<br>
+struct timespec st_atim：最后一次访问时间。<br>
+struct timespec st_mtim：最后一次修改时间。<br>
+struct timespec st_ctim：最后一次状态改变时间。示例代码</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;sys/stat.h&gt;
+#include &lt;unistd.h&gt;
+int main() &#123;
+    struct stat st;
+    if (stat(&quot;example.txt&quot;, &amp;st) == -1) &#123;
+        perror(&quot;stat&quot;);
+        return 1;
+    &#125;
+    printf(&quot;File size: %ld bytes\n&quot;, st.st_size);
+    printf(&quot;Last modified time: %ld\n&quot;, st.st_mtime);
+    return 0;
+&#125;
+</code></pre>
+</li>
+</ol>
+<hr>
+<ol start="5">
+<li class="lvl-3">
+<p>fstat() 是一个系统调用，用于获取打开文件的状态信息。它与 stat() 类似，但 fstat() 接受一个文件描述符作为参数，而不是文件路径。这在处理已经打开的文件时非常有用。函数原型<br>
+int fstat(int fd, struct stat *st);<br>
+参数解释<br>
+int fd：文件描述符，它是通过 open(), creat(), dup(), fcntl(), socket(), accept(), 等系统调用获得的。<br>
+struct stat *st：指向 struct stat 结构体的指针，用于存储文件的状态信息。返回值成功：返回 0。失败：返回 -1，并设置 errno 以指示错误。<br>
+struct stat 结构体<br>
+struct stat 结构体包含了许多关于文件的详细信息，如：<br>
+st_size：文件的大小（字节）。<br>
+st_mode：文件类型和权限。<br>
+st_uid：文件所有者的用户ID。<br>
+st_gid：文件所有者的组ID。<br>
+st_atime：最后访问时间。<br>
+st_mtime：最后修改时间。<br>
+st_ctime：文件状态改变时间。等等。示例代码以下是一个使用 fstat() 的简单示例，它打开一个文件，并获取其大小：</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/stat.h&gt;
+#include &lt;fcntl.h&gt;
+int main() &#123;
+    int fd;
+    struct stat st;
+    // 打开文件
+    fd = open(&quot;example.txt&quot;, O_RDONLY);
+    if (fd == -1) &#123;
+        perror(&quot;open&quot;);
+        return EXIT_FAILURE;
+    &#125;
+    // 获取文件状态信息
+    if (fstat(fd, &amp;st) == -1) &#123;
+        perror(&quot;fstat&quot;);
+        close(fd);
+        return EXIT_FAILURE;
+    &#125;
+    // 打印文件大小
+    printf(&quot;File size: %ld bytes\n&quot;, st.st_size);
+    // 关闭文件
+    close(fd);
+    return EXIT_SUCCESS;
+&#125;
+</code></pre>
+<p>注意事项使用 fstat() 前，确保文件描述符是有效的。在使用完文件后，应关闭文件描述符以释放资源。</p>
+</li>
+</ol>
+<hr>
+<ol start="6">
+<li class="lvl-3">
+<p>fprintf是C/C++中的一个格式化库函数，位于头文件<cstdio>;中，其作用是格式化输出到一个流文件中；函数原型为int fprintf( FILE *stream, const char *format, [ argument ]…)，fprintf()函数根据指定的格式(format)，向输出流(stream)写入数据(argument)。</p>
+</li>
+</ol>
+<hr>
+<ol start="7">
+<li class="lvl-3">
+<p>echo &gt; b<br>
+命令解释：<br>
+echo：用于在终端输出文本或字符串。<br>
+&gt;：重定向符号，将输出写入到指定的文件中。如果文件不存在，则会创建该文件；如果文件已存在，则覆盖其内容。<br>
+b：文件名。作用：创建一个名为 b 的空文件。因为 echo 后面没有跟任何字符串，所以 b 文件的内容为空。</p>
+</li>
+</ol>
+<hr>
+<ol start="8">
+<li class="lvl-3">
+<p>在XV6操作系统中，DIRSIZ 是一个宏定义，表示目录条目（struct dirent）中文件名的最大长度。它的值通常是14字节（定义在 kernel/fs.h 中），这是XV6文件系统的设计限制。</p>
+<p>DIRSIZ 的作用目录条目结构：在XV6中，目录由一系列目录条目（struct dirent）组成，每个条目包含：</p>
+<p>inum：文件的inode编号（2字节）</p>
+<p>name：文件名（DIRSIZ 字节，通常是14字节）</p>
+<p>文件名存储：DIRSIZ 限制了文件名的最大长度（例如，“a.txt” 可以，但 “very_long_filename.txt” 可能被截断）</p>
+</li>
+</ol>
+<hr>
+<ol start="9">
+<li class="lvl-3">
+<p>void <em>memmove( void</em> dest, const void* src, size_t count );</p>
+</li>
+</ol>
+<hr>
+<h5 id="代码实例：">代码实例：</h5>
+<pre><code class="c">#include &quot;kernel/types.h&quot;
+#include &quot;kernel/stat.h&quot;
+#include &quot;user/user.h&quot;
+#include &quot;kernel/fs.h&quot;
+
+// 从路径中提取文件名
+char*
+get_filename(char *path)
+&#123;
+    char *p;
+    // 从后往前找到最后一个斜杠
+    for(p = path + strlen(path); p &gt;= path &amp;&amp; *p != '/'; p--);
+    p++;
+    return p;
+&#125;
+
+void
+find(char *path, char *target)
+&#123;
+    char buf[512], *p;
+    int fd;
+    struct dirent de;
+    struct stat st;
+
+    if((fd = open(path, 0)) &lt; 0)&#123;
+        fprintf(2, &quot;find: cannot open %s\n&quot;, path);
+        return;
+    &#125;
+    
+    if(fstat(fd, &amp;st) &lt; 0)&#123;
+        fprintf(2, &quot;find: cannot stat %s\n&quot;, path);
+        close(fd);
+        return;
+    &#125;
+
+    switch(st.type)&#123;
+    case T_FILE:
+        // 比较文件名部分
+        if(strcmp(get_filename(path), target) == 0)
+            printf(&quot;%s\n&quot;, path);
+        break;
+
+    case T_DIR:
+        if(strlen(path) + 1 + DIRSIZ + 1 &gt; sizeof buf)&#123;
+            printf(&quot;find: path too long\n&quot;);
+            break;
+        &#125;
+        strcpy(buf, path);
+        p = buf + strlen(buf);
+        *p++ = '/'; // 添加斜杠
+        while(read(fd, &amp;de, sizeof(de)) == sizeof(de))&#123;
+            if(de.inum == 0)
+                continue;
+            memmove(p, de.name, DIRSIZ);
+            p[DIRSIZ] = 0; // 确保字符串终止
+            // 跳过.和..
+            if(!strcmp(de.name, &quot;.&quot;) || !strcmp(de.name, &quot;..&quot;))
+                continue;
+            find(buf, target); // 递归处理子目录
+        &#125;
+        break;
+    &#125;
+    close(fd);                                                                                                     
+&#125;    
+
+int
+main(int argc, char *argv[])
+&#123;
+    if(argc != 3)&#123;
+        fprintf(2, &quot;Usage: find &lt;directory&gt; &lt;filename&gt;\n&quot;);
+        exit(1);
+    &#125;
+    find(argv[1], argv[2]);
+    exit(0);
+&#125;
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2025 zero two
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;lAn_rEd
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo="styundydsg/styundydsg.github.io"
+    data-repo-id="R_kgDOK0X3wA"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOK0X3wM4Cok6S"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="1"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin
+    async
+></script>
+
+
+
+
+
+    
+
+    
+    
+</body>
+</html>
