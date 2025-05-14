@@ -198,7 +198,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #ff7d73">
+                <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00a596">
                     解决方案
                 </a>
             </span>
@@ -208,29 +208,28 @@
     </div>
     
     <div class="content" v-pre>
-        <h4 id="注意">注意</h4>
-<p>过程我有些记不清了，可以先看链接处理，主要是后面要进入parted模式第一次no然后后面的就是yes那里不出意外很快的，我有一次按了很久的y都没成功，虽然不知道有没有影响然后操作里会有选择start、end就将大小改回来就可以了下面不保证操作顺序的正确</p>
-<p><a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/565923/either-the-superblock-or-the-partition-table-is-likely-to-be-corrupt-after-pa">分区调整大小后，“超级块或分区表可能已损坏！”</a></p>
+        <h5 id="注意">注意</h5>
+<p>过程我有些记不清了，可以先看链接处理，主要是后面要进入parted模式<br>
+第一次no然后后面的就是yes那里不出意外很快的，我有一次按了很久的y都没成功，虽然不知道有没有影响<br>
+然后操作里会有选择start、end就将大小改回来就可以了<br>
+下面不保证操作顺序的正确<br>
+可以问问ai那些命令是什么意思判断调整顺序</p>
+<p><a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/565923/either-the-superblock-or-the-partition-table-is-likely-to-be-corrupt-after-pa">“Either the superblock or the partition table is likely to be corrupt!” after partition resized</a></p>
 <ol>
 <li class="lvl-3">
-<p>首先下载与你损坏虚拟机版本相同的iso文件将损坏虚拟机的cd改为该iso<br>
-启动后try … install进入即可使用命令行操作</p>
+<p>首先下载与你损坏虚拟机版本相同的iso文件，将损坏虚拟机的cd改为该iso，启动后try … install进入，即可使用命令行操作</p>
 </li>
 <li class="lvl-3">
-</li>
-</ol>
-<pre><code>```bash
-sudo fdisk -l /dev/whatever 比如/dev/sda（还是sda2了）
-```
+<pre><code class="Shell">sudo fdisk -l /dev/whatever 比如/dev/sda（还是sda2了）
 </code></pre>
-<ol start="3">
+</li>
 <li class="lvl-3">
 <p>将结果抄在纸上。然后修复分区表：</p>
-<pre><code class="bash">sudo fdisk /dev/whatever
+<pre><code class="Shell">sudo fdisk /dev/whatever
 </code></pre>
 </li>
 <li class="lvl-3">
-<pre><code class="bash">sudo fdisk /dev/sdX  # 替换为你的磁盘设备，如 /dev/sda
+<pre><code class="Shell">sudo fdisk /dev/sdX  # 替换为你的磁盘设备，如 /dev/sda
 </code></pre>
 </li>
 <li class="lvl-3">
@@ -255,14 +254,15 @@ sudo fdisk -l /dev/whatever 比如/dev/sda（还是sda2了）
 </li>
 <li class="lvl-3">
 <p>输入 p 最终确认分区表无误。</p>
+<p>输入 w 保存并退出。（此操作不可逆！）</p>
 </li>
 <li class="lvl-3">
 <p>文件系统检查</p>
-<pre><code class="bash">sudo fdisk /dev/whatever
+<pre><code class="Shell">sudo fdisk /dev/whatever
 </code></pre>
 </li>
 <li class="lvl-3">
-<pre><code class="bash">sudo parted /dev/sda
+<pre><code class="Shell">sudo parted /dev/sda
 (parted) print          # 查看当前分区表，确认 `/dev/sda2` 的编号（此处应为分区2）
 (parted) resizepart 2   # 选择要调整的分区编号（这里是2）
 新的结束点？ [20GB]? 100%  # 输入 100%（直接覆盖全部剩余空间）
@@ -270,16 +270,20 @@ sudo fdisk -l /dev/whatever 比如/dev/sda（还是sda2了）
 </code></pre>
 </li>
 <li class="lvl-4">
-<p>sudo partprobe /dev/sda  # 重新加载分区表</p>
+<pre><code class="Shell">sudo partprobe /dev/sda  # 重新加载分区表
+</code></pre>
 </li>
 <li class="lvl-4">
-<p>df -Th | grep /dev/sda2<br>
-• 若为 ext4：<br>
-sudo resize2fs /dev/sda2</p>
+<pre><code class="Shell">df -Th | grep /dev/sda2
+</code></pre>
+<p>若为 ext4：</p>
+<pre><code class="Shell">sudo resize2fs /dev/sda2
+</code></pre>
 </li>
 <li class="lvl-4">
-<p>lsblk    # 确认 <code>/dev/sda2</code> 的 SIZE 变为 30G<br>
-df -h    # 查看 <code>/</code> 分区的可用空间是否增加</p>
+<pre><code class="Shell">lsblk    # 确认 `/dev/sda2` 的 SIZE 变为 30G
+df -h    # 查看 `/` 分区的可用空间是否增加
+</code></pre>
 </li>
 <li class="lvl-4">
 <p>然后就可以将挂载了可以看到文件之后解除挂载关闭虚拟机在编辑里不用那个iso后选择自动检测重启，不出意外可以进入</p>
