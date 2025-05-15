@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>3月23日起床 | zero two</title>
+    <title>mit-6s081-lab01-xargs | zero two</title>
     <meta name="author" content="lAn_rEd" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -170,22 +170,22 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>3月23日起床</h1>
+        <h1>mit-6s081-lab01-xargs</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/3/23
+            2025/5/15
         </span>
         
         <span class="category">
-            <a href="/categories/%E6%97%A5%E8%AE%B0/">
+            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                日记
+                操作系统
             </a>
         </span>
         
@@ -198,22 +198,8 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #00bcd4">
-                    想法
-                </a>
-            </span>
-            
-            <span class="tag">
-                
-                <a href="/tags/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/" style="color: #ffa2c4">
-                    探索自我
-                </a>
-            </span>
-            
-            <span class="tag">
-                
-                <a href="/tags/%E8%BF%B7%E8%8C%AB/" style="color: #00a596">
-                    迷茫
+                <a href="/tags/mit6-s081-labs/" style="color: #03a9f4">
+                    mit6.s081_labs
                 </a>
             </span>
             
@@ -222,9 +208,185 @@
     </div>
     
     <div class="content" v-pre>
-        <p>       起床后感到非常压抑,打开手机看到首页推荐的暴雨狂风视频,黑乎乎的天,看了很久,想要出去走一下,可是又不知道能去哪里.每天只是呆在宿舍,想着出去走却也不会发生什么的.我追求自然,不会主动,比如社交什么的,感觉是为了利益去行动,又或者是亲近大自然,但也是单方面的,所以我希望存在一些外力来推动世界发生一些什么,这样就能够有一个理由让我去行动了.</p>
-<p><img src="../PictureRecord/20250323.png" alt="狂风"></p>
-<!-- flag of hidden posts -->
+        <h4 id="前置知识">前置知识</h4>
+<h5 id="exec">exec</h5>
+<p>exec命令的基本语法<br>
+exec命令的基本语法如下：</p>
+<p>exec [options] [command] [arguments]</p>
+<p>options: 可选参数，用于修改exec的行为。<br>
+command: 要执行的可执行文件或命令。<br>
+arguments: 传递给command的参数。<br>
+如果没有指定command，exec将用于修改当前shell的环境变量、文件描述符等设置。</p>
+<hr>
+<h5 id="read-write-参数012">read/write 参数012</h5>
+<p>fd：文件描述符，表示将数据写入到哪里。可以是文件、设备、套接字等。文件描述符是一个整数，通常是由 open 系统调用返回的。</p>
+<p>0：标准输入（stdin）<br>
+1：标准输出（stdout）<br>
+2：标准错误（stderr）</p>
+<h5 id="sh-xxx-sh">sh &lt; <a target="_blank" rel="noopener" href="http://xxx.sh">xxx.sh</a></h5>
+<p>sh &lt; <a target="_blank" rel="noopener" href="http://xargstest.sh">xargstest.sh</a> 是在 xv6 实验环境中用于测试 xargs 实现的指令，其核心作用是通过输入重定向将脚本内容传递给 sh 解释器执行<br>
+等效于 cat <a target="_blank" rel="noopener" href="http://xargstest.sh">xargstest.sh</a> | sh，但更高效（避免中间管道进程）<br>
+.sh里面可能是一些命令然后重定向给sh执行</p>
+<h4 id="代码">代码</h4>
+<pre><code class="c">#include &quot;kernel/types.h&quot;
+#include &quot;user/user.h&quot;
+#include &quot;kernel/param.h&quot;
+
+#define MAXLINE 1024
+
+void parse_args(char *line, char **args, int *argc) &#123;
+    *argc = 0;
+    while (1) &#123;
+        // 跳过前导空格
+        while (*line == ' ') &#123;
+            line++;
+        &#125;
+        if (*line == '\0') &#123;
+            break;
+        &#125;
+        args[(*argc)++] = line;
+        // 寻找参数的结尾
+        while (*line != ' ' &amp;&amp; *line != '\0') &#123;
+            line++;
+        &#125;
+        // 分割参数
+        if (*line == ' ') &#123;
+            *line = '\0';
+            line++;
+        &#125;
+        if (*argc &gt;= MAXARG) &#123;
+            break;
+        &#125;
+    &#125;
+&#125;
+
+int read_line(int fd, char *buf, int max, int *found_newline) &#123;
+    int i = 0;
+    *found_newline = 0;
+    while (i &lt; max - 1) &#123;
+        char ch;
+        int n = read(fd, &amp;ch, 1);
+        if (n &lt; 0) &#123;
+            return -1;
+        &#125;
+        if (n == 0) &#123;
+            break; // EOF
+        &#125;
+        if (ch == '\n') &#123;
+            *found_newline = 1;
+            break;
+        &#125;
+        buf[i++] = ch;
+    &#125;
+    buf[i] = '\0';
+    return i;
+&#125;
+
+int main(int argc, char *argv[]) &#123;
+    if (argc &lt; 2) &#123;
+        char *msg = &quot;xargs: missing command\n&quot;;
+        write(2, msg, strlen(msg));
+        exit(1);
+    &#125;
+
+    while (1) &#123;
+        char line[MAXLINE];
+        int found_newline;
+        int len = read_line(0, line, sizeof(line), &amp;found_newline);
+        if (len &lt; 0) &#123;
+            char *msg = &quot;xargs: read error\n&quot;;
+            write(2, msg, strlen(msg));
+            exit(1);
+        &#125;
+        if (len == 0 &amp;&amp; !found_newline) &#123;
+            break; // EOF
+        &#125;
+
+        char *args[MAXARG];
+        int new_argc = 0;
+        parse_args(line, args, &amp;new_argc);
+
+        char *new_argv[MAXARG];
+        int total_args = 0;
+
+        // 添加命令名称
+        new_argv[total_args++] = argv[1];
+
+        // 添加原参数
+        for (int i = 2; i &lt; argc; i++) &#123;
+            if (total_args &gt;= MAXARG) &#123;
+                char *msg = &quot;xargs: too many arguments\n&quot;;
+                write(2, msg, strlen(msg));
+                exit(1);
+            &#125;
+            new_argv[total_args++] = argv[i];
+        &#125;
+
+        // 添加新参数
+        for (int i = 0; i &lt; new_argc; i++) &#123;
+            if (total_args &gt;= MAXARG) &#123;
+                char *msg = &quot;xargs: too many arguments\n&quot;;
+                write(2, msg, strlen(msg));
+                exit(1);
+            &#125;
+            new_argv[total_args++] = args[i];
+        &#125;
+
+        new_argv[total_args] = 0; // 参数数组以NULL结尾
+
+        // 创建子进程执行命令
+        int pid = fork();
+        if (pid &lt; 0) &#123;
+            char *msg = &quot;xargs: fork failed\n&quot;;
+            write(2, msg, strlen(msg));
+            exit(1);
+        &#125; else if (pid == 0) &#123;
+            // 子进程执行命令
+            exec(new_argv[0], new_argv);
+            // 如果exec失败
+            char *msg = &quot;xargs: exec failed\n&quot;;
+            write(2, msg, strlen(msg));
+            exit(1);
+        &#125; else &#123;
+            // 父进程等待子进程完成
+            wait(0);
+        &#125;
+    &#125;
+
+    exit(0);
+&#125;
+</code></pre>
+<h4 id="一些解释">一些解释</h4>
+<p><strong>以echo hello too | xargs echo bye为例</strong><br>
+首先会执行echo hello too输出到终端缓冲区，通过管道符传递给xargs的标准输入0<br>
+然后xargs运行时参数为char *argv[]={‘xargs’,‘echo’,‘bye’}<br>
+read_line会读取标准输入里的数据也就是hello too到line字符数组<br>
+parse_args解析line存到args指针数组里<br>
+此时args里就是{“hello\0”,“too\0”}<br>
+构造一个新的命令new_argv<br>
+这个新命令的索引：<br>
+0:echo<br>
+1:bye<br>
+添加args<br>
+2:hello<br>
+3:too<br>
+4:0<br>
+最后exec执行输出bye hello too，中间的空格应该是自己识别的吧</p>
+<h4 id="整理一下AI的总结">整理一下AI的总结</h4>
+<p>在Linux系统中，管道符|通过以下机制将数据从左侧命令传递给右侧命令，具体流程如下：<br>
+一、管道符的底层实现原理<br>
+匿名管道创建<br>
+当用户执行cmd1 | cmd2时，Shell会调用pipe()系统调用创建一个匿名管道（Anonymous Pipe），该管道由两个文件描述符（read_fd和write_fd）表示。<br>
+进程间文件描述符重定向<br>
+Shell通过fork()创建两个子进程（分别执行cmd1和cmd2），并利用dup2()将文件描述符重定向：<br>
+cmd1的标准输出（文件描述符1）被重定向到管道的write_fd，其输出不再直接发送到终端，而是写入管道。<br>
+cmd2的标准输入（文件描述符0）被重定向到管道的read_fd，其输入源变为管道。<br>
+内核缓冲区的数据传输<br>
+左侧命令（cmd1）的输出数据首先写入内核空间的管道缓冲区（默认4KB），而非直接发送到屏幕。<br>
+右侧命令（cmd2）通过read()系统调用从管道缓冲区按需读取数据，若缓冲区为空则阻塞等待。</p>
+<p>管道是单向通信，数据从echo的stdout流向cat的stdin。</p>
+<p>存储位置：当直接执行echo hello时，字符串hello默认通过标准输出（文件描述符1）发送到终端屏幕（即字符设备文件，如/dev/tty） echo内部应该有一个print 从0转变为1</p>
+
     </div>
     
     
