@@ -195,6 +195,75 @@
         
 
 <div class="post">
+    <a href="/2025/05/17/%E5%85%B3%E4%BA%8Ewsl%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8samba/">
+        <h2 class="post-title">关于wsl无法使用samba</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/linux/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                linux
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/5/17
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            
+            <p>问题：WSL 默认不支持直接运行 smbd<br>
+原因：<br>
+smbd 需要访问低层网络功能（如绑定到端口 445），WSL2 虚拟环境不允许这样做。</p>
+<p>WSL2 的网络和 Windows 是隔离的（类似虚拟机），而且端口 445 通常已被 Windows 自身的 SMB 服务占用，smbd 无法监听。</p>
+<p>推荐解决方案：用 Windows 的 SMB 服务共享 WSL 文件夹</p>
+<p>方法：</p>
+<ol>
+<li class="lvl-3">
+<p>wsl -l -v<br>
+输出：NAME      STATE           VERSION<br>
+Ubuntu    Running         2<br>
+记住这个name</p>
+</li>
+<li class="lvl-3">
+<p>在资源管理器地址栏输入\wsl$\name\home\share   \home\share是共享的文件夹自行寻找，此时可以验证在wsl里共享文件夹下创建一个文件在windows看有没有</p>
+</li>
+</ol>
+
+            
+            
+        </div>
+    </div>
+    
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/wsl/" style="color: #ff7d73">wsl</a>
+        </span>
+        
+    </div>
+    
+    <a href="/2025/05/17/%E5%85%B3%E4%BA%8Ewsl%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8samba/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2025/05/15/mit-6s081-lab01-xargs/">
         <h2 class="post-title">mit-6s081-lab01-xargs</h2>
     </a>
@@ -492,7 +561,7 @@ cmd2的标准输入（文件描述符0）被重定向到管道的read_fd，其�
         
         <span class="tag">
             
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #03a9f4">解决方案</a>
+            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00bcd4">解决方案</a>
         </span>
         
     </div>
@@ -564,7 +633,7 @@ dirent结构体用于描述目录中的条目，主要成员包括：</p>
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #00bcd4">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #03a9f4">mit6.s081_labs</a>
         </span>
         
     </div>
@@ -616,7 +685,7 @@ dirent结构体用于描述目录中的条目，主要成员包括：</p>
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #ffa2c4">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #00a596">mit6.s081_labs</a>
         </span>
         
     </div>

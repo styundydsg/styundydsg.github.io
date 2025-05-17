@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Tags: 想法 | zero two</title>
+    <title>关于wsl无法使用samba | zero two</title>
     <meta name="author" content="lAn_rEd" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -42,6 +42,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -164,195 +168,75 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
+            <div class="article">
+    <div>
+        <h1>关于wsl无法使用samba</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/5/17
+        </span>
         
-        
-        
-        <span>
-            <a href="/tags/%E6%83%B3%E6%B3%95/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
+        <span class="category">
+            <a href="/categories/linux/">
                 <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                想法
+                linux
             </a>
         </span>
         
         
-        
-        
-        
-        <span>
-            <a href="/tags/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                探索自我
-            </a>
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/wsl/" style="color: #03a9f4">
+                    wsl
+                </a>
+            </span>
+            
         </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E8%BF%B7%E8%8C%AB/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                迷茫
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/mit6-s081-labs/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                mit6.s081_labs
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E5%BD%92%E5%9B%A0/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                归因
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                解决方案
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/tags/wsl/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-tags fa-fw"></i>
-                </span>
-                wsl
-            </a>
-        </span>
-        
         
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2025/3/31</div>
-            <a href="/2025/03/31/%E6%83%B3%E5%81%9A%E6%B8%B8%E6%88%8F%E7%9A%84%E7%AC%AC%E4%BA%8C%E5%A4%A9/">
-                <h3>想做游戏的第二天</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E6%97%A5%E8%AE%B0/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        日记
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #ffa2c4">
-                            想法
-                        </a>
-                    </span>
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/" style="color: #ff7d73">
-                            探索自我
-                        </a>
-                    </span>
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E5%BD%92%E5%9B%A0/" style="color: #ffa2c4">
-                            归因
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <p>问题：WSL 默认不支持直接运行 smbd<br>
+原因：<br>
+smbd 需要访问低层网络功能（如绑定到端口 445），WSL2 虚拟环境不允许这样做。</p>
+<p>WSL2 的网络和 Windows 是隔离的（类似虚拟机），而且端口 445 通常已被 Windows 自身的 SMB 服务占用，smbd 无法监听。</p>
+<p>推荐解决方案：用 Windows 的 SMB 服务共享 WSL 文件夹</p>
+<p>方法：</p>
+<ol>
+<li class="lvl-3">
+<p>wsl -l -v<br>
+输出：NAME      STATE           VERSION<br>
+Ubuntu    Running         2<br>
+记住这个name</p>
+</li>
+<li class="lvl-3">
+<p>在资源管理器地址栏输入\wsl$\name\home\share   \home\share是共享的文件夹自行寻找，此时可以验证在wsl里共享文件夹下创建一个文件在windows看有没有</p>
+</li>
+</ol>
+
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2025/3/23</div>
-            <a href="/2025/03/23/3%E6%9C%8823%E6%97%A5%E8%B5%B7%E5%BA%8A/">
-                <h3>3月23日起床</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E6%97%A5%E8%AE%B0/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        日记
-                    </a>
-                </span>
-                
-                
-                <span class="tags">
-                    <span class="icon">
-                        <i class="fa-solid fa-tags fa-fw"></i>
-                    </span>
-                    
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #00bcd4">
-                            想法
-                        </a>
-                    </span>
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/" style="color: #00a596">
-                            探索自我
-                        </a>
-                    </span>
-                    
-                    <span class="tag">
-                        
-                        <a href="/tags/%E8%BF%B7%E8%8C%AB/" style="color: #00bcd4">
-                            迷茫
-                        </a>
-                    </span>
-                    
-                </span>
-                
-            </div>
-        </div>
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
     </div>
+    
+    
+    
     
 </div>
 
@@ -384,6 +268,29 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo="styundydsg/styundydsg.github.io"
+    data-repo-id="R_kgDOK0X3wA"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOK0X3wM4Cok6S"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="1"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin
+    async
+></script>
+
+
+
+
+
     
 
     
