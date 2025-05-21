@@ -1,0 +1,934 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>mit-6s081-lab02-System_call_tracing | zero two</title>
+    <meta name="author" content="lAn_rEd" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/anle.jpeg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&amp;family=Lexend:wght@400;500;600;700;800;900&amp;family=Noto+Sans+SC:wght@400;500;600;700;800;900&amp;display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+<canvas id="fireworks" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 32767"></canvas>
+<script src="https://s4.zstatic.net/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+
+    
+    
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>ZERO TWO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;ZERO TWO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>mit-6s081-lab02-System_call_tracing</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/5/19
+        </span>
+        
+        <span class="category">
+            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                操作系统
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/mit6-s081-labs/" style="color: #ff7d73">
+                    mit6.s081_labs
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h4 id="声明">声明</h4>
+<p>文章仅具有解释意义<br>
+希望能为你搭建知识框架</p>
+<h4 id="过程">过程</h4>
+<p>Makefile Modification:</p>
+<p>makefile<br>
+UPROGS=<br>
+…<br>
+$U/_trace<br>
+User Space Modifications:</p>
+<p>user/user.h:</p>
+<pre><code class="c">int trace(int);
+</code></pre>
+<p>user/usys.pl:</p>
+<pre><code class="perl">entry(&quot;trace&quot;);
+</code></pre>
+<p>Kernel Modifications:</p>
+<p>kernel/syscall.h:</p>
+<pre><code class="c">#define SYS_trace 22
+</code></pre>
+<p>kernel/syscall.c:</p>
+<pre><code class="c">
+extern uint64 sys_trace(void);
+//这里是自己添加不是将syscalls修改
+static char *syscall_names[] = &#123;   
+    [SYS_fork]    &quot;fork&quot;,
+    [SYS_exit]    &quot;exit&quot;,
+    [SYS_wait]    &quot;wait&quot;,
+    [SYS_pipe]    &quot;pipe&quot;,
+    [SYS_read]    &quot;read&quot;,
+    [SYS_kill]    &quot;kill&quot;,
+    [SYS_exec]    &quot;exec&quot;,
+    [SYS_fstat]   &quot;fstat&quot;,
+    [SYS_chdir]   &quot;chdir&quot;,
+    [SYS_dup]     &quot;dup&quot;,
+    [SYS_getpid]  &quot;getpid&quot;,
+    [SYS_sbrk]    &quot;sbrk&quot;,
+    [SYS_sleep]   &quot;sleep&quot;,
+    [SYS_uptime]  &quot;uptime&quot;,
+    [SYS_open]    &quot;open&quot;,
+    [SYS_write]   &quot;write&quot;,
+    [SYS_mknod]   &quot;mknod&quot;,
+    [SYS_unlink]  &quot;unlink&quot;,
+    [SYS_link]    &quot;link&quot;,
+    [SYS_mkdir]   &quot;mkdir&quot;,
+    [SYS_close]   &quot;close&quot;,
+    [SYS_trace]   &quot;trace&quot;,
+&#125;;
+</code></pre>
+<p>kernel/sysproc.c:</p>
+<pre><code class="c">uint64 sys_trace(void) &#123;
+    int mask;
+    if (argint(0, &amp;mask) &lt; 0)
+        return -1;
+    struct proc *p = myproc();
+    p-&gt;trace_mask = mask;
+    return 0;
+&#125;
+</code></pre>
+<p>kernel/proc.h:</p>
+<pre><code class="c">struct proc &#123;
+    ...
+    int trace_mask;
+    ...
+&#125;;
+</code></pre>
+<p>kernel/proc.c (fork and allocproc):</p>
+<pre><code class="c">int fork(void) &#123;
+    ...
+    np-&gt;trace_mask = p-&gt;trace_mask;
+    ...
+&#125;
+
+static struct proc* allocproc(void) &#123;
+    ...
+    p-&gt;trace_mask = 0;
+    ...
+&#125;
+kernel/syscall.c (syscall function):
+</code></pre>
+<pre><code class="c">void syscall(void) &#123;
+    int num;
+    struct proc *p = myproc();
+
+    num = p-&gt;trapframe-&gt;a7;
+    if (num &gt; 0 &amp;&amp; num &lt; NELEM(syscalls) &amp;&amp; syscalls[num]) &#123;
+        p-&gt;trapframe-&gt;a0 = syscalls[num]();
+        if ((p-&gt;trace_mask &amp; (1 &lt;&lt; num)) != 0) &#123;
+            char *name = &quot;unknown&quot;;
+            if (num &lt; NELEM(syscall_names) &amp;&amp; syscall_names[num] != 0) &#123;
+                name = syscall_names[num];
+            &#125;
+            printf(&quot;%d: syscall %s -&gt; %d\n&quot;, p-&gt;pid, name, p-&gt;trapframe-&gt;a0);
+        &#125;
+    &#125; else &#123;
+        printf(&quot;%d %s: unknown sys call %d\n&quot;, p-&gt;pid, p-&gt;name, num);
+        p-&gt;trapframe-&gt;a0 = -1;
+    &#125;
+&#125;
+</code></pre>
+<span id="more"></span>>
+<h4 id="AI问答">AI问答</h4>
+<p>总结一下这个assignment的知识点，以及完成过程</p>
+<p>系统调用跟踪（System Call Tracing）作业知识点总结</p>
+<ol>
+<li class="lvl-3">
+<p>核心知识点系统调用机制：</p>
+</li>
+</ol>
+<p>用户态与内核态的交互流程（ecall/eret指令）。</p>
+<p>系统调用号的分配与处理函数映射（syscalls[]数组）。</p>
+<p>用户态存根（usys.pl生成汇编代码）与内核处理函数（sys_*）的关联。</p>
+<p>进程管理：</p>
+<p>进程控制块（PCB，即struct proc）的结构与扩展（添加trace_mask字段）。</p>
+<p>进程创建（fork）时的属性继承（复制父进程的trace_mask）。</p>
+<p>进程初始化（allocproc）时的字段初始化（trace_mask设为0）。</p>
+<p>内核调试与日志：</p>
+<p>在系统调用返回前打印调试信息（进程ID、系统调用名、返回值）。</p>
+<p>使用printf在内核中输出日志，需注意并发安全（避免死锁）。</p>
+<p>位掩码（Bitmask）操作：</p>
+<p>通过位运算（如mask &amp; (1 &lt;&lt; num)）判断是否需要跟踪特定系统调用。</p>
+<p>掩码的传递与保存（用户参数到内核的trace_mask）。</p>
+<ol start="2">
+<li class="lvl-3">
+<p>完成过程步骤添加用户态支持：</p>
+</li>
+</ol>
+<p>Makefile：将_trace添加到UPROGS，确保用户程序编译。</p>
+<p>用户头文件：在user/user.h中声明int trace(int);。</p>
+<p>系统调用存根：在user/usys.pl中添加entry(“trace”);生成汇编代码。</p>
+<p>定义系统调用号：</p>
+<p>kernel/syscall.h：添加#define SYS_trace 22（或其他未使用的编号）。</p>
+<p>扩展进程结构体：</p>
+<p>kernel/proc.h：在struct proc中添加int trace_mask;字段。</p>
+<p>实现系统调用处理函数：</p>
+<p>kernel/sysproc.c：</p>
+<pre><code class="c">uint64 sys_trace(void) &#123;
+    int mask;
+    if (argint(0, &amp;mask) &lt; 0) return -1;
+    myproc()-&gt;trace_mask = mask;
+    return 0;
+&#125;
+</code></pre>
+<p>修改进程创建逻辑：</p>
+<p>kernel/proc.c：</p>
+<p>allocproc：初始化新进程的trace_mask为0。</p>
+<pre><code class="c">static struct proc* allocproc() &#123;
+    // ...
+    p-&gt;trace_mask = 0; // 初始化
+    // ...
+&#125;
+</code></pre>
+<p>fork：复制父进程的trace_mask到子进程。</p>
+<pre><code class="c">int fork() &#123;
+    // ...
+    np-&gt;trace_mask = p-&gt;trace_mask; // 继承
+    // ...
+&#125;
+</code></pre>
+<p>修改系统调用处理逻辑：</p>
+<p>kernel/syscall.c：</p>
+<p>定义系统调用名称数组syscall_names[]，映射编号到名称。</p>
+<p>在syscall()函数中添加跟踪逻辑：</p>
+<pre><code class="c">void syscall(void) &#123;
+    int num;
+    struct proc *p = myproc();
+    num = p-&gt;trapframe-&gt;a7;
+    if (num &gt; 0 &amp;&amp; num &lt; NELEM(syscalls) &amp;&amp; syscalls[num]) &#123;
+        p-&gt;trapframe-&gt;a0 = syscalls[num]();
+        // 检查是否需要跟踪
+        if (p-&gt;trace_mask &amp; (1 &lt;&lt; num)) &#123;
+            printf(&quot;%d: syscall %s -&gt; %d\n&quot;, 
+                   p-&gt;pid, syscall_names[num], p-&gt;trapframe-&gt;a0);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>调试与验证：</p>
+<p>编译错误处理：解决类型不匹配（如函数指针与字符串数组混淆）、头文件缺失（如NULL未定义）。</p>
+<p>运行时错误：通过scause和sepc定位页错误或无效内存访问（如直接解引用用户指针）。</p>
+<p>功能测试：</p>
+<p>运行trace 32 grep hello README验证read调用跟踪。</p>
+<p>运行trace 2147483647 grep hello README验证全系统调用跟踪。</p>
+<ol start="3">
+<li class="lvl-3">
+<p>关键挑战与解决用户参数传递：使用argint安全获取用户空间传递的掩码，避免直接解引用。</p>
+</li>
+</ol>
+<p>进程间继承：确保fork正确复制trace_mask，子进程行为符合预期。</p>
+<p>内核日志安全：在syscall()中调用printf需注意锁机制，防止并发问题。</p>
+<p>系统调用表维护：保持syscalls[]与syscall_names[]数组的同步更新。</p>
+<ol start="4">
+<li class="lvl-3">
+<p>最终效果命令示例：</p>
+</li>
+</ol>
+<pre><code class="bash">$ trace 32 grep hello README    # 跟踪read系统调用
+$ trace 2147483647 ls           # 跟踪所有系统调用
+</code></pre>
+<p>输出示例：</p>
+<p>3: syscall read -&gt; 1023<br>
+3: syscall read -&gt; 966<br>
+4: syscall trace -&gt; 0<br>
+4: syscall exec -&gt; 3<br>
+5. 延伸思考性能影响：频繁的日志输出可能降低系统性能，如何优化？</p>
+<p>动态跟踪：能否实现运行时动态启用/禁用跟踪，而非通过进程继承？</p>
+<p>安全边界：如何防止恶意用户滥用跟踪功能泄露内核信息？</p>
+<p>通过本作业，深入理解了xv6系统调用机制、进程管理及内核调试技术，为后续文件系统、多线程等实验奠定基础。</p>
+<p>列出这些文件之间的关联以下是 xv6 系统调用跟踪（System Call Tracing）作业中涉及的关键文件及其关联关系的详细说明：</p>
+<p>文件功能与关联说明</p>
+<ol>
+<li class="lvl-3">
+<p>用户态程序 (user/ 目录)<br>
+文件	作用	关联文件<br>
+user/trace.c	用户态测试程序，调用 trace() 和 exec() 运行目标程序。	依赖 user/user.h 声明接口。<br>
+user/user.h	声明用户态系统调用接口（如 int trace(int);）。	被 trace.c 和 <a target="_blank" rel="noopener" href="http://usys.pl">usys.pl</a> 依赖。<br>
+user/usys.pl	Perl 脚本，生成 user/usys.S（系统调用存根）。	生成 usys.S，为内核提供入口。<br>
+user/usys.S	汇编代码，包含 ecall 指令跳转到内核。	链接用户程序与内核系统调用。</p>
+</li>
+<li class="lvl-3">
+<p>内核系统调用处理 (kernel/ 目录)<br>
+文件	作用	关联文件<br>
+kernel/syscall.h	定义系统调用号（如 #define SYS_trace 22）。	被 syscall.c 和用户态头文件引用。<br>
+kernel/syscall.c	系统调用分派中心：</p>
+</li>
+</ol>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>维护 syscalls[] 函数指针数组。</p>
+</li>
+<li class="lvl-2">
+<p>实现 syscall() 函数，处理日志打印逻辑。	调用 sysproc.c 和 sysfile.c 的具体实现。<br>
+kernel/sysproc.c	实现进程相关系统调用（如 sys_trace()）。	操作 proc.h 中的进程结构体。<br>
+kernel/proc.h	定义进程控制块 struct proc，包含新增字段 trace_mask。	被 proc.c 和 sysproc.c 使用。<br>
+kernel/proc.c	进程管理：</p>
+</li>
+<li class="lvl-2">
+<p>allocproc()：初始化 trace_mask=0。</p>
+</li>
+<li class="lvl-2">
+<p>fork()：复制 trace_mask 到子进程。	依赖 proc.h 结构体定义。</p>
+</li>
+</ul>
+<ol start="3">
+<li class="lvl-3">
+<p>编译与链接文件	作用	关联文件<br>
+Makefile	编译规则：</p>
+</li>
+</ol>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>将 _trace 加入 UPROGS。</p>
+</li>
+<li class="lvl-2">
+<p>调用 <a target="_blank" rel="noopener" href="http://usys.pl">usys.pl</a> 生成 usys.S。	控制用户程序和内核的编译流程。关键数据流用户发起跟踪<br>
+user/trace.c → trace() → user/usys.S（ecall） → kernel/syscall.c（syscall()） → kernel/sysproc.c（sys_trace()） → 设置 proc-&gt;trace_mask。</p>
+</li>
+</ul>
+<p>系统调用执行与日志</p>
+<p>任何系统调用（如 read）触发 kernel/syscall.c 的 syscall()。</p>
+<p>检查 proc-&gt;trace_mask 决定是否打印日志。</p>
+<p>从 syscall_names[] 获取名称，输出格式：pid: syscall name -&gt; return_value。</p>
+<p>进程继承<br>
+fork() 调用链：<br>
+user → sys_fork → kernel/proc.c → 复制父进程 trace_mask 到子进程。</p>
+<p>依赖关系总结用户程序依赖内核接口<br>
+user/trace.c 通过 user/user.h 声明调用 trace()，最终由内核实现。</p>
+<p>内核依赖进程结构体<br>
+sysproc.c 和 proc.c 共同操作 proc.h 中的 struct proc。</p>
+<p>系统调用表维护<br>
+syscall.c 的 syscalls[] 和 syscall_names[] 需同步更新（如新增 SYS_trace）。</p>
+<p>编译时生成代码<br>
+<a target="_blank" rel="noopener" href="http://usys.pl">usys.pl</a> 脚本生成 usys.S，确保用户态能正确跳转到内核。</p>
+<p>调试时的核心检查点系统调用号一致性</p>
+<p>user/user.h、kernel/syscall.h、syscall.c 中的 SYS_trace 必须相同。</p>
+<p>进程字段初始化</p>
+<p>allocproc() 和 fork() 必须正确操作 trace_mask。</p>
+<p>日志逻辑安全</p>
+<p>syscall() 中的 printf 不应破坏寄存器状态（避免在 trapframe 修改前调用）。</p>
+<p>通过理解这些文件关联，可以高效定位问题（如未继承 trace_mask 或日志未打印），并确保修改符合 xv6 的整体架构。</p>
+<p>trace 32 grep hello README 描述这条命令的执行过程以下是命令 trace 32 grep hello README 在 xv6 中的完整执行过程分析，结合系统调用跟踪功能的实现逻辑：</p>
+<ol>
+<li class="lvl-3">
+<p>命令解析<br>
+trace 32 grep hello README</p>
+</li>
+</ol>
+<p>trace：用户态程序，调用 trace() 系统调用设置掩码，并执行后续命令。</p>
+<p>32：跟踪掩码值（1 &lt;&lt; SYS_read，即只跟踪 read 系统调用）。</p>
+<p>grep hello README：被跟踪的目标命令。</p>
+<ol start="2">
+<li class="lvl-3">
+<p>执行流程详解阶段 1：trace 程序初始化用户态启动</p>
+</li>
+</ol>
+<p>Shell 解析命令后，通过 exec() 加载 trace 程序到内存。</p>
+<p>trace 的 main() 开始执行（user/trace.c）：</p>
+<pre><code class="c">int main(int argc, char *argv[]) &#123;
+    if (argc &lt; 3) &#123; /* 检查参数 */ &#125;
+    int mask = atoi(argv[1]); // 解析掩码 &quot;32&quot;
+    trace(mask);             // 调用 trace() 系统调用
+    exec(argv[2], &amp;argv[2]); // 执行 &quot;grep hello README&quot;
+&#125;
+</code></pre>
+<p>调用 trace() 系统调用</p>
+<p>用户态存根：user/usys.S 中的 trace 标签通过 ecall 陷入内核。</p>
+<pre><code class="asm">trace:
+    li a7, SYS_trace  # 将系统调用号存入 a7
+    ecall             # 切换到内核态
+    ret
+</code></pre>
+<p>内核处理：</p>
+<p>kernel/syscall.c 的 syscall() 根据 a7 调用 sys_trace()。</p>
+<p>kernel/sysproc.c 的 sys_trace() 设置当前进程的 trace_mask：</p>
+<pre><code class="c">uint64 sys_trace(void) &#123;
+    int mask;
+    argint(0, &amp;mask);          // 从用户态读取 mask=32
+    myproc()-&gt;trace_mask = mask; // 设置进程的 trace_mask
+    return 0;
+&#125;
+</code></pre>
+<p>阶段 2：执行 grep hello README<br>
+调用 exec() 加载 grep</p>
+<p>trace 程序通过 exec(“grep”, {“grep”, “hello”, “README”}) 加载 grep。</p>
+<p>内核行为：</p>
+<p>sys_exec() 加载 grep 的代码和数据，替换当前进程的内存空间。</p>
+<p>继承属性：子进程（原 trace 进程）的 trace_mask=32 被保留。</p>
+<p>grep 执行时的系统调用跟踪</p>
+<p>grep 执行过程中调用 read() 读取 README 文件：</p>
+<p>触发 read 系统调用：grep 的代码调用 read() → ecall → syscall()。</p>
+<p>内核检查跟踪条件：</p>
+<pre><code class="c">// kernel/syscall.c 的 syscall() 逻辑
+if (p-&gt;trace_mask &amp; (1 &lt;&lt; num)) &#123; // num=SYS_read, 1&lt;&lt;5=32
+    printf(&quot;%d: syscall %s -&gt; %d\n&quot;, p-&gt;pid, &quot;read&quot;, return_value);
+&#125;
+</code></pre>
+<p>输出示例：</p>
+<p>3: syscall read -&gt; 1023  // 第一次读取<br>
+3: syscall read -&gt; 966   // 第二次读取阶段 3：跟踪终止进程退出</p>
+<p>grep 执行完毕退出后，Shell 回收进程资源。</p>
+<p>跟踪日志随进程终止而结束。</p>
+<ol start="3">
+<li class="lvl-3">
+<p>关键机制说明步骤	关键行为	涉及文件用户态传参	trace 程序将掩码 32 通过 trace() 系统调用传递给内核。	user/trace.c, user/usys.S<br>
+内核设置掩码	sys_trace() 设置当前进程的 trace_mask=32。	kernel/sysproc.c<br>
+掩码继承	fork() 和 exec() 保留 trace_mask，确保 grep 继承跟踪状态。	kernel/proc.c<br>
+系统调用跟踪	syscall() 检查 trace_mask &amp; (1 &lt;&lt; num) 决定是否打印日志。	kernel/syscall.c<br>
+日志输出	仅当系统调用号 num（如 SYS_read=5）对应的位被置 1 时打印。	kernel/syscall.c</p>
+</li>
+<li class="lvl-3">
+<p>掩码计算示例<br>
+32 的二进制：100000（第5位为1，因为 SYS_read=5）。</p>
+</li>
+</ol>
+<p>检查逻辑：</p>
+<p>c<br>
+if (trace_mask &amp; (1 &lt;&lt; SYS_read)) =&gt; if (32 &amp; (1&lt;&lt;5)) =&gt; if (32 &amp; 32) =&gt; 成立因此仅跟踪 read 调用。</p>
+<ol start="5">
+<li class="lvl-3">
+<p>输出结果示例</p>
+</li>
+</ol>
+<pre><code class="bash">$ trace 32 grep hello README
+3: syscall read -&gt; 1023  # grep 第一次读取 README
+3: syscall read -&gt; 966   # 第二次读取
+3: syscall read -&gt; 70    # 第三次读取
+3: syscall read -&gt; 0     # 文件结束
+</code></pre>
+<p>总结通过此命令，xv6 实现了对 grep 程序的 read 系统调用跟踪，展示了以下核心机制：</p>
+<p>用户态到内核态的切换（ecall）。</p>
+<p>进程属性的动态设置与继承（trace_mask）。</p>
+<p>系统调用分派与条件日志（syscall() 和位掩码检查）。</p>
+<p>这些参数是如何传递的在 xv6 中，系统调用参数的传递涉及 用户态到内核态的数据交换，主要通过寄存器、栈和内核安全函数协作完成。以下是命令 trace 32 grep hello README 的参数传递全流程解析：</p>
+<ol>
+<li class="lvl-3">
+<p>用户态参数准备<br>
+trace 程序的参数（用户态）<br>
+argv 结构：</p>
+</li>
+</ol>
+<pre><code class="c">argv = [&quot;trace&quot;, &quot;32&quot;, &quot;grep&quot;, &quot;hello&quot;, &quot;README&quot;]
+</code></pre>
+<p>trace.c 的 main 函数：</p>
+<pre><code class="c">int main(int argc, char *argv[]) &#123;
+    int mask = atoi(argv[1]);  // 字符串 &quot;32&quot; → 整数 32
+    trace(mask);               // 调用 trace(32)
+    exec(argv[2], &amp;argv[2]);   // 调用 exec(&quot;grep&quot;, [&quot;grep&quot;, &quot;hello&quot;, &quot;README&quot;])
+&#125;
+</code></pre>
+<ol start="2">
+<li class="lvl-3">
+<p>系统调用参数传递机制<br>
+(1) 用户态到内核态的切换<br>
+trace() 系统调用：</p>
+</li>
+</ol>
+<p>用户态存根（user/usys.S）：</p>
+<pre><code class="asm">trace:
+    li a7, SYS_trace  # 系统调用号存入 a7（SYS_trace=22）
+    mv a0, a0         # 第一个参数（mask=32）已由用户代码放在 a0
+    ecall             # 切换到内核态
+    ret
+</code></pre>
+<p>关键寄存器：</p>
+<p>寄存器	作用	值<br>
+a7	系统调用号	22（SYS_trace）<br>
+a0	第一个参数（mask）	32<br>
+(2) 内核读取用户参数<br>
+sys_trace() 处理（kernel/sysproc.c）：</p>
+<pre><code class="c">uint64 sys_trace(void) &#123;
+    int mask;
+    if (argint(0, &amp;mask) &lt; 0) return -1;  // 从用户态 a0 读取 mask
+    myproc()-&gt;trace_mask = mask;          // 保存到当前进程
+    return 0;
+&#125;
+</code></pre>
+<p>argint 函数（kernel/syscall.c）：</p>
+<p>从用户态的 a0 寄存器（存储 mask）复制值到内核。</p>
+<p>使用 fetchint 安全访问用户内存（防止页错误导致内核崩溃）。</p>
+<ol start="3">
+<li class="lvl-3">
+<p>exec() 的参数传递<br>
+(1) 用户态参数准备<br>
+exec(argv[2], &amp;argv[2])：</p>
+</li>
+</ol>
+<p>argv[2] = “grep”（程序名）</p>
+<p>&amp;argv[2] = [“grep”, “hello”, “README”]（参数列表）</p>
+<p>(2) 内核处理 exec 参数<br>
+sys_exec()（kernel/sysfile.c）：</p>
+<pre><code class="c">uint64 sys_exec(void) &#123;
+    char path[MAXPATH], *argv[MAXARG];
+    uint64 uargv; // 用户态地址
+    argaddr(1, &amp;uargv); // 从 a1 读取用户态 argv 地址
+    // 安全复制每个用户态字符串到内核
+    for (i = 0; ; i++) &#123;
+        if (fetchaddr(uargv + i*sizeof(uint64), &amp;uarg) &lt; 0) break;
+        if (fetchstr(uarg, argv[i], MAXPATH) &lt; 0) break;
+    &#125;
+    // 执行程序
+    return exec(path, argv);
+&#125;
+</code></pre>
+<p>关键步骤：</p>
+<p>argaddr(1, &amp;uargv)：从寄存器 a1 获取用户态 argv 数组地址。</p>
+<p>fetchaddr + fetchstr：逐项复制用户态字符串到内核。</p>
+<ol start="4">
+<li class="lvl-3">
+<p>参数传递总结步骤	参数类型	传递方式	关键函数/寄存器<br>
+trace(mask)	整数 (32)	用户态 a0 → 内核 argint()	a7=22, a0=32<br>
+exec(argv)	字符串数组	用户态 a1（指针）→ 内核 fetchstr	a7=7, a0=“grep”, a1=argv</p>
+</li>
+<li class="lvl-3">
+<p>安全机制寄存器隔离</p>
+</li>
+</ol>
+<p>用户态和内核态使用独立的寄存器副本（通过 ecall 切换时保存上下文）。</p>
+<p>边界检查</p>
+<p>fetchint/fetchstr 检查用户指针有效性，防止内核访问非法地址。</p>
+<p>进程属性隔离</p>
+<p>trace_mask 存储在进程控制块（struct proc）中，各进程独立。</p>
+<ol start="6">
+<li class="lvl-3">
+<p>示例：trace 32 grep hello README 的寄存器状态系统调用	寄存器	值	说明<br>
+trace	a7	22（SYS_trace）	系统调用号<br>
+a0	32	跟踪掩码<br>
+exec	a7	7（SYS_exec）	系统调用号<br>
+a0	用户态 “grep” 的地址	程序路径<br>
+a1	用户态 [“grep”, …] 的地址	参数列表指针通过这种设计，xv6 实现了安全高效的用户态-内核态参数传递，确保系统调用的可靠性和隔离性。</p>
+</li>
+</ol>
+<p>trace:<br>
+li a7, SYS_trace<br>
+ecall<br>
+ret<br>
+这是什么语法,.s是什么文件以下是关于 trace:、.s 文件及 RISC-V 汇编语法的详细解释：</p>
+<ol>
+<li class="lvl-3">
+<p>代码语法解析</p>
+</li>
+</ol>
+<pre><code class="asm">trace:           ; 标签（函数入口）
+    li a7, SYS_trace  ; 将系统调用号加载到寄存器 a7
+    ecall            ; 触发软中断，切换到内核态
+    ret              ; 返回调用者
+</code></pre>
+<p>逐行说明指令/标签	作用	寄存器/参数说明<br>
+trace:	标签（Label），表示函数入口地址，相当于 C 语言的函数名。	用户态通过 call trace 调用。<br>
+li a7, SYS_trace	加载立即数（Load Immediate）：将 SYS_trace（系统调用号）存入寄存器 a7。	a7 用于传递系统调用号。<br>
+ecall	环境调用（Environment Call）：触发软中断，切换到内核态执行系统调用。	RISC-V 特权指令，依赖 a7 确定调用类型。<br>
+ret	返回（Return）：从函数返回到调用者（call 指令的下一条指令）。	实际是 jalr x0, 0(ra) 的伪指令。<br>
+2. .s 文件是什么？文件类型：.s 是 汇编代码文件（Assembly Source），包含直接用处理器指令编写的低级代码。</p>
+<p>生成方式：</p>
+<p>xv6 通过 Perl 脚本 user/usys.pl 动态生成 user/usys.S，避免手动编写重复的系统调用存根。</p>
+<p>示例生成逻辑：</p>
+<pre><code class="perl"># user/usys.pl
+print &quot;trace:\n li a7, SYS_trace\n ecall\n ret\n&quot;;
+</code></pre>
+<p>编译过程：</p>
+<p>汇编器（如 riscv64-linux-gnu-as）将 .s 文件编译为机器码（.o 目标文件）。</p>
+<p>链接器将多个 .o 文件合并为最终的可执行文件。</p>
+<ol start="3">
+<li class="lvl-3">
+<p>为何需要汇编存根？<br>
+(1) 用户态到内核态的切换<br>
+ecall 指令：RISC-V 中唯一合法的特权指令，用于触发系统调用。</p>
+</li>
+</ol>
+<p>寄存器约定：</p>
+<p>a7：存放系统调用号（如 SYS_trace=22）。</p>
+<p>a0-a5：传递参数（trace 只有一个参数 mask，通过 a0 传递）。</p>
+<p>(2) 对比 C 代码的局限性<br>
+C 无法直接内联 ecall 指令，必须通过汇编实现。</p>
+<p>示例：若用 C 伪代码表示 trace()，实际无法编译：</p>
+<pre><code class="c">void trace(int mask) &#123;
+    a7 = SYS_trace; // 无法直接操作寄存器
+    ecall();        // C 无此语法
+&#125;
+</code></pre>
+<ol start="4">
+<li class="lvl-3">
+<p>xv6 中的完整调用链以 trace(32) 为例：</p>
+</li>
+</ol>
+<p>用户态调用（user/trace.c）：</p>
+<pre><code class="c">trace(32); // 调用汇编存根
+</code></pre>
+<p>汇编存根（user/usys.S）：</p>
+<pre><code class="asm">trace:
+    li a7, SYS_trace  # a7 = 22
+    mv a0, a0         # 第一个参数（mask=32）已在调用前存入 a0
+    ecall             # 切换到内核态
+    ret
+</code></pre>
+<p>内核处理（kernel/syscall.c）：</p>
+<p>通过 scause 识别 ecall，调用 syscall()。</p>
+<p>根据 a7=22 调用 sys_trace()。</p>
+<ol start="5">
+<li class="lvl-3">
+<p>RISC-V 汇编关键点概念	说明寄存器	a0-a7 用于参数传递，a7 固定存放系统调用号。伪指令	li（加载立即数）、ret（返回）等是汇编器提供的简化写法。标签	trace: 定义符号地址，其他代码可通过 call trace 跳转。特权指令	ecall 是用户程序唯一能触发的特权指令，用于请求内核服务。</p>
+</li>
+<li class="lvl-3">
+<p>示例：查看生成的汇编代码编译 xv6 后，可检查 user/usys.S 文件内容：</p>
+</li>
+</ol>
+<pre><code class="bash">cat user/usys.S
+</code></pre>
+<p>输出示例：</p>
+<pre><code class="asm">trace:
+    li a7, SYS_trace
+    ecall
+    ret
+fork:
+    li a7, SYS_fork
+    ecall
+    ret
+</code></pre>
+<p>…<br>
+总结<br>
+.s 文件：是手写或脚本生成的汇编代码，直接对应处理器指令。</p>
+<p>ecall 存根：用户态通过固定的汇编模板（li a7 + ecall）调用内核功能。</p>
+<p>RISC-V 约定：参数通过寄存器传递，系统调用号必须存入 a7。</p>
+<p>通过这种设计，xv6 实现了安全可控的用户态-内核态交互，同时保持代码的简洁性。</p>
+<p>uint64 sys_trace(void) {<br>
+int mask;<br>
+argint(0, &amp;mask);          // 从用户态读取 mask=32<br>
+myproc()-&gt;trace_mask = mask; // 设置进程的 trace_mask<br>
+return 0;<br>
+}   这里的int mask和ao<br>
+uint64 sys_trace(void) {<br>
+int mask;<br>
+argint(0, &amp;mask);          // 从用户态读取 mask=32<br>
+myproc()-&gt;trace_mask = mask; // 设置进程的 trace_mask<br>
+return 0;<br>
+}   这里的int mask和a<br>
+uint64 sys_trace(void) {<br>
+int mask;<br>
+argint(0, &amp;mask);          // 从用户态读取 mask=32<br>
+myproc()-&gt;trace_mask = mask; // 设置进程的 trace_mask<br>
+return 0;<br>
+}   这里的int mask和a0的关系在 xv6 的系统调用实现中，int mask 和寄存器 a0 的关系是 用户态参数通过寄存器传递到内核的桥梁。以下是详细分析：</p>
+<ol>
+<li class="lvl-3">
+<p>参数传递流程<br>
+(1) 用户态调用 trace(mask)<br>
+C 代码调用（user/trace.c）：</p>
+</li>
+</ol>
+<pre><code class="c">trace(32);  // 参数 32 传递给 trace()
+</code></pre>
+<p>汇编存根处理（user/usys.S）：</p>
+<pre><code class="asm">trace:
+    li a7, SYS_trace  # 系统调用号存入 a7
+    mv a0, a0         # 第一个参数（mask=32）从 C 调用约定位置移动到 a0
+    ecall             # 切换到内核态
+    ret
+</code></pre>
+<p>关键点：</p>
+<p>根据 RISC-V 调用约定，第一个整数参数通过 a0 传递。</p>
+<p>mask=32 在用户态调用时已存入 a0，此处 mv a0, a0 看似冗余，但确保参数位置正确。</p>
+<p>(2) 内核读取 a0 的值<br>
+sys_trace() 函数（kernel/sysproc.c）：</p>
+<pre><code class="c">uint64 sys_trace(void) &#123;
+    int mask;
+    argint(0, &amp;mask);          // 从用户态 a0 读取 mask
+    myproc()-&gt;trace_mask = mask; // 保存到当前进程
+    return 0;
+&#125;
+</code></pre>
+<p>argint(0, &amp;mask) 的作用：</p>
+<p>第一个参数 0：表示从 a0 寄存器读取（0 是参数索引，对应 a0）。</p>
+<p>&amp;mask：将读取的值存入内核变量 mask。</p>
+<ol start="2">
+<li class="lvl-3">
+<p>argint() 的内部实现<br>
+(1) 函数定义（kernel/syscall.c）</p>
+</li>
+</ol>
+<pre><code class="c">int argint(int n, int *ip) &#123;
+    *ip = myproc()-&gt;trapframe-&gt;a0 + n * sizeof(uint64);
+    return 0;
+&#125;
+</code></pre>
+<p>逻辑简化：</p>
+<p>n=0 时，直接访问 trapframe-&gt;a0（存储用户态的 a0 寄存器值）。</p>
+<p>将 a0 的值（即 32）写入 *ip（即 mask）。</p>
+<p>(2) trapframe 的作用上下文保存：当用户态通过 ecall 进入内核时，所有用户寄存器（包括 a0）被保存到 trapframe 结构体中。</p>
+<p>访问路径：</p>
+<pre><code class="c">myproc()-&gt;trapframe-&gt;a0  // 获取用户态 a0 的值
+</code></pre>
+<ol start="3">
+<li class="lvl-3">
+<p>数据流向图示图表代码</p>
+</li>
+<li class="lvl-3">
+<p>关键点总结概念	说明<br>
+RISC-V 调用约定	前 6 个整数参数通过 a0-a5 传递，a0 是第一个参数。<br>
+argint 的索引	argint(0, …) 对应 a0，argint(1, …) 对应 a1，依此类推。寄存器到变量	用户态的 a0 → 内核的 trapframe-&gt;a0 → 通过 argint() 存入 mask。安全性	argint() 通过 trapframe 安全访问用户态参数，避免直接解引用。</p>
+</li>
+<li class="lvl-3">
+<p>示例验证若用户调用 trace(32)：</p>
+</li>
+</ol>
+<p>用户态：a0 = 32（通过 C 调用约定设置）。</p>
+<p>内核态：</p>
+<p>argint(0, &amp;mask) 读取 trapframe-&gt;a0，得到 32。</p>
+<p>mask 被赋值为 32，最终存入 trace_mask。</p>
+<p>常见问题<br>
+Q：为什么不用 a0 直接赋值，而要调用 argint()？安全性：直接访问用户态寄存器可能引发安全问题（如寄存器未保存）。</p>
+<p>抽象性：argint() 封装了参数读取逻辑，统一处理所有系统调用。</p>
+<p>Q：argint(0, &amp;mask) 的 0 是参数索引吗？是的，0 表示第一个参数（对应 a0），1 对应 a1，以此类推。xv6 通过索引映射到寄存器位置。</p>
+<p>通过这种设计，xv6 实现了用户态参数到内核的安全、高效传递，同时保持了代码的清晰性和可维护性。</p>
+
+    </div>
+    
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2025 zero two
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;lAn_rEd
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo="styundydsg/styundydsg.github.io"
+    data-repo-id="R_kgDOK0X3wA"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOK0X3wM4Cok6S"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="1"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin
+    async
+></script>
+
+
+
+
+
+    
+
+    
+    
+</body>
+</html>

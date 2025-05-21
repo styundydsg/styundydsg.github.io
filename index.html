@@ -195,6 +195,157 @@
         
 
 <div class="post">
+    <a href="/2025/05/19/mit-6s081-lab02-System-call-tracing/">
+        <h2 class="post-title">mit-6s081-lab02-System_call_tracing</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                操作系统
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/5/19
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            
+            <h4 id="声明">声明</h4>
+<p>文章仅具有解释意义<br>
+希望能为你搭建知识框架</p>
+<h4 id="过程">过程</h4>
+<p>Makefile Modification:</p>
+<p>makefile<br>
+UPROGS=<br>
+…<br>
+$U/_trace<br>
+User Space Modifications:</p>
+<p>user/user.h:</p>
+<pre><code class="c">int trace(int);
+</code></pre>
+<p>user/usys.pl:</p>
+<pre><code class="perl">entry(&quot;trace&quot;);
+</code></pre>
+<p>Kernel Modifications:</p>
+<p>kernel/syscall.h:</p>
+<pre><code class="c">#define SYS_trace 22
+</code></pre>
+<p>kernel/syscall.c:</p>
+<pre><code class="c">
+extern uint64 sys_trace(void);
+//这里是自己添加不是将syscalls修改
+static char *syscall_names[] = &#123;   
+    [SYS_fork]    &quot;fork&quot;,
+    [SYS_exit]    &quot;exit&quot;,
+    [SYS_wait]    &quot;wait&quot;,
+    [SYS_pipe]    &quot;pipe&quot;,
+    [SYS_read]    &quot;read&quot;,
+    [SYS_kill]    &quot;kill&quot;,
+    [SYS_exec]    &quot;exec&quot;,
+    [SYS_fstat]   &quot;fstat&quot;,
+    [SYS_chdir]   &quot;chdir&quot;,
+    [SYS_dup]     &quot;dup&quot;,
+    [SYS_getpid]  &quot;getpid&quot;,
+    [SYS_sbrk]    &quot;sbrk&quot;,
+    [SYS_sleep]   &quot;sleep&quot;,
+    [SYS_uptime]  &quot;uptime&quot;,
+    [SYS_open]    &quot;open&quot;,
+    [SYS_write]   &quot;write&quot;,
+    [SYS_mknod]   &quot;mknod&quot;,
+    [SYS_unlink]  &quot;unlink&quot;,
+    [SYS_link]    &quot;link&quot;,
+    [SYS_mkdir]   &quot;mkdir&quot;,
+    [SYS_close]   &quot;close&quot;,
+    [SYS_trace]   &quot;trace&quot;,
+&#125;;
+</code></pre>
+<p>kernel/sysproc.c:</p>
+<pre><code class="c">uint64 sys_trace(void) &#123;
+    int mask;
+    if (argint(0, &amp;mask) &lt; 0)
+        return -1;
+    struct proc *p = myproc();
+    p-&gt;trace_mask = mask;
+    return 0;
+&#125;
+</code></pre>
+<p>kernel/proc.h:</p>
+<pre><code class="c">struct proc &#123;
+    ...
+    int trace_mask;
+    ...
+&#125;;
+</code></pre>
+<p>kernel/proc.c (fork and allocproc):</p>
+<pre><code class="c">int fork(void) &#123;
+    ...
+    np-&gt;trace_mask = p-&gt;trace_mask;
+    ...
+&#125;
+
+static struct proc* allocproc(void) &#123;
+    ...
+    p-&gt;trace_mask = 0;
+    ...
+&#125;
+kernel/syscall.c (syscall function):
+</code></pre>
+<pre><code class="c">void syscall(void) &#123;
+    int num;
+    struct proc *p = myproc();
+
+    num = p-&gt;trapframe-&gt;a7;
+    if (num &gt; 0 &amp;&amp; num &lt; NELEM(syscalls) &amp;&amp; syscalls[num]) &#123;
+        p-&gt;trapframe-&gt;a0 = syscalls[num]();
+        if ((p-&gt;trace_mask &amp; (1 &lt;&lt; num)) != 0) &#123;
+            char *name = &quot;unknown&quot;;
+            if (num &lt; NELEM(syscall_names) &amp;&amp; syscall_names[num] != 0) &#123;
+                name = syscall_names[num];
+            &#125;
+            printf(&quot;%d: syscall %s -&gt; %d\n&quot;, p-&gt;pid, name, p-&gt;trapframe-&gt;a0);
+        &#125;
+    &#125; else &#123;
+        printf(&quot;%d %s: unknown sys call %d\n&quot;, p-&gt;pid, p-&gt;name, num);
+        p-&gt;trapframe-&gt;a0 = -1;
+    &#125;
+&#125;
+</code></pre>
+            
+            
+        </div>
+    </div>
+    
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/mit6-s081-labs/" style="color: #00a596">mit6.s081_labs</a>
+        </span>
+        
+    </div>
+    
+    <a href="/2025/05/19/mit-6s081-lab02-System-call-tracing/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2025/05/17/%E5%85%B3%E4%BA%8Ewsl%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8samba/">
         <h2 class="post-title">关于wsl无法使用samba</h2>
     </a>
@@ -255,7 +406,7 @@ Ubuntu    Running         2<br>
         
         <span class="tag">
             
-            <a href="/tags/wsl/" style="color: #ff7d73">wsl</a>
+            <a href="/tags/wsl/" style="color: #ffa2c4">wsl</a>
         </span>
         
     </div>
@@ -561,7 +712,7 @@ cmd2的标准输入（文件描述符0）被重定向到管道的read_fd，其�
         
         <span class="tag">
             
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00bcd4">解决方案</a>
+            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #03a9f4">解决方案</a>
         </span>
         
     </div>
@@ -685,7 +836,7 @@ dirent结构体用于描述目录中的条目，主要成员包括：</p>
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #00a596">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #ff7d73">mit6.s081_labs</a>
         </span>
         
     </div>
