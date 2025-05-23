@@ -195,6 +195,131 @@
         
 
 <div class="post">
+    <a href="/2025/05/23/%E5%85%B3%E4%BA%8E%E9%B8%BF%E8%92%99mini%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E4%B8%8D%E8%BF%87%E7%9A%84%E9%97%AE%E9%A2%98%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+        <h2 class="post-title">关于鸿蒙mini系统编译不过的问题的个人解决方案</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/OpenHarmony/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                OpenHarmony
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/5/23
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            
+            <h2 id="个人总结">个人总结</h2>
+<p>wsl ubuntu 22.04<br>
+拉取源码时的命令：repo init -u <a href="mailto:git@gitee.com">git@gitee.com</a>:openharmony/manifest.git -b master -g ohos:mini --no-repo-verify<br>
+bash build/prebuilts_download.sh 命令之后会出现一些什么pls check 我的理解就是mini系统不需要，至少我编译成功helloword的时候我没有去管，如果后面需要再去解决。<br>
+还有windows和linux联合的时候vscode远程链接之后vscode打不开那个deveco device tool<br>
+在使用全量的时候也出现了子系统名称不对，忘了解决没有反正后面还有问题就不管了<br>
+忘了忘了<br>
+当时的文档是v5.0.3 Release</p>
+<h2 id="配置文件">配置文件</h2>
+<h3 id="applications-sample-wifi-iot-app-my-first-app下的BUILD-gn文件">./applications/sample/wifi-iot/app/my_first_app下的BUILD.gn文件</h3>
+<p>static_library(“my_first_app”) {<br>
+sources = [<br>
+“hello_world.c”<br>
+]<br>
+include_dirs = [<br>
+“//utils/native/lite/include”<br>
+]<br>
+}</p>
+<h3 id="build-lite-components-communication-json">build/lite/components/communication.json</h3>
+<pre><code>&#123;
+  &quot;component&quot;: &quot;hello_world_app&quot;,
+  &quot;description&quot;: &quot;hello world samples.&quot;,
+  &quot;optional&quot;: &quot;true&quot;,
+  &quot;dirs&quot;: [
+    &quot;applications/sample/wifi-iot/app/my_first_app&quot;
+  ],
+  &quot;targets&quot;: [
+    &quot;//applications/sample/wifi-iot/app/my_first_app:myapp&quot;
+  ],
+  &quot;rom&quot;: &quot;&quot;,
+  &quot;ram&quot;: &quot;&quot;,
+  &quot;output&quot;: [],
+  &quot;adapted_kernel&quot;: [ &quot;liteos_m&quot; ],
+  &quot;features&quot;: [],
+  &quot;deps&quot;: &#123;
+    &quot;components&quot;: [],
+    &quot;third_party&quot;: []
+  &#125;
+&#125;
+</code></pre>
+<h3 id="vendor-hisilicon-hispark-pegasus-config-json">vendor/hisilicon/hispark_pegasus/config.json</h3>
+<p>这里我没配置也通过了，下面连接他们说上面那个communication也可以不写，但是我会出错好像是报json的格式错误？去看那个文件也是错误的，那个文件是生成的所以应该找源头<br>
+<a target="_blank" rel="noopener" href="https://gitee.com/openharmony/build/issues/I8L7LC?skip_mobile=true"></a></p>
+<h3 id="wsl-Ubuntu22-04-root-ohos-master-applications-sample-wifi-iot-app-BUILD-gn">\\wsl$\Ubuntu22.04\root\ohos_master\applications\sample\wifi-iot\app\BUILD.gn</h3>
+<p># Copyright © 2020-2022 Huawei Device Co., Ltd.<br>
+# Licensed under the Apache License, Version 2.0 (the “License”);<br>
+# you may not use this file except in compliance with the License.<br>
+# You may obtain a copy of the License at<br>
+#<br>
+#     <a target="_blank" rel="noopener" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a><br>
+#<br>
+# Unless required by applicable law or agreed to in writing, software<br>
+# distributed under the License is distributed on an “AS IS” BASIS,<br>
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br>
+# See the License for the specific language governing permissions and<br>
+# limitations under the License.</p>
+<p>import(“//build/lite/config/component/lite_component.gni”)<br>
+#这里应该可以看出app就是application路径下面的那个，然后my_first_app也是对应的，可以说哪里有那个gn文件就需要添加进去，个人理解个人理解<br>
+lite_component(“app”) {<br>
+features = [ “startup”,“my_first_app” ]<br>
+}</p>
+<h3 id="wsl-Ubuntu22-04-root-ohos-master-applications-sample-wifi-iot-app-my-first-app-BUILD-gn">\\wsl$\Ubuntu22.04\root\ohos_master\applications\sample\wifi-iot\app\my_first_app\BUILD.gn</h3>
+<p>static_library(“my_first_app”) {<br>
+sources = [<br>
+“hello_world.c”<br>
+]<br>
+include_dirs = [<br>
+“//utils/native/lite/include”<br>
+]<br>
+}</p>
+<h3 id="最后">最后</h3>
+<p>这些在那个文档都是有配置规则的，不过是在后面，为了写hello world去看也不太可能<br>
+为了写hello world，先是获取源码，买了块移动硬盘发现是qlc就退了，想了想其实100多GB空间还是够的，就强行把五个分区合并成两个了（不是不知道危害，就是突然不想管了就想着前进，五个分区要正常解决要处理太多了，能卸载的卸载，一些文件或工具之类的就直接剪切，想着也没有空间去存那些先移出来的数据（写到这里触发了既视感），最后一些电脑组件损坏了，索引服务启动不了搜索界面出现一大块东西，注册表乱成一团，还好慢慢地恢复到能使用的情况了），然后去寻找减少空间的方法，发现可以只下载mini。按照教程来出现的问题也很多，就又下载small，后来又下载全量，还是很多问题，还有出现不同的问题，最后还是下载mini了，毕竟刚开始小总是好的，确定的东西总是能根据不同的状态出现不同的问题。还有挺多问题已经记不起来了，抱歉。</p>
+<h3 id="一些链接，希望能有帮助">一些链接，希望能有帮助</h3>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7430348056199675967">轻量编译</a>没必要完全按照，太精细反而不太好<br>
+<a target="_blank" rel="noopener" href="https://jsonlint.com/">json格式验证</a><br>
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36115224/article/details/133966244">Ubuntu22.04 搭建 OpenHarmony 命令行开发环境</a><br>
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38844263/article/details/144016387?spm=1001.2014.3001.5506">[OpenHarmony5.0][环境][教程]OpenHarmony 5.0源码在WSL2 Ubuntu22.04 编译环境搭建教程</a>细<br>
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/wenfei11471/article/details/129922947?spm=1001.2014.3001.5506">一键配置Ubuntu的OpenHarmony基础编译环境</a>23年的<br>
+<a target="_blank" rel="noopener" href="https://developer.huawei.com/consumer/cn/forum/topic/0201103580446197179">关于在Ubuntu中搭建DevEco Device Tool环境出现报错Unable to locate package python-venv</a><br>
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40010764/article/details/140949225">如何向OpenHarmony中编译构建自己的子系统、部件和模块</a><br>
+这里也很多链接找不到了</p>
+
+            
+            
+        </div>
+    </div>
+    
+    <div class="post-tags">
+        
+        
+        
+    </div>
+    
+    <a href="/2025/05/23/%E5%85%B3%E4%BA%8E%E9%B8%BF%E8%92%99mini%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E4%B8%8D%E8%BF%87%E7%9A%84%E9%97%AE%E9%A2%98%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2025/05/19/mit-6s081-lab02-System-call-tracing/">
         <h2 class="post-title">mit-6s081-lab02-System_call_tracing</h2>
     </a>
@@ -337,7 +462,7 @@ kernel/syscall.c (syscall function):
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #00a596">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #ff7d73">mit6.s081_labs</a>
         </span>
         
     </div>
@@ -636,7 +761,7 @@ cmd2的标准输入（文件描述符0）被重定向到管道的read_fd，其�
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #00bcd4">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #ffa2c4">mit6.s081_labs</a>
         </span>
         
     </div>
@@ -712,7 +837,7 @@ cmd2的标准输入（文件描述符0）被重定向到管道的read_fd，其�
         
         <span class="tag">
             
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #03a9f4">解决方案</a>
+            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #ffa2c4">解决方案</a>
         </span>
         
     </div>
@@ -784,7 +909,7 @@ dirent结构体用于描述目录中的条目，主要成员包括：</p>
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #03a9f4">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #ffa2c4">mit6.s081_labs</a>
         </span>
         
     </div>
@@ -836,7 +961,7 @@ dirent结构体用于描述目录中的条目，主要成员包括：</p>
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #ff7d73">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #00a596">mit6.s081_labs</a>
         </span>
         
     </div>
