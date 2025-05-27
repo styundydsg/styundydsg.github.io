@@ -200,7 +200,8 @@ bash build/prebuilts_download.sh 命令之后会出现一些什么pls check 我�
 还有windows和linux联合的时候vscode远程链接之后vscode打不开那个deveco device tool<br>
 在使用全量的时候也出现了子系统名称不对，忘了解决没有反正后面还有问题就不管了<br>
 忘了忘了<br>
-当时的文档是v5.0.3 Release</p>
+当时的文档是v5.0.3 Release<br>
+还有如果提示格式错误就检查有没有格式错误，没有删掉那个.build文件</p>
 <h2 id="配置文件">配置文件</h2>
 <h3 id="applications-sample-wifi-iot-app-my-first-app下的BUILD-gn文件">./applications/sample/wifi-iot/app/my_first_app下的BUILD.gn文件</h3>
 <p>static_library(“my_first_app”) {<br>
@@ -220,7 +221,7 @@ include_dirs = [<br>
     &quot;applications/sample/wifi-iot/app/my_first_app&quot;
   ],
   &quot;targets&quot;: [
-    &quot;//applications/sample/wifi-iot/app/my_first_app:myapp&quot;
+    &quot;//applications/sample/wifi-iot/app/my_first_app:my_first_app&quot;
   ],
   &quot;rom&quot;: &quot;&quot;,
   &quot;ram&quot;: &quot;&quot;,
@@ -249,9 +250,8 @@ include_dirs = [<br>
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br>
 # See the License for the specific language governing permissions and<br>
 # limitations under the License.</p>
-<p>import(“//build/lite/config/component/lite_component.gni”)<br>
-#这里应该可以看出app就是application路径下面的那个，然后my_first_app也是对应的，可以说哪里有那个gn文件就需要添加进去，个人理解个人理解<br>
-lite_component(“app”) {<br>
+<p>import(“//build/lite/config/component/lite_component.gni”)</p>
+<p>lite_component(“app”) {<br>
 features = [ “startup”,“my_first_app” ]<br>
 }</p>
 <h3 id="wsl-Ubuntu22-04-root-ohos-master-applications-sample-wifi-iot-app-my-first-app-BUILD-gn">\\wsl$\Ubuntu22.04\root\ohos_master\applications\sample\wifi-iot\app\my_first_app\BUILD.gn</h3>

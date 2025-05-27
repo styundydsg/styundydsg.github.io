@@ -195,6 +195,58 @@
         
 
 <div class="post">
+    <a href="/2025/05/27/openharmony%E7%83%A7%E5%BD%95-%E8%BF%90%E8%A1%8C/">
+        <h2 class="post-title">openharmony烧录/运行</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/OpenHarmony/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                OpenHarmony
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/5/27
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            
+            <h3 id="关键语句">关键语句</h3>
+<p>ready to load at 0x10a000 ccccccccccload fail 0xc35a69a6 ready<br>
+Wait SELoadr ACK overtime Wait connect success flag (hisilicon) overtime.<br>
+AT指令无返回</p>
+<p>HiBurn<br>
+烧录的时候使用OHOS_Image.bin,文档是刚开始看是选择两个的，其中是选择一个整合好的，应该是文档漏了。</p>
+<p>AT指令的运行是在一个工具下的，如IPOP<br>
+运行的时候他们说要发送AT指令，如果后面不加回车的话会没有反应。<br>
+可能不同的串口调试助手不一样。</p>
+
+            
+            
+        </div>
+    </div>
+    
+    <div class="post-tags">
+        
+        
+        
+    </div>
+    
+    <a href="/2025/05/27/openharmony%E7%83%A7%E5%BD%95-%E8%BF%90%E8%A1%8C/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2025/05/26/xv6-%E7%94%A8%E6%88%B7%E8%B0%83%E7%94%A8-%E8%BF%87%E7%A8%8B/">
         <h2 class="post-title">xv6-用户调用-过程</h2>
     </a>
@@ -331,7 +383,7 @@ int write(int fd, char *buf, int n) &#123;
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #ff7d73">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #ffa2c4">mit6.s081_labs</a>
         </span>
         
     </div>
@@ -419,7 +471,8 @@ bash build/prebuilts_download.sh 命令之后会出现一些什么pls check 我�
 还有windows和linux联合的时候vscode远程链接之后vscode打不开那个deveco device tool<br>
 在使用全量的时候也出现了子系统名称不对，忘了解决没有反正后面还有问题就不管了<br>
 忘了忘了<br>
-当时的文档是v5.0.3 Release</p>
+当时的文档是v5.0.3 Release<br>
+还有如果提示格式错误就检查有没有格式错误，没有删掉那个.build文件</p>
 <h2 id="配置文件">配置文件</h2>
 <h3 id="applications-sample-wifi-iot-app-my-first-app下的BUILD-gn文件">./applications/sample/wifi-iot/app/my_first_app下的BUILD.gn文件</h3>
 <p>static_library(“my_first_app”) {<br>
@@ -439,7 +492,7 @@ include_dirs = [<br>
     &quot;applications/sample/wifi-iot/app/my_first_app&quot;
   ],
   &quot;targets&quot;: [
-    &quot;//applications/sample/wifi-iot/app/my_first_app:myapp&quot;
+    &quot;//applications/sample/wifi-iot/app/my_first_app:my_first_app&quot;
   ],
   &quot;rom&quot;: &quot;&quot;,
   &quot;ram&quot;: &quot;&quot;,
@@ -468,9 +521,8 @@ include_dirs = [<br>
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br>
 # See the License for the specific language governing permissions and<br>
 # limitations under the License.</p>
-<p>import(“//build/lite/config/component/lite_component.gni”)<br>
-#这里应该可以看出app就是application路径下面的那个，然后my_first_app也是对应的，可以说哪里有那个gn文件就需要添加进去，个人理解个人理解<br>
-lite_component(“app”) {<br>
+<p>import(“//build/lite/config/component/lite_component.gni”)</p>
+<p>lite_component(“app”) {<br>
 features = [ “startup”,“my_first_app” ]<br>
 }</p>
 <h3 id="wsl-Ubuntu22-04-root-ohos-master-applications-sample-wifi-iot-app-my-first-app-BUILD-gn">\\wsl$\Ubuntu22.04\root\ohos_master\applications\sample\wifi-iot\app\my_first_app\BUILD.gn</h3>
@@ -652,7 +704,7 @@ kernel/syscall.c (syscall function):
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #00bcd4">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #00a596">mit6.s081_labs</a>
         </span>
         
     </div>
@@ -721,7 +773,7 @@ Ubuntu    Running         2<br>
         
         <span class="tag">
             
-            <a href="/tags/wsl/" style="color: #ff7d73">wsl</a>
+            <a href="/tags/wsl/" style="color: #00a596">wsl</a>
         </span>
         
     </div>
@@ -1027,7 +1079,7 @@ cmd2的标准输入（文件描述符0）被重定向到管道的read_fd，其�
         
         <span class="tag">
             
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00a596">解决方案</a>
+            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00bcd4">解决方案</a>
         </span>
         
     </div>
@@ -1151,7 +1203,7 @@ dirent结构体用于描述目录中的条目，主要成员包括：</p>
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #00a596">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #ff7d73">mit6.s081_labs</a>
         </span>
         
     </div>
@@ -1159,65 +1211,21 @@ dirent结构体用于描述目录中的条目，主要成员包括：</p>
     <a href="/2025/05/12/mit-6s081-lab01-primes/" class="go-post">阅读全文</a>
 </div>
 
-<div class="post">
-    <a href="/2025/03/22/hello-world/">
-        <h2 class="post-title">Hello World</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/3/22
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start">Quick Start</h2>
-<h3 id="Create-a-new-post">Create a new post</h3>
-<pre><code class="bash">$ hexo new &quot;My New Post&quot;
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server">Run server</h3>
-<pre><code class="bash">$ hexo server
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files">Generate static files</h3>
-<pre><code class="bash">$ hexo generate
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
-<pre><code class="bash">$ hexo deploy
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        
-        
-    </div>
-    
-    <a href="/2025/03/22/hello-world/" class="go-post">阅读全文</a>
-</div>
-
 
         <div class="page-current">
     
     <span class="current">1</span>
     
+    <a class="page-num" href="/page/2">
+        2
+    </a>
     
     
+    
+    
+    <a class="page-num" href="/page/2/">
+        <i class="fa-solid fa-caret-right fa-fw"></i>
+    </a>
     
 </div>
 
