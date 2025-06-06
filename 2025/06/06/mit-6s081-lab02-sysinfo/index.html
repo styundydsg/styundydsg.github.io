@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Categories: 解决方案 | zero two</title>
+    <title>mit-6s081-lab02-sysinfo | zero two</title>
     <meta name="author" content="lAn_rEd" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -42,6 +42,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -164,25 +168,20 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="archives">
-    
-    <div class="categories-tags">
-        
-        
-        
-        <span>
-            <a href="/categories/%E6%97%A5%E8%AE%B0/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                日记
-            </a>
+            <div class="article">
+    <div>
+        <h1>mit-6s081-lab02-sysinfo</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/6/6
         </span>
         
-        
-        
-        <span>
-            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="background: #00a596">
+        <span class="category">
+            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
@@ -191,76 +190,118 @@
         </span>
         
         
-        
-        <span>
-            <a href="/categories/Linux/" style="background: #ff7d73">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                Linux
-            </a>
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/mit6-s081-labs/" style="color: #ffa2c4">
+                    mit6.s081_labs
+                </a>
+            </span>
+            
         </span>
-        
-        
-        
-        <span>
-            <a href="/categories/linux/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                linux
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/OpenHarmony/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                OpenHarmony
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                解决方案
-            </a>
-        </span>
-        
-        
-        
         
     </div>
     
-    <div class="timeline">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2025/5/25</div>
-            <a href="/2025/05/25/%E8%A7%A3%E5%86%B3%E5%90%AF%E5%8A%A8windows-search-%E9%94%99%E8%AF%AF3/">
-                <h3>解决启动windows search 错误3</h3>
-            </a>
-            <div class="info">
-                
-                <span class="category">
-                    <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-                        <span class="icon">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </span>
-                        解决方案
-                    </a>
-                </span>
-                
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <p>像之前那样添加syscall，和$U/_sysinfotest</p>
+<h3 id="代码">代码</h3>
+<p>kernel/syscall.h</p>
+<pre><code class="c">#define SYS_sysinfo 23
+</code></pre>
+<p>kernel/syscall.c</p>
+<pre><code class="c">extern uint64 sys_sysinfo(void);
+
+[SYS_sysinfo] sys_sysinfo
+</code></pre>
+<p>kernel/sysproc.c</p>
+<pre><code class="c">#include &quot;sysinfo.h&quot;
+
+int sys_sysinfo(void) &#123;
+    struct sysinfo info;
+    uint64 addr;
+    struct proc *p = myproc();
+
+    if (argaddr(0, &amp;addr) &lt; 0)
+        return -1;
+
+    info.freemem = kfreemem();
+    info.nproc = nproc();
+
+    if (copyout(p-&gt;pagetable, addr, (char *)&amp;info, sizeof(info)) &lt; 0)
+        return -1;
+
+    return 0;
+&#125;
+</code></pre>
+<p>kernel/kalloc.c</p>
+<pre><code class="c">void *
+kalloc(void)
+&#123;
+  struct run *r;
+
+  acquire(&amp;kmem.lock);
+  r = kmem.freelist;
+  if(r)
+    kmem.freelist = r-&gt;next;
+  release(&amp;kmem.lock);
+
+  if(r)
+    memset((char*)r, 5, PGSIZE); // fill with junk
+  return (void*)r;
+&#125;
+</code></pre>
+<pre><code class="c">uint64
+kfreemem(void)
+&#123;
+struct run *r;
+uint64 pages=0;
+acquire(&amp;kmem.lock);
+for(r=kmem.freelist;r;r=r-&gt;next)
+        pages++;
+release(&amp;kmem.lock);
+
+return pages*PGSIZE;
+&#125;
+</code></pre>
+<p>kernel/proc.c</p>
+<pre><code class="c">int
+nproc(void)
+&#123;
+        int count=0;
+        struct proc* p;
+        acquire(&amp;pid_lock);
+        acquire(&amp;wait_lock);
+        for(p=proc;p&lt;&amp;proc[NPROC];p++)
+        &#123;
+                if(p-&gt;state!=UNUSED)&#123;
+                        count++;
+                &#125;
+
+        &#125;
+        release(&amp;wait_lock);
+        release(&amp;pid_lock);
+
+        return count;
+&#125;
+</code></pre>
+<p>然后输入sysinfotest</p>
+
     </div>
+    
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
+    
+    
     
 </div>
 
@@ -292,6 +333,29 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo="styundydsg/styundydsg.github.io"
+    data-repo-id="R_kgDOK0X3wA"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOK0X3wM4Cok6S"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="1"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin
+    async
+></script>
+
+
+
+
+
     
 
     
