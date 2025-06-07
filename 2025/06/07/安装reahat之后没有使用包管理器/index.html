@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>mit-6s081-lab02-sysinfo | zero two</title>
+    <title>安装reahat之后无法使用包管理器 | zero two</title>
     <meta name="author" content="lAn_rEd" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -170,126 +170,32 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>mit-6s081-lab02-sysinfo</h1>
+        <h1>安装reahat之后无法使用包管理器</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/6/6
+            2025/6/7
         </span>
         
         <span class="category">
-            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+            <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                操作系统
+                解决方案
             </a>
         </span>
         
         
-        <span class="tags">
-            <span class="icon">
-                <i class="fa-solid fa-tags fa-fw"></i>
-            </span>
-            
-            
-            <span class="tag">
-                
-                <a href="/tags/mit6-s081-labs/" style="color: #ffa2c4">
-                    mit6.s081_labs
-                </a>
-            </span>
-            
-        </span>
-        
     </div>
     
     <div class="content" v-pre>
-        <p>像之前那样添加syscall，和$U/_sysinfotest</p>
-<h3 id="代码">代码</h3>
-<p>kernel/syscall.h</p>
-<pre><code class="c">#define SYS_sysinfo 23
-</code></pre>
-<p>kernel/syscall.c</p>
-<pre><code class="c">extern uint64 sys_sysinfo(void);
-
-[SYS_sysinfo] sys_sysinfo
-</code></pre>
-<p>kernel/sysproc.c</p>
-<pre><code class="c">#include &quot;sysinfo.h&quot;
-
-int sys_sysinfo(void) &#123;
-    struct sysinfo info;
-    uint64 addr;
-    struct proc *p = myproc();
-
-    if (argaddr(0, &amp;addr) &lt; 0)
-        return -1;
-
-    info.freemem = kfreemem();
-    info.nproc = nproc();
-
-    if (copyout(p-&gt;pagetable, addr, (char *)&amp;info, sizeof(info)) &lt; 0)
-        return -1;
-
-    return 0;
-&#125;
-</code></pre>
-<p>kernel/kalloc.c</p>
-<pre><code class="c">void *
-kalloc(void)
-&#123;
-  struct run *r;
-
-  acquire(&amp;kmem.lock);
-  r = kmem.freelist;
-  if(r)
-    kmem.freelist = r-&gt;next;
-  release(&amp;kmem.lock);
-
-  if(r)
-    memset((char*)r, 5, PGSIZE); // fill with junk
-  return (void*)r;
-&#125;
-</code></pre>
-<pre><code class="c">uint64
-kfreemem(void)
-&#123;
-struct run *r;
-uint64 pages=0;
-acquire(&amp;kmem.lock);
-for(r=kmem.freelist;r;r=r-&gt;next)
-        pages++;
-release(&amp;kmem.lock);
-
-return pages*PGSIZE;
-&#125;
-</code></pre>
-<p>kernel/proc.c</p>
-<pre><code class="c">int
-nproc(void)
-&#123;
-        int count=0;
-        struct proc* p;
-        acquire(&amp;pid_lock);
-        acquire(&amp;wait_lock);
-        for(p=proc;p&lt;&amp;proc[NPROC];p++)
-        &#123;
-                if(p-&gt;state!=UNUSED)&#123;
-                        count++;
-                &#125;
-
-        &#125;
-        release(&amp;wait_lock);
-        release(&amp;pid_lock);
-
-        return count;
-&#125;
-</code></pre>
-<p>然后输入sysinfotest</p>
+        <p><a target="_blank" rel="noopener" href="https://access.redhat.com/zh_CN/solutions/1119463">如何使用红帽订阅管理器将 RHEL 系统注册并订阅到红帽客户门户网站？</a><br>
+username就填用户名，我使用的是github所以就使用github的名<br>
+之后记得refresh</p>
 
     </div>
     
