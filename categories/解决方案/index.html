@@ -171,61 +171,6 @@
         
         
         <span>
-            <a href="/categories/%E6%97%A5%E8%AE%B0/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                日记
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                操作系统
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/Linux/" style="background: #00bcd4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                Linux
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/linux/" style="background: #00a596">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                linux
-            </a>
-        </span>
-        
-        
-        
-        <span>
-            <a href="/categories/OpenHarmony/" style="background: #ffa2c4">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                OpenHarmony
-            </a>
-        </span>
-        
-        
-        
-        <span>
             <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="background: linear-gradient(120deg, #9abbf7 0%, #ffbbf4 100%)">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
@@ -237,6 +182,84 @@
         
         
         
+        
+        <span>
+            <a href="/categories/%E6%97%A5%E8%AE%B0/" style="background: #ffa2c4">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                日记
+            </a>
+        </span>
+        
+        
+        
+        <span>
+            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="background: #03a9f4">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                操作系统
+            </a>
+        </span>
+        
+        
+        
+        <span>
+            <a href="/categories/OpenHarmony/" style="background: #00bcd4">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                OpenHarmony
+            </a>
+        </span>
+        
+        
+        
+        <span>
+            <a href="/categories/linux/" style="background: #ffa2c4">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                linux
+            </a>
+        </span>
+        
+        
+        
+        <span>
+            <a href="/categories/Linux/" style="background: #ff7d73">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                Linux
+            </a>
+        </span>
+        
+        
+    </div>
+    
+    <div class="timeline">
+        <div class="timeline-tail"></div>
+        <div class="timeline-content">
+            <div class="item-time">2025/8/5</div>
+            <a href="/2025/08/05/hispark-pegasus-hi3861-%E5%8D%8E%E4%B8%BA%E4%BA%91-Mqtt/">
+                <h3>hispark_pegasus/hi3861/华为云/Mqtt</h3>
+            </a>
+            <div class="info">
+                
+                <span class="category">
+                    <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+                        <span class="icon">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </span>
+                        解决方案
+                    </a>
+                </span>
+                
+                
+            </div>
+        </div>
     </div>
     
     <div class="timeline">
@@ -266,7 +289,7 @@
                     
                     <span class="tag">
                         
-                        <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #03a9f4">
+                        <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00bcd4">
                             解决方案
                         </a>
                     </span>
@@ -304,7 +327,7 @@
                     
                     <span class="tag">
                         
-                        <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #ff7d73">
+                        <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #03a9f4">
                             解决方案
                         </a>
                     </span>
@@ -432,7 +455,12 @@
         </div>
         
     </div>
+
+    
+    
+
 </footer>
+
 
         </div>
         
@@ -446,7 +474,25 @@
     <script src="/js/main.js"></script>
     
 
-    
+    <!-- 问答按钮和窗口 -->
+    <div id="qa-button">
+        <i class="fa-solid fa-question"></i>
+    </div>
+    <div id="qa-window">
+        <div class="qa-header">
+            <h3>问答</h3>
+            <button id="qa-close">&times;</button>
+        </div>
+        <div class="qa-content">
+            <div class="qa-input">
+                <input type="text" id="qa-question" placeholder="请输入您的问题...">
+                <button id="qa-submit">提问</button>
+            </div>
+            <div class="qa-results" id="qa-results">
+                <!-- 问答结果将在这里显示 -->
+            </div>
+        </div>
+    </div>
     
 </body>
 </html>

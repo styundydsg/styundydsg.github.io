@@ -434,6 +434,189 @@
 #menu.menu-color #mobile-menu .title {
     color: #fff;
 }
+
+/* 问答按钮样式 */
+#qa-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(120deg, #66afef 0%, #9abbf7 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(102, 175, 239, 0.4);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+#qa-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(102, 175, 239, 0.6);
+}
+
+/* 问答窗口样式 */
+#qa-window {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 350px;
+    height: 600px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    display: none;
+    flex-direction: column;
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+
+#qa-window.show {
+    display: flex;
+}
+
+.qa-header {
+    background: linear-gradient(120deg, #66afef 0%, #9abbf7 100%);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.qa-header h3 {
+    margin: 0;
+    color: white;
+    font-size: 16px;
+}
+
+#qa-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#qa-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+.qa-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.qa-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#qa-question {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 14px;
+    outline: none;
+}
+
+#qa-question:focus {
+    border-color: #66afef;
+    box-shadow: 0 0 0 2px rgba(102, 175, 239, 0.2);
+}
+
+#qa-submit {
+    padding: 12px 20px;
+    background: #66afef;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+#qa-submit:hover {
+    background: #5590d0;
+}
+
+.qa-results {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 15px;
+    background: #f9f9f9;
+}
+
+.qa-result-item {
+    background: white;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 4px solid #66afef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    white-space: pre-line; /* 处理换行符 */
+}
+
+.qa-result-item:last-child {
+    margin-bottom: 0;
+}
+
+/* 加载状态样式 */
+.qa-result-item.loading {
+    background: #f8f9fa;
+    border-left: 4px solid #ffc107;
+}
+
+.qa-result-item.loading .spinner {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* 错误状态样式 */
+.qa-result-item.error {
+    background: #fff5f5;
+    border-left: 4px solid #dc3545;
+    color: #dc3545;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    #qa-button {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    #qa-window {
+        bottom: 80px;
+        right: 20px;
+        left: 20px;
+        width: auto;
+        max-width: none;
+    }
+}
 #preview {
     align-items: center;
     background-color: #fffc;
@@ -973,5 +1156,215 @@ ol li {
     ul,
     ol {
         padding-left: 20px;
+    }
+}
+
+/* 联系博主按钮样式 */
+.qa-contact-blogger {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #ff6b6b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.qa-contact-blogger p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+}
+
+.qa-contact-button {
+    padding: 8px 16px;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+}
+
+.qa-contact-button:hover {
+    background: #ff5252;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+.qa-contact-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(255, 107, 107, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .qa-contact-blogger {
+        padding: 12px;
+    }
+    
+    .qa-contact-button {
+        padding: 10px 16px;
+        font-size: 16px;
+    }
+}
+
+/* 聊天界面样式 */
+.qa-chat-interface {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    z-index: 1002;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.qa-chat-interface .chat-header {
+    background: linear-gradient(120deg, #ff6b6b 0%, #ff5252 100%);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.qa-chat-interface .chat-header h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.qa-chat-interface .chat-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.qa-chat-interface .chat-header button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.qa-chat-interface .chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.qa-chat-interface .chat-messages div {
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 80%;
+    word-wrap: break-word;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.qa-chat-interface .chat-messages .user-message {
+    background: #66afef;
+    color: white;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.qa-chat-interface .chat-messages .blogger-message {
+    background: #f0f0f0;
+    color: #333;
+    align-self: flex-start;
+}
+
+.qa-chat-interface .chat-input {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background: white;
+    gap: 10px;
+}
+
+.qa-chat-interface .chat-input input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+}
+
+.qa-chat-interface .chat-input input:focus {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+}
+
+.qa-chat-interface .chat-input button {
+    padding: 10px 20px;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.qa-chat-interface .chat-input button:hover {
+    background: #ff5252;
+}
+
+.qa-chat-interface .chat-input button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .qa-chat-interface {
+        width: 90%;
+        height: 70%;
+        max-width: 350px;
+    }
+    
+    .qa-chat-interface .chat-input {
+        padding: 10px;
+    }
+    
+    .qa-chat-interface .chat-input input {
+        padding: 8px 12px;
+    }
+    
+    .qa-chat-interface .chat-input button {
+        padding: 8px 16px;
     }
 }

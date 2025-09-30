@@ -190,6 +190,21 @@
         </span>
         
         
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #ff7d73">
+                    解决方案
+                </a>
+            </span>
+            
+        </span>
+        
     </div>
     
     <div class="content" v-pre>
@@ -306,7 +321,12 @@ include_dirs = [<br>
         </div>
         
     </div>
+
+    
+    
+
 </footer>
+
 
         </div>
         
@@ -343,7 +363,25 @@ include_dirs = [<br>
 
     
 
-    
+    <!-- 问答按钮和窗口 -->
+    <div id="qa-button">
+        <i class="fa-solid fa-question"></i>
+    </div>
+    <div id="qa-window">
+        <div class="qa-header">
+            <h3>问答</h3>
+            <button id="qa-close">&times;</button>
+        </div>
+        <div class="qa-content">
+            <div class="qa-input">
+                <input type="text" id="qa-question" placeholder="请输入您的问题...">
+                <button id="qa-submit">提问</button>
+            </div>
+            <div class="qa-results" id="qa-results">
+                <!-- 问答结果将在这里显示 -->
+            </div>
+        </div>
+    </div>
     
 </body>
 </html>

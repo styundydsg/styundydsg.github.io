@@ -173,14 +173,31 @@
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/3/30
+            2025/9/25
         </span>
         
         
     </div>
     
     <div class="content" v-pre>
-        <p><img src="https://via.placeholder.com/200x200.png?text=Hello!" alt="个人头像"> <!-- 替换为你的头像链接 --></p>
+        <h1>关于我</h1>
+<p><img src="./images/touxiang.png" alt="个人头像"></p>
+<h2 id="👋-你好！">👋 你好！</h2>
+<p>我是 <strong>lAn_rEd</strong>，一个热爱技术、喜欢探索的人。在这里记录我的学习历程、技术思考和生活中的点滴感悟。</p>
+<h2 id="📫-联系我">📫 联系我</h2>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>GitHub</strong>: <a target="_blank" rel="noopener" href="https://github.com/styundydsg">styundydsg</a></p>
+</li>
+<li class="lvl-2">
+<p><strong>邮箱</strong>: <a href="jasonh0401@163.com">jasonh0401@163.com</a></p>
+</li>
+<li class="lvl-2">
+<p><strong>博客</strong>: <a href="blog.hjsiot.top">blog.hjsiot.top</a></p>
+</li>
+</ul>
+<hr>
+<p>感谢你访问我的博客！如果你对我的内容感兴趣，欢迎留言交流，我们一起进步！</p>
 
     </div>
     
@@ -203,7 +220,12 @@
         </div>
         
     </div>
+
+    
+    
+
 </footer>
+
 
         </div>
         
@@ -217,7 +239,25 @@
     <script src="/js/main.js"></script>
     
 
-    
+    <!-- 问答按钮和窗口 -->
+    <div id="qa-button">
+        <i class="fa-solid fa-question"></i>
+    </div>
+    <div id="qa-window">
+        <div class="qa-header">
+            <h3>问答</h3>
+            <button id="qa-close">&times;</button>
+        </div>
+        <div class="qa-content">
+            <div class="qa-input">
+                <input type="text" id="qa-question" placeholder="请输入您的问题...">
+                <button id="qa-submit">提问</button>
+            </div>
+            <div class="qa-results" id="qa-results">
+                <!-- 问答结果将在这里显示 -->
+            </div>
+        </div>
+    </div>
     
 </body>
 </html>
