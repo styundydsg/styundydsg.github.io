@@ -208,9 +208,30 @@
     </div>
     
     <div class="content" v-pre>
-        <p><a target="_blank" rel="noopener" href="https://access.redhat.com/zh_CN/solutions/1119463">如何使用红帽订阅管理器将 RHEL 系统注册并订阅到红帽客户门户网站？</a><br>
-username就填用户名，我使用的是github所以就使用github的名<br>
-之后记得refresh</p>
+        <p>如何使用红帽订阅管理器将 RHEL 系统注册并订阅到红帽客户门户网站？</p>
+<ol>
+<li class="lvl-4">运行注册命令：<pre><code class="bash">subscription-manager register
+</code></pre>
+</li>
+<li class="lvl-4">输入用户名：
+<ul class="lvl-2">
+<li class="lvl-8">提示 <code>Username:</code> 时，输入您的红帽客户门户网站用户名。</li>
+<li class="lvl-8">例如，如果您使用 GitHub 账号登录，则输入您的 GitHub 用户名。</li>
+</ul>
+</li>
+<li class="lvl-4">输入密码：
+<ul class="lvl-2">
+<li class="lvl-8">提示 <code>Password:</code> 时，输入您的密码。</li>
+</ul>
+</li>
+<li class="lvl-4">刷新订阅：
+<ul class="lvl-2">
+<li class="lvl-8">注册成功后，运行以下命令刷新本地订阅数据，使系统获取最新的订阅信息。</li>
+</ul>
+<pre><code class="bash">subscription-manager refresh
+</code></pre>
+</li>
+</ol>
 
     </div>
     

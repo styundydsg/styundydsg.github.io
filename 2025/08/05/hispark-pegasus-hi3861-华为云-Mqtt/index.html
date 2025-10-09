@@ -193,14 +193,32 @@
     </div>
     
     <div class="content" v-pre>
-        <p>需要的条件</p>
-<p>clientid<br>
-user<br>
-pwd</p>
-<p>接入信息找mqtt接入的域名，ping域名得到地址，端口选择1833<br>
-topic在topic管理那里查找消息上报或者属性上报选择消息上报的话可以根据得到的消息继续通过规则转发到设备然后根据使用的库进行连接就行了</p>
-<p>在规则引擎配置的时候设置的topic<br>
-在设备端比如pc可以用接入信息的ip+端口+这个topic去订阅</p>
+        <h3 id="MQTT-接入所需条件">MQTT 接入所需条件</h3>
+<p><strong>1. 接入凭证</strong></p>
+<ul class="lvl-0">
+<li class="lvl-4"><strong>Client ID</strong></li>
+<li class="lvl-4"><strong>用户名</strong></li>
+<li class="lvl-4"><strong>密码</strong><br>
+<strong>2. 接入信息</strong></li>
+<li class="lvl-4"><strong>域名/地址</strong>：在 MQTT 接入信息中查找域名，通过 <code>ping</code> 命令获取其 IP 地址。</li>
+<li class="lvl-4"><strong>端口</strong>：使用 <code>1883</code>。<br>
+<strong>3. 主题</strong></li>
+<li class="lvl-4">在平台的“Topic 管理”中查找。</li>
+<li class="lvl-4">常用类型：
+<ul class="lvl-2">
+<li class="lvl-8"><strong>消息上报</strong>：用于上报设备消息。</li>
+<li class="lvl-8"><strong>属性上报</strong>：用于上报设备属性。<br>
+<strong>4. 连接与订阅</strong></li>
+</ul>
+</li>
+<li class="lvl-4"><strong>设备端连接</strong>：使用 MQTT 客户端库，并填入上述的地址、端口、Client ID、用户名和密码进行连接。</li>
+<li class="lvl-4"><strong>规则引擎</strong>：
+<ul class="lvl-2">
+<li class="lvl-8">在配置规则引擎时，会设置一个 Topic 作为消息转发的目标。</li>
+<li class="lvl-8">设备端（如 PC）可以使用接入信息的 IP + 端口 + 这个 Topic 来订阅消息。</li>
+</ul>
+</li>
+</ul>
 
     </div>
     

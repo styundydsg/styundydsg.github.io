@@ -208,8 +208,19 @@
     </div>
     
     <div class="content" v-pre>
-        <p>问题原因：我使用虚拟机的nfs作为服务端，然后windows作为客户端挂载，然后没有卸载</p>
-<p>所以使用     net use X: /delete   进行删除 就可以了</p>
+        <p><strong>问题原因：</strong><br>
+Windows 作为客户端挂载了虚拟机的 NFS 服务，但未正常卸载，导致网络连接或挂载点残留。<br>
+<strong>解决方案：</strong><br>
+使用 <code>net use</code> 命令强制删除残留的挂载点。</p>
+<pre><code class="cmd">net use X: /delete
+</code></pre>
+<blockquote>
+<p><strong>说明：</strong></p>
+<ul class="lvl-1">
+<li class="lvl-4"><code>X:</code> 需替换为实际的挂载盘符。</li>
+<li class="lvl-4">该命令会断开指定盘符的网络连接，并删除挂载点。</li>
+</ul>
+</blockquote>
 
     </div>
     

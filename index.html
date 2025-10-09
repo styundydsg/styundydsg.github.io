@@ -221,14 +221,32 @@
         <div class="content" v-pre>
             
             
-            <p>需要的条件</p>
-<p>clientid<br>
-user<br>
-pwd</p>
-<p>接入信息找mqtt接入的域名，ping域名得到地址，端口选择1833<br>
-topic在topic管理那里查找消息上报或者属性上报选择消息上报的话可以根据得到的消息继续通过规则转发到设备然后根据使用的库进行连接就行了</p>
-<p>在规则引擎配置的时候设置的topic<br>
-在设备端比如pc可以用接入信息的ip+端口+这个topic去订阅</p>
+            <h3 id="MQTT-接入所需条件">MQTT 接入所需条件</h3>
+<p><strong>1. 接入凭证</strong></p>
+<ul class="lvl-0">
+<li class="lvl-4"><strong>Client ID</strong></li>
+<li class="lvl-4"><strong>用户名</strong></li>
+<li class="lvl-4"><strong>密码</strong><br>
+<strong>2. 接入信息</strong></li>
+<li class="lvl-4"><strong>域名/地址</strong>：在 MQTT 接入信息中查找域名，通过 <code>ping</code> 命令获取其 IP 地址。</li>
+<li class="lvl-4"><strong>端口</strong>：使用 <code>1883</code>。<br>
+<strong>3. 主题</strong></li>
+<li class="lvl-4">在平台的“Topic 管理”中查找。</li>
+<li class="lvl-4">常用类型：
+<ul class="lvl-2">
+<li class="lvl-8"><strong>消息上报</strong>：用于上报设备消息。</li>
+<li class="lvl-8"><strong>属性上报</strong>：用于上报设备属性。<br>
+<strong>4. 连接与订阅</strong></li>
+</ul>
+</li>
+<li class="lvl-4"><strong>设备端连接</strong>：使用 MQTT 客户端库，并填入上述的地址、端口、Client ID、用户名和密码进行连接。</li>
+<li class="lvl-4"><strong>规则引擎</strong>：
+<ul class="lvl-2">
+<li class="lvl-8">在配置规则引擎时，会设置一个 Topic 作为消息转发的目标。</li>
+<li class="lvl-8">设备端（如 PC）可以使用接入信息的 IP + 端口 + 这个 Topic 来订阅消息。</li>
+</ul>
+</li>
+</ul>
 
             
             
@@ -290,7 +308,7 @@ topic在topic管理那里查找消息上报或者属性上报选择消息上报�
         
         <span class="tag">
             
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00bcd4">解决方案</a>
+            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #03a9f4">解决方案</a>
         </span>
         
     </div>
@@ -357,7 +375,7 @@ podman run -dt --pod mypod --name sidecar busybox sh -c “while true; do echo h
         
         <span class="tag">
             
-            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #00a596">学习日记</a>
+            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #00bcd4">学习日记</a>
         </span>
         
     </div>
@@ -393,14 +411,22 @@ podman run -dt --pod mypod --name sidecar busybox sh -c “while true; do echo h
         <div class="content" v-pre>
             
             
-            <p>问题:podman run -d --pod myapp-pod --name mysql 00a697b8380c无法运行</p>
-<p>解决过程:<br>
-使用podman logs &lt;容器ID&gt;查看问题,发现2025-07-02 12:53:55+00:00 [ERROR] [Entrypoint]: Database is uninitialized and password option is not specified<br>
-你需要通过环境变量指定以下之一：<br>
-- MYSQL_ROOT_PASSWORD<br>
-- MYSQL_ALLOW_EMPTY_PASSWORD<br>
-- MYSQL_RANDOM_ROOT_PASSWORD</p>
-<p>原来未进行一些初始化所以,podman run -d --pod myapp-pod --name mysql -e MYSQL_ROOT_PASSWORD=root1573 00a697b8380c</p>
+            <p><strong>问题：</strong><br>
+<code>podman run -d --pod myapp-pod --name mysql 00a697b8380c</code> 无法运行<br>
+<strong>解决过程：</strong></p>
+<ol>
+<li class="lvl-4">使用 <code>podman logs &lt;容器ID&gt;</code> 查看问题，发现错误信息：<pre><code>2025-07-02 12:53:55+00:00 [ERROR] [Entrypoint]: Database is uninitialized and password option is not specified
+你需要通过环境变量指定以下之一：
+- MYSQL_ROOT_PASSWORD
+- MYSQL_ALLOW_EMPTY_PASSWORD
+- MYSQL_RANDOM_ROOT_PASSWORD
+</code></pre>
+</li>
+<li class="lvl-4">原因是容器启动时未进行必要的初始化，特别是未设置 root 密码。</li>
+<li class="lvl-4">添加环境变量 <code>MYSQL_ROOT_PASSWORD</code> 重新运行容器：<pre><code class="bash">podman run -d --pod myapp-pod --name mysql -e MYSQL_ROOT_PASSWORD=root1573 00a697b8380c
+</code></pre>
+</li>
+</ol>
 
             
             
@@ -417,48 +443,12 @@ podman run -dt --pod mypod --name sidecar busybox sh -c “while true; do echo h
         
         <span class="tag">
             
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #ff7d73">解决方案</a>
+            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00bcd4">解决方案</a>
         </span>
         
     </div>
     
     <a href="/2025/07/02/20250702/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2025/06/13/%E8%A7%A3%E5%86%B3%E6%B6%A6%E5%92%8Chi3861%E8%BF%9E%E6%8E%A5mpu6050%E8%AF%BB%E5%8F%96%E5%9C%B0%E5%9D%80%E4%B8%BA0x70%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%88%E4%B8%80%EF%BC%89/">
-        <h2 class="post-title">解决润和hi3861连接mpu6050读取地址为0x70的问题（一）</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/6/13
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <p>今天并没有解决问题</p>
-<p>首先就是要设置输出模式为输出的。</p>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        
-        
-    </div>
-    
-    <a href="/2025/06/13/%E8%A7%A3%E5%86%B3%E6%B6%A6%E5%92%8Chi3861%E8%BF%9E%E6%8E%A5mpu6050%E8%AF%BB%E5%8F%96%E5%9C%B0%E5%9D%80%E4%B8%BA0x70%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%88%E4%B8%80%EF%BC%89/" class="go-post">阅读全文</a>
 </div>
 
 <div class="post">
@@ -489,9 +479,30 @@ podman run -dt --pod mypod --name sidecar busybox sh -c “while true; do echo h
         <div class="content" v-pre>
             
             
-            <p><a target="_blank" rel="noopener" href="https://access.redhat.com/zh_CN/solutions/1119463">如何使用红帽订阅管理器将 RHEL 系统注册并订阅到红帽客户门户网站？</a><br>
-username就填用户名，我使用的是github所以就使用github的名<br>
-之后记得refresh</p>
+            <p>如何使用红帽订阅管理器将 RHEL 系统注册并订阅到红帽客户门户网站？</p>
+<ol>
+<li class="lvl-4">运行注册命令：<pre><code class="bash">subscription-manager register
+</code></pre>
+</li>
+<li class="lvl-4">输入用户名：
+<ul class="lvl-2">
+<li class="lvl-8">提示 <code>Username:</code> 时，输入您的红帽客户门户网站用户名。</li>
+<li class="lvl-8">例如，如果您使用 GitHub 账号登录，则输入您的 GitHub 用户名。</li>
+</ul>
+</li>
+<li class="lvl-4">输入密码：
+<ul class="lvl-2">
+<li class="lvl-8">提示 <code>Password:</code> 时，输入您的密码。</li>
+</ul>
+</li>
+<li class="lvl-4">刷新订阅：
+<ul class="lvl-2">
+<li class="lvl-8">注册成功后，运行以下命令刷新本地订阅数据，使系统获取最新的订阅信息。</li>
+</ul>
+<pre><code class="bash">subscription-manager refresh
+</code></pre>
+</li>
+</ol>
 
             
             
@@ -508,7 +519,7 @@ username就填用户名，我使用的是github所以就使用github的名<br>
         
         <span class="tag">
             
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #ff7d73">解决方案</a>
+            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #ffa2c4">解决方案</a>
         </span>
         
     </div>
@@ -544,8 +555,19 @@ username就填用户名，我使用的是github所以就使用github的名<br>
         <div class="content" v-pre>
             
             
-            <p>问题原因：我使用虚拟机的nfs作为服务端，然后windows作为客户端挂载，然后没有卸载</p>
-<p>所以使用     net use X: /delete   进行删除 就可以了</p>
+            <p><strong>问题原因：</strong><br>
+Windows 作为客户端挂载了虚拟机的 NFS 服务，但未正常卸载，导致网络连接或挂载点残留。<br>
+<strong>解决方案：</strong><br>
+使用 <code>net use</code> 命令强制删除残留的挂载点。</p>
+<pre><code class="cmd">net use X: /delete
+</code></pre>
+<blockquote>
+<p><strong>说明：</strong></p>
+<ul class="lvl-1">
+<li class="lvl-4"><code>X:</code> 需替换为实际的挂载盘符。</li>
+<li class="lvl-4">该命令会断开指定盘符的网络连接，并删除挂载点。</li>
+</ul>
+</blockquote>
 
             
             
@@ -696,7 +718,7 @@ nproc(void)
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #ff7d73">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #00a596">mit6.s081_labs</a>
         </span>
         
     </div>
@@ -733,14 +755,24 @@ nproc(void)
             
             
             <h3 id="关键语句">关键语句</h3>
-<p>ready to load at 0x10a000 ccccccccccload fail 0xc35a69a6 ready<br>
-Wait SELoadr ACK overtime Wait connect success flag (hisilicon) overtime.<br>
-AT指令无返回</p>
-<p>HiBurn<br>
-烧录的时候使用OHOS_Image.bin,文档是刚开始看是选择两个的，其中是选择一个整合好的，应该是文档漏了。</p>
-<p>AT指令的运行是在一个工具下的，如IPOP<br>
-运行的时候他们说要发送AT指令，如果后面不加回车的话会没有反应。<br>
-可能不同的串口调试助手不一样。</p>
+<ul class="lvl-0">
+<li class="lvl-4"><strong>启动与加载失败</strong><br>
+<code>ready to load at 0x10a000 ccccccccccload fail 0xc35a69a6 ready</code><br>
+<code>Wait SELoadr ACK overtime Wait connect success flag (hisilicon) overtime.</code></li>
+<li class="lvl-4"><strong>AT指令无返回</strong></li>
+</ul>
+<h3 id="烧录问题">烧录问题</h3>
+<ul class="lvl-0">
+<li class="lvl-4"><strong>HiBurn 工具</strong><br>
+烧录时使用 <code>OHOS_Image.bin</code> 文件。文档中可能提到选择两个文件，但实际应选择一个整合好的文件，这可能是文档的疏漏。</li>
+</ul>
+<h3 id="AT指令问题">AT指令问题</h3>
+<ul class="lvl-0">
+<li class="lvl-4"><strong>运行环境</strong><br>
+AT指令需在特定工具（如 IPOP）下运行。</li>
+<li class="lvl-4"><strong>发送格式</strong><br>
+发送AT指令后必须加回车，否则可能无反应。不同串口调试助手的处理方式可能不同。</li>
+</ul>
 
             
             
@@ -899,6 +931,51 @@ int write(int fd, char *buf, int n) &#123;
     </div>
     
     <a href="/2025/05/26/xv6-%E7%94%A8%E6%88%B7%E8%B0%83%E7%94%A8-%E8%BF%87%E7%A8%8B/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2025/05/25/%E8%A7%A3%E5%86%B3%E5%90%AF%E5%8A%A8windows-search-%E9%94%99%E8%AF%AF3/">
+        <h2 class="post-title">解决启动windows search 错误3</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                解决方案
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/5/25
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            
+            <p>如果你因为删除了某些分区导致注册表混乱，然后无法正确指向，那么你可以看一下这个链接，在你尝试了多种方法后都没有成功，因为他确实指出了注册表问题并且提出了解决方法。请仔细查看他们的恢复。<br>
+(Unable to Start Windows Search Service – “Error 3: The System Cannot Find the Path Specified”)[<a target="_blank" rel="noopener" href="https://answers.microsoft.com/en-us/windows/forum/all/unable-to-start-windows-search-service-error-3-the/dc734fdc-8f9f-4ae9-b873-ea864f3663fc?page=4">https://answers.microsoft.com/en-us/windows/forum/all/unable-to-start-windows-search-service-error-3-the/dc734fdc-8f9f-4ae9-b873-ea864f3663fc?page=4</a>]</p>
+
+            
+            
+        </div>
+    </div>
+    
+    <div class="post-tags">
+        
+        
+        
+    </div>
+    
+    <a href="/2025/05/25/%E8%A7%A3%E5%86%B3%E5%90%AF%E5%8A%A8windows-search-%E9%94%99%E8%AF%AF3/" class="go-post">阅读全文</a>
 </div>
 
 

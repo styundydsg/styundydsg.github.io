@@ -198,7 +198,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00a596">
+                <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #ffa2c4">
                     解决方案
                 </a>
             </span>
@@ -208,14 +208,22 @@
     </div>
     
     <div class="content" v-pre>
-        <p>问题:podman run -d --pod myapp-pod --name mysql 00a697b8380c无法运行</p>
-<p>解决过程:<br>
-使用podman logs &lt;容器ID&gt;查看问题,发现2025-07-02 12:53:55+00:00 [ERROR] [Entrypoint]: Database is uninitialized and password option is not specified<br>
-你需要通过环境变量指定以下之一：<br>
-- MYSQL_ROOT_PASSWORD<br>
-- MYSQL_ALLOW_EMPTY_PASSWORD<br>
-- MYSQL_RANDOM_ROOT_PASSWORD</p>
-<p>原来未进行一些初始化所以,podman run -d --pod myapp-pod --name mysql -e MYSQL_ROOT_PASSWORD=root1573 00a697b8380c</p>
+        <p><strong>问题：</strong><br>
+<code>podman run -d --pod myapp-pod --name mysql 00a697b8380c</code> 无法运行<br>
+<strong>解决过程：</strong></p>
+<ol>
+<li class="lvl-4">使用 <code>podman logs &lt;容器ID&gt;</code> 查看问题，发现错误信息：<pre><code>2025-07-02 12:53:55+00:00 [ERROR] [Entrypoint]: Database is uninitialized and password option is not specified
+你需要通过环境变量指定以下之一：
+- MYSQL_ROOT_PASSWORD
+- MYSQL_ALLOW_EMPTY_PASSWORD
+- MYSQL_RANDOM_ROOT_PASSWORD
+</code></pre>
+</li>
+<li class="lvl-4">原因是容器启动时未进行必要的初始化，特别是未设置 root 密码。</li>
+<li class="lvl-4">添加环境变量 <code>MYSQL_ROOT_PASSWORD</code> 重新运行容器：<pre><code class="bash">podman run -d --pod myapp-pod --name mysql -e MYSQL_ROOT_PASSWORD=root1573 00a697b8380c
+</code></pre>
+</li>
+</ol>
 
     </div>
     

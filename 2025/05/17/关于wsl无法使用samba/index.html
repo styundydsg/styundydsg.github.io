@@ -198,7 +198,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/wsl/" style="color: #03a9f4">
+                <a href="/tags/wsl/" style="color: #00bcd4">
                     wsl
                 </a>
             </span>
@@ -208,22 +208,22 @@
     </div>
     
     <div class="content" v-pre>
-        <p>问题：WSL 默认不支持直接运行 smbd<br>
-原因：<br>
-smbd 需要访问低层网络功能（如绑定到端口 445），WSL2 虚拟环境不允许这样做。</p>
-<p>WSL2 的网络和 Windows 是隔离的（类似虚拟机），而且端口 445 通常已被 Windows 自身的 SMB 服务占用，smbd 无法监听。</p>
-<p>推荐解决方案：用 Windows 的 SMB 服务共享 WSL 文件夹</p>
-<p>方法：</p>
+        <p><strong>问题：</strong><br>
+WSL 默认不支持直接运行 smbd<br>
+<strong>原因：</strong><br>
+smbd 需要访问低层网络功能（如绑定到端口 445），WSL2 虚拟环境不允许这样做。<br>
+WSL2 的网络和 Windows 是隔离的（类似虚拟机），而且端口 445 通常已被 Windows 自身的 SMB 服务占用，smbd 无法监听。<br>
+<strong>推荐解决方案：</strong><br>
+用 Windows 的 SMB 服务共享 WSL 文件夹<br>
+<strong>方法：</strong></p>
 <ol>
-<li class="lvl-3">
-<p>wsl -l -v<br>
-输出：NAME      STATE           VERSION<br>
-Ubuntu    Running         2<br>
-记住这个name</p>
-</li>
-<li class="lvl-3">
-<p>在资源管理器地址栏输入\wsl$\name\home\share   \home\share是共享的文件夹自行寻找，此时可以验证在wsl里共享文件夹下创建一个文件在windows看有没有</p>
-</li>
+<li class="lvl-3"><code>wsl -l -v</code><br>
+输出：<pre><code>NAME      STATE           VERSION  
+Ubuntu    Running         2  
+</code></pre>
+记住这个 name</li>
+<li class="lvl-3">在资源管理器地址栏输入 <code>\\wsl$\name\home\share</code>（<code>/home/share</code> 是共享的文件夹，自行寻找）<br>
+此时可以验证在 WSL 里共享文件夹下创建一个文件，在 Windows 查看是否存在</li>
 </ol>
 
     </div>
