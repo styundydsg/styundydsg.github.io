@@ -44,6 +44,9 @@
 <script src="/js/lib/preview.js"></script>
 
 
+<script src="https://s4.zstatic.net/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script src="/js/lib/crypto.js"></script>
+
 
 
 
@@ -198,14 +201,14 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #00bcd4">
+                <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #ff7d73">
                     想法
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/" style="color: #03a9f4">
+                <a href="/tags/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/" style="color: #00a596">
                     探索自我
                 </a>
             </span>
@@ -221,13 +224,20 @@
         
     </div>
     
-    <div class="content" v-pre>
-        <p>  昨天突然非常想做游戏,一想到做游戏时能够将自己的想法实现出来,就很开心,看了别人的一些作品之后就愈发想做了.下载了一个cocos,不过搜到的教程非常的少,而且看到的作品都是小游戏,我并不想做小游戏,我想做那种横屏的闯关动作剧情游戏,然后能有非常好看的背景,可是我什么也不会.我想着是不是也可以和别人合作呢.今天跟着官方教程做了个跳跃游戏,只是复制粘贴,因为我发现我不知道官方的那些引擎啊库什么的,想完全理解又太麻烦了,还有typescript就随便看了一些,虽然能根据c++的一些经验和编程理解去看懂,但是涉及特性的又看不懂了.在做那个东西的时候总是想着这个引擎好不好,沉没成本多不多,毕竟我又不是什么数媒专业的,没有资源,和别人比不了,好有做的东西太无聊了,不想去做,说到底我这个时候还去想这种事挺搞笑的,所以做到后面也没什么心思了.最后坐标系没有搞好什么世界坐标系独立坐标系的…粘贴的代码不想去看了,后面可能还会继续去看一些或者做一些小东西.</p>
-<p>  实际上我没有技术,没有学历,总是什么都想学,以至于下学期秋招了还没有项目,也没有精通的方向,想考研但是家里人没那个想法,也不想继续靠他们了.虽然我想着这学期必须好好去学精一点,秋招找工作,以后再去做喜欢的事.可是经常因为某个想法就比如现在想做游戏,或者是有什么事就打乱了我,学习的时候胡思乱想导致学了很久但是效率很低,主要我怕以后我都没办法去表达了所以想做些创作性的东西.我想尽可能秋招就找到工作,不然遭闲话就麻烦了,什么大学生找不到工作,本来就比较自卑弱势,再找不到工作还需要靠别人这种事就很恐怖.啊好烦啊,也没有实习什么的,也不精进…明明我一直都在学习的,我是知道为什么的,我不敢去做…不想就这么埋没,成为无关紧要的一员.睡觉了,又是麻烦的明天.<br>
-  话说明天愚人节欸<br>
-<img src="/PictureRecord/CocosGame.png" alt="CocosGame"></p>
-<!-- flag of hidden posts -->
-    </div>
+    
+    <input
+        id="crypto"
+        :class="['input', cryptoStatus]"
+        :disabled="cryptoStatus === 'success'"
+        ref="crypto"
+        placeholder="文章被加密，请输入密码"
+        data-encrypted="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"
+        data-shasum="70faeb9273b094ecf78be7e3a8f5579315f4234aa0c5f1420db1f7e3bfa349af"
+        v-model="crypto"
+    />
+    <transition name="fade">
+        <div class="content" ref="content" v-show="cryptoStatus === 'success'"></div>
+    </transition>
     
     
     
