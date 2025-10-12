@@ -44,6 +44,9 @@
 <script src="/js/lib/preview.js"></script>
 
 
+<script src="https://s4.zstatic.net/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script src="/js/lib/crypto.js"></script>
+
 
 
 
@@ -212,7 +215,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E8%BF%B7%E8%8C%AB/" style="color: #ff7d73">
+                <a href="/tags/%E8%BF%B7%E8%8C%AB/" style="color: #00a596">
                     迷茫
                 </a>
             </span>
@@ -221,11 +224,20 @@
         
     </div>
     
-    <div class="content" v-pre>
-        <p>       起床后感到非常压抑,打开手机看到首页推荐的暴雨狂风视频,黑乎乎的天,看了很久,想要出去走一下,可是又不知道能去哪里.每天只是呆在宿舍,想着出去走却也不会发生什么的.我追求自然,不会主动,比如社交什么的,感觉是为了利益去行动,又或者是亲近大自然,但也是单方面的,所以我希望存在一些外力来推动世界发生一些什么,这样就能够有一个理由让我去行动了.</p>
-<p><img src="../PictureRecord/20250323.png" alt="狂风"></p>
-<!-- flag of hidden posts -->
-    </div>
+    
+    <input
+        id="crypto"
+        :class="['input', cryptoStatus]"
+        :disabled="cryptoStatus === 'success'"
+        ref="crypto"
+        placeholder="文章被加密，请输入密码"
+        data-encrypted="U2FsdGVkX19kqJRb3fPsV+mJqtLy7TUx2tw7m5OTPxZTvCImIOMD8BXjskQlU6N2DjI5og2A174Todewj7jdRj5XMOR4dZZ8VyzNJNdCuuCTtP6XO8PI7KM/YaMSCCSdGtN9htb5FMWu+rWBQdBUbmM/0kcS5f/G3cqK21cekYJACvX4J61am1SCEgsI+N8ws3w35ioqyqEefPtIAxHDcUMD1DuA5tD9x5Ux4uOFbV8D2WHpW6ntCmYPZZY9nkl4B+nR7AJWwYEoqB0fpX5dIA946wCF1yKJGi3rgGhfkU2i295pcs32bbNgJ9ZD6L7IxdUNU0vedBCRTUOO5FewtrW7jxJl04gPGzi/tOhDcoP6DJCpebuBEJt05zLP9wDsRBDKOb7xplPxGmuUqniATOLO8XkBVQFPZ+W5ehlMPmO3QpfpC3vQ7OeIcgP3JzfjGWuZrTJJ0yqjA7xc7Z3fgmv+j5Q+vZqMh/A/unmOJFSROGxSn5WDSuo797GDIv9uItoUWaUBaeA/oacMVTXjr5tZfydWzY/cayr663YhSr76LlQXDwGO4Mq84b0605H9BpyTCotQRuwNChYqSujJPN4ccWfePOvM+Nl0W7GxCB7tMZcBFrgx5UEvjz/N6Sda1ovPRKt69CrmWrJdP/YESai+PxsaQYemx29zVF4Aacn0kz9ihX2ezckxW/f2uHX7UnK89cQiyCX+vjCMbwiKA0On4S7AqWbKGbDjKbgfBO7z/1dIyOCMp6jfYqJ84RT95GFgjj1MuBGDxgcoxoPNDGlbS0awtb2kF2ISsrF/SE4="
+        data-shasum="f137101c72341df927535150a96926b2f3bf7de6c2bf8b2df47edaadd0ac1aae"
+        v-model="crypto"
+    />
+    <transition name="fade">
+        <div class="content" ref="content" v-show="cryptoStatus === 'success'"></div>
+    </transition>
     
     
     
