@@ -525,7 +525,8 @@
 .qa-input {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    order: 2;                   /* 顺序2 - 在底部 */
+    padding: 20px 0;
 }
 
 #qa-question {

@@ -1,3 +1,4 @@
+https://styundydsg.github.io/about/index.html
 https://styundydsg.github.io/2025/12/15/20251215%E8%AE%B0%E5%BD%95/
 https://styundydsg.github.io/2025/03/31/%E6%83%B3%E5%81%9A%E6%B8%B8%E6%88%8F%E7%9A%84%E7%AC%AC%E4%BA%8C%E5%A4%A9/
 https://styundydsg.github.io/2025/03/23/3%E6%9C%8823%E6%97%A5%E8%B5%B7%E5%BA%8A/
@@ -9,7 +10,6 @@ https://styundydsg.github.io/2025/05/27/openharmony%E7%83%A7%E5%BD%95-%E8%BF%90%
 https://styundydsg.github.io/2025/08/05/hispark-pegasus-hi3861-%E5%8D%8E%E4%B8%BA%E4%BA%91-Mqtt/
 https://styundydsg.github.io/2025/06/07/%E5%AE%89%E8%A3%85reahat%E4%B9%8B%E5%90%8E%E6%B2%A1%E6%9C%89%E4%BD%BF%E7%94%A8%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8/
 https://styundydsg.github.io/2025/05/17/%E5%85%B3%E4%BA%8Ewsl%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8samba/
-https://styundydsg.github.io/about/index.html
 https://styundydsg.github.io/2025/05/23/%E5%85%B3%E4%BA%8E%E9%B8%BF%E8%92%99mini%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E4%B8%8D%E8%BF%87%E7%9A%84%E9%97%AE%E9%A2%98%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/
 https://styundydsg.github.io/2025/07/05/%E8%A7%A3%E5%86%B3redhat-echo-$http_proxy%E6%97%A0%E6%B3%95%E6%89%BE%E5%88%B0%E6%96%87%E4%BB%B6%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95%E5%8F%8Aredhat%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BB%88%E7%AB%AF%E6%8C%89%E9%94%AE%E5%93%92%E5%93%92%E5%93%92%E5%A3%B0%E9%9F%B3%E7%9A%84%E9%97%AE%E9%A2%98%E6%8E%A2%E8%AE%A8/
 https://styundydsg.github.io/2025/07/02/20250702%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/
