@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>zero two</title>
+    <title>ws63(hi3863)完成c++支持过程 | zero two</title>
     <meta name="author" content="lAn_rEd" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -47,7 +47,9 @@
 
 
 
-<script src="/js/lib/home.js"></script>
+
+
+
 
 <link rel="stylesheet" href="/css/main.css" />
 <meta name="generator" content="Hexo 7.3.0"></head>
@@ -166,39 +168,11 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="home-head">
-    <div id="home-background" ref="homeBackground" data-images="/images/background.png"></div>
-    <div id="home-info" @click="homeClick">
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="info">
-            <div class="wrap">
-                <h1>
-                    zero two
-                </h1>
-                <h3>
-                    
-                </h3>
-                <h5>
-                    
-                </h5>
-            </div>
-        </span>
+            <div class="article">
+    <div>
+        <h1>ws63(hi3863)完成c++支持过程</h1>
     </div>
-</div>
-<div id="home-posts-wrap" ref="homePostsWrap" true
-    >
-    <div id="home-posts">
-        
-
-<div class="post">
-    <a href="/2026/02/08/ws63-hi3861-%E5%AE%8C%E6%88%90c-%E6%94%AF%E6%8C%81%E8%BF%87%E7%A8%8B/">
-        <h2 class="post-title">ws63(hi3863)完成c++支持过程</h2>
-    </a>
-    <div class="category-and-date">
-        
+    <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
@@ -208,11 +182,9 @@
         
         
     </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <h1>WS63 SDK 添加 C++ 编译支持完整指南</h1>
+    
+    <div class="content" v-pre>
+        <h1>WS63 SDK 添加 C++ 编译支持完整指南</h1>
 <h2 id="概述">概述</h2>
 <p>本文档记录了在海思 WS63 SDK 中添加 C++ 编译支持的完整过程，包括遇到的问题、解决方案和最终配置。适用于需要在 WS63 芯片上使用 TensorFlow Lite Micro (TFLM) 或其他 C++ 库的开发者。</p>
 <h2 id="开发环境">开发环境</h2>
@@ -605,592 +577,19 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
 <strong>适用 SDK 版本</strong>: WS63 SDK 1.10.106<br>
 <strong>参考链接</strong>: <a target="_blank" rel="noopener" href="https://developers.hisilicon.com/postDetail?tid=0206204513850702020">WS63添加C++经验总结及讨论</a></p>
 
-            
-            
-        </div>
     </div>
     
-    <div class="post-tags">
-        
-        
-        
-    </div>
-    
-    <a href="/2026/02/08/ws63-hi3861-%E5%AE%8C%E6%88%90c-%E6%94%AF%E6%8C%81%E8%BF%87%E7%A8%8B/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2026/01/21/%E6%9C%80%E8%BF%91%E6%83%B3%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%9C%E8%A5%BF/">
-        <h2 class="post-title">最近想实现的东西</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2026/1/21
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <p>1、drogon有一个csp的功能，如果搭配ai，能否做到渲染页面的时候根据内容自动排版呢？</p>
-<p>2、我的hi3861有一个i2s接口，正在尝试设计模块去实现智能语音</p>
-<p>3、hello-agents课程</p>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        
-        
-    </div>
-    
-    <a href="/2026/01/21/%E6%9C%80%E8%BF%91%E6%83%B3%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%9C%E8%A5%BF/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2025/12/15/20251215%E8%AE%B0%E5%BD%95/">
-        <h2 class="post-title">20251215记录</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/12/15
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <h1>关于我使用开发板连接wifi但是没有分配地址去花一天解决为什么无法使用mqtt连接服务器的问题</h1>
-<p>居然不知道ping一下连通性。。主要是不太信任不熟悉的代码，比如那没有一点注释的mqtt代码，就一直以为是mqtt的问题。结果就是dhcp的问题。</p>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        
-        
-    </div>
-    
-    <a href="/2025/12/15/20251215%E8%AE%B0%E5%BD%95/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2025/10/13/DECA%E5%AE%9E%E8%B7%B5/">
-        <h2 class="post-title">DECA实践</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/10/13
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/yangowen/article/details/127560680">https://blog.csdn.net/yangowen/article/details/127560680</a></p>
-<p>结果：<br>
-<img src="/PictureRecord/my_face_vis.jpg" alt="my face"></p>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #00bcd4">学习日记</a>
-        </span>
-        
-    </div>
-    
-    <a href="/2025/10/13/DECA%E5%AE%9E%E8%B7%B5/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2025/08/05/hispark-pegasus-hi3861-%E5%8D%8E%E4%B8%BA%E4%BA%91-Mqtt/">
-        <h2 class="post-title">hispark_pegasus/hi3861/华为云/Mqtt</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                解决方案
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/8/5
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <h3 id="MQTT-接入所需条件">MQTT 接入所需条件</h3>
-<p><strong>1. 接入凭证</strong></p>
-<ul class="lvl-0">
-<li class="lvl-4"><strong>Client ID</strong></li>
-<li class="lvl-4"><strong>用户名</strong></li>
-<li class="lvl-4"><strong>密码</strong><br>
-<strong>2. 接入信息</strong></li>
-<li class="lvl-4"><strong>域名/地址</strong>：在 MQTT 接入信息中查找域名，通过 <code>ping</code> 命令获取其 IP 地址。</li>
-<li class="lvl-4"><strong>端口</strong>：使用 <code>1883</code>。<br>
-<strong>3. 主题</strong></li>
-<li class="lvl-4">在平台的“Topic 管理”中查找。</li>
-<li class="lvl-4">常用类型：
-<ul class="lvl-2">
-<li class="lvl-8"><strong>消息上报</strong>：用于上报设备消息。</li>
-<li class="lvl-8"><strong>属性上报</strong>：用于上报设备属性。<br>
-<strong>4. 连接与订阅</strong></li>
-</ul>
-</li>
-<li class="lvl-4"><strong>设备端连接</strong>：使用 MQTT 客户端库，并填入上述的地址、端口、Client ID、用户名和密码进行连接。</li>
-<li class="lvl-4"><strong>规则引擎</strong>：
-<ul class="lvl-2">
-<li class="lvl-8">在配置规则引擎时，会设置一个 Topic 作为消息转发的目标。</li>
-<li class="lvl-8">设备端（如 PC）可以使用接入信息的 IP + 端口 + 这个 Topic 来订阅消息。</li>
-</ul>
-</li>
-</ul>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        
-        
-    </div>
-    
-    <a href="/2025/08/05/hispark-pegasus-hi3861-%E5%8D%8E%E4%B8%BA%E4%BA%91-Mqtt/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2025/07/05/%E8%A7%A3%E5%86%B3redhat-echo-$http_proxy%E6%97%A0%E6%B3%95%E6%89%BE%E5%88%B0%E6%96%87%E4%BB%B6%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95%E5%8F%8Aredhat%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BB%88%E7%AB%AF%E6%8C%89%E9%94%AE%E5%93%92%E5%93%92%E5%93%92%E5%A3%B0%E9%9F%B3%E7%9A%84%E9%97%AE%E9%A2%98%E6%8E%A2%E8%AE%A8/">
-        <h2 class="post-title">解决redhat echo $http_proxy无法找到文件地址的方法及redhat虚拟机终端按键哒哒哒声音的问题探讨</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                解决方案
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/7/5
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <p>问题1:当echo的时候查找~/.bashrc文件,发现脚本会继续寻找bashrc.d目录下的proxy文件并进行运行,也就是启动bash的时候就会运行那个proxy.sh文件,而proxy.sh文件可能是之前旧的代理地址,只要删除里面的内容就好了。</p>
-<p>问题2:redhat虚拟机终端按键哒哒哒的问题主要是虚拟机的问题,并不是自己键盘的问题,可以在搜索关键词进行寻找解决方案</p>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00a596">解决方案</a>
-        </span>
-        
-    </div>
-    
-    <a href="/2025/07/05/%E8%A7%A3%E5%86%B3redhat-echo-$http_proxy%E6%97%A0%E6%B3%95%E6%89%BE%E5%88%B0%E6%96%87%E4%BB%B6%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95%E5%8F%8Aredhat%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BB%88%E7%AB%AF%E6%8C%89%E9%94%AE%E5%93%92%E5%93%92%E5%93%92%E5%A3%B0%E9%9F%B3%E7%9A%84%E9%97%AE%E9%A2%98%E6%8E%A2%E8%AE%A8/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2025/07/02/20250702%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/">
-        <h2 class="post-title">20250702学习日记</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E6%97%A5%E8%AE%B0/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                日记
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/7/2
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <p>今天对podman进行了更深入地学习,包括podman对pod的创建,然后使用映像文件将容器创建在pod里<br>
-还有创建网络,对pod的网络进行指定(只在创建时还是有点不方便的)</p>
-<p>了解到一个pod迁移方式:<br>
-将现有 Pod 导出为 Compose 风格 YAML<br>
-你可以用 podman generate kube 从已有 Pod 自动导出配置文件，方便迁移或复用：</p>
-<h1>创建 Pod 和容器</h1>
-<p>podman pod create --name mypod<br>
-podman run -dt --pod mypod --name web nginx:alpine<br>
-podman run -dt --pod mypod --name sidecar busybox sh -c “while true; do echo hello; sleep 10; done”</p>
-<h1>生成 Kubernetes 风格 YAML</h1>
-<p>podman generate kube mypod &gt; pod-compose.yaml<br>
-然后你可以用 pod-compose.yaml 作为配置模板修改后再部署：</p>
-<p>podman play kube pod-compose.yaml</p>
-<p>基础设施容器:<br>
-在Podman中，Pod创建时会自动生成一个名为“infra”的基础设施容器（也称Pause容器），它的核心作用是初始化并维护Pod的网络命名空间，使Pod内所有容器能共享同一个网络环境、IP地址，从而实现它们之间通过localhost互相通信。这个轻量级且对用户隐藏的容器几乎不占用资源，但其生命周期与Pod绑定，确保即使Pod内没有其他容器运行，网络环境也能保持存活，直到Pod被删除时一同销毁。这种设计简化了网络管理，提高了资源利用率，并提升了可维护性，其理念与Kubernetes中的Pause容器类似，都是为了解决多容器共享网络的问题。</p>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #00a596">学习日记</a>
-        </span>
-        
-    </div>
-    
-    <a href="/2025/07/02/20250702%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2025/07/02/20250702/">
-        <h2 class="post-title">podman在pod里创建容器的时候无法运行</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                解决方案
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/7/2
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <p><strong>问题：</strong><br>
-<code>podman run -d --pod myapp-pod --name mysql 00a697b8380c</code> 无法运行<br>
-<strong>解决过程：</strong></p>
-<ol>
-<li class="lvl-4">使用 <code>podman logs &lt;容器ID&gt;</code> 查看问题，发现错误信息：<pre><code>2025-07-02 12:53:55+00:00 [ERROR] [Entrypoint]: Database is uninitialized and password option is not specified
-你需要通过环境变量指定以下之一：
-- MYSQL_ROOT_PASSWORD
-- MYSQL_ALLOW_EMPTY_PASSWORD
-- MYSQL_RANDOM_ROOT_PASSWORD
-</code></pre>
-</li>
-<li class="lvl-4">原因是容器启动时未进行必要的初始化，特别是未设置 root 密码。</li>
-<li class="lvl-4">添加环境变量 <code>MYSQL_ROOT_PASSWORD</code> 重新运行容器：<pre><code class="bash">podman run -d --pod myapp-pod --name mysql -e MYSQL_ROOT_PASSWORD=root1573 00a697b8380c
-</code></pre>
-</li>
-</ol>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00bcd4">解决方案</a>
-        </span>
-        
-    </div>
-    
-    <a href="/2025/07/02/20250702/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2025/06/07/%E5%AE%89%E8%A3%85reahat%E4%B9%8B%E5%90%8E%E6%B2%A1%E6%9C%89%E4%BD%BF%E7%94%A8%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8/">
-        <h2 class="post-title">安装reahat之后无法使用包管理器</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                解决方案
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/6/7
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <p>如何使用红帽订阅管理器将 RHEL 系统注册并订阅到红帽客户门户网站？</p>
-<ol>
-<li class="lvl-4">运行注册命令：<pre><code class="bash">subscription-manager register
-</code></pre>
-</li>
-<li class="lvl-4">输入用户名：
-<ul class="lvl-2">
-<li class="lvl-8">提示 <code>Username:</code> 时，输入您的红帽客户门户网站用户名。</li>
-<li class="lvl-8">例如，如果您使用 GitHub 账号登录，则输入您的 GitHub 用户名。</li>
-</ul>
-</li>
-<li class="lvl-4">输入密码：
-<ul class="lvl-2">
-<li class="lvl-8">提示 <code>Password:</code> 时，输入您的密码。</li>
-</ul>
-</li>
-<li class="lvl-4">刷新订阅：
-<ul class="lvl-2">
-<li class="lvl-8">注册成功后，运行以下命令刷新本地订阅数据，使系统获取最新的订阅信息。</li>
-</ul>
-<pre><code class="bash">subscription-manager refresh
-</code></pre>
-</li>
-</ol>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #ffa2c4">解决方案</a>
-        </span>
-        
-    </div>
-    
-    <a href="/2025/06/07/%E5%AE%89%E8%A3%85reahat%E4%B9%8B%E5%90%8E%E6%B2%A1%E6%9C%89%E4%BD%BF%E7%94%A8%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2025/06/07/windows%E6%89%93%E5%BC%80%E6%AD%A4%E7%94%B5%E8%84%91%E8%BD%AC%E5%9C%88%E6%9C%AA%E5%93%8D%E5%BA%94/">
-        <h2 class="post-title">windows打开此电脑转圈未响应</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                解决方案
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/6/7
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <p><strong>问题原因：</strong><br>
-Windows 作为客户端挂载了虚拟机的 NFS 服务，但未正常卸载，导致网络连接或挂载点残留。<br>
-<strong>解决方案：</strong><br>
-使用 <code>net use</code> 命令强制删除残留的挂载点。</p>
-<pre><code class="cmd">net use X: /delete
-</code></pre>
-<blockquote>
-<p><strong>说明：</strong></p>
-<ul class="lvl-1">
-<li class="lvl-4"><code>X:</code> 需替换为实际的挂载盘符。</li>
-<li class="lvl-4">该命令会断开指定盘符的网络连接，并删除挂载点。</li>
-</ul>
-</blockquote>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00a596">解决方案</a>
-        </span>
-        
-    </div>
-    
-    <a href="/2025/06/07/windows%E6%89%93%E5%BC%80%E6%AD%A4%E7%94%B5%E8%84%91%E8%BD%AC%E5%9C%88%E6%9C%AA%E5%93%8D%E5%BA%94/" class="go-post">阅读全文</a>
-</div>
-
-
-            <div class="page-current">
-    
-    <span class="current">1</span>
-    
-    <a class="page-num" href="/page/2">
-        2
-    </a>
-    
-    
-    <a class="page-num" href="/page/3">
-        3
-    </a>
     
     
     
-    <a class="page-num" href="/page/2/">
-        <i class="fa-solid fa-caret-right fa-fw"></i>
-    </a>
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
+    
+    
     
 </div>
-
-    </div>
-    
-        <div id="home-card">
-            <div id="card-style">
-    <div id="card-div">
-        <div class="avatar">
-            <img src="/images/anle.jpeg" alt="avatar" />
-        </div>
-        <div class="name">lAn_rEd</div>
-        <div class="description">
-            <p>Description<br>
-一个喜欢幻想的人</p>
-
-        </div>
-        
-        
-        <div class="friend-links">
-            
-            <div class="friend-link">
-                <a target="_blank" rel="noopener" href="https://github.com/styundydsg">github</a>
-            </div>
-            
-        </div>
-        
-    </div>
-</div>
-
-        </div>
-        
-    
-</div>
-
 
             <footer id="footer">
     <div id="footer-wrap">
@@ -1225,6 +624,29 @@ Windows 作为客户端挂载了虚拟机的 NFS 服务，但未正常卸载，�
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo="styundydsg/styundydsg.github.io"
+    data-repo-id="R_kgDOK0X3wA"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOK0X3wM4Cok6S"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="1"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin
+    async
+></script>
+
+
+
+
+
     
 
     <!-- 问答按钮和窗口 -->
