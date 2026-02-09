@@ -1,4 +1,5 @@
-https://styundydsg.github.io/2026/02/08/ws63-hi3861-%E5%AE%8C%E6%88%90c-%E6%94%AF%E6%8C%81%E8%BF%87%E7%A8%8B/
+https://styundydsg.github.io/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863-%E5%B9%B3%E5%8F%B0/
+https://styundydsg.github.io/2026/02/08/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-ws63-hi3863-%E5%AE%8C%E6%88%90c-%E6%94%AF%E6%8C%81%E8%BF%87%E7%A8%8B/
 https://styundydsg.github.io/2026/01/21/%E6%9C%80%E8%BF%91%E6%83%B3%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%9C%E8%A5%BF/
 https://styundydsg.github.io/about/index.html
 https://styundydsg.github.io/2025/12/15/20251215%E8%AE%B0%E5%BD%95/
@@ -35,6 +36,7 @@ https://styundydsg.github.io/tags/%E8%BF%B7%E8%8C%AB/
 https://styundydsg.github.io/tags/mit6-s081-labs/
 https://styundydsg.github.io/tags/wsl/
 https://styundydsg.github.io/tags/%E5%BD%92%E5%9B%A0/
+https://styundydsg.github.io/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/
 https://styundydsg.github.io/categories/%E6%97%A5%E8%AE%B0/
 https://styundydsg.github.io/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/
 https://styundydsg.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/
