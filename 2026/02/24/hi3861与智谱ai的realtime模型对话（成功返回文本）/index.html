@@ -1,0 +1,2084 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>hi3861与智谱ai的realtime模型对话（成功返回文本） | zero two</title>
+    <meta name="author" content="lAn_rEd" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/anle.jpeg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&amp;family=Lexend:wght@400;500;600;700;800;900&amp;family=Noto+Sans+SC:wght@400;500;600;700;800;900&amp;display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+<canvas id="fireworks" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 32767"></canvas>
+<script src="https://s4.zstatic.net/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+
+    
+    
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>ZERO TWO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;ZERO TWO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>hi3861与智谱ai的realtime模型对话（成功返回文本）</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/2/24
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <p>做了一点不想做了，看了一些毕设的评论突然很着急，为什么他们进度那么快啊，我们学校都没什么通知，只是在1月30号让我们申请选题。为什么有的三月已经准备完成了，为什么有的上学期完成了，有点急啊。</p>
+<p>唉，昨天发现一个喜欢的up主注销账号了，明明14号的时候才关注我，那时候真的很开心。新年也结束了，悲伤的氛围。又要找工作。又要准备毕设。真的烦死了。</p>
+<span id="more"></span>
+<pre><code>static_library(&quot;i2s_demo&quot;) &#123;
+      sources = [
+          # &quot;i2s_demo.c&quot;,
+          &quot;realtime_streaming_demo.c&quot;,
+          &quot;i2s_codec_common.c&quot;,
+          &quot;i2s_microphone.c&quot;,
+          &quot;ws_client_demo.c&quot;,
+          &quot;//third_party/musl/src/math/sinf.c&quot;,
+          &quot;//third_party/musl/src/math/cosf.c&quot;,
+          &quot;//third_party/musl/src/math/__sindf.c&quot;,
+          &quot;//third_party/musl/src/math/__cosdf.c&quot;,
+          &quot;//third_party/musl/src/math/__rem_pio2f.c&quot;,
+          &quot;//third_party/musl/src/math/__rem_pio2_large.c&quot;,
+          &quot;//third_party/musl/src/math/__sin.c&quot;,
+          &quot;//third_party/musl/src/math/__cos.c&quot;,
+          &quot;//third_party/musl/src/math/__rem_pio2.c&quot;,
+      ]
+
+     include_dirs = [
+         &quot;.&quot;,
+         &quot;//device/soc/hisilicon/hi3861v100/sdk_liteos/include&quot;,
+         &quot;//base/iothardware/peripheral/interfaces/inner_api&quot;,
+         &quot;//commonlibrary/utils_lite/include&quot;,
+         &quot;//kernel/liteos_m/kal/include&quot;,
+         &quot;//foundation/communication/interfaces/kits/wifi_lite/wifiservice&quot;,
+         &quot;//device/soc/hisilicon/hi3861v100/sdk_liteos/third_party/lwip_sack/include/lwip&quot;,
+         &quot;//device/soc/hisilicon/hi3861v100/sdk_liteos/third_party/mbedtls/include&quot;,
+         &quot;//third_party/librws&quot;,
+         &quot;//third_party/musl/src/internal&quot;,
+         &quot;//third_party/musl/porting/liteos_m/kernel/src/internal/&quot;
+     ]
+
+     defines = [ &quot;WITH_LWIP&quot; ]
+
+     # 链接 librws 静态库和 mbedtls
+     deps = [
+         &quot;//third_party/librws/librws:librws_static&quot;,
+         &quot;//device/soc/hisilicon/hi3861v100/sdk_liteos/third_party/mbedtls:mbedtls&quot;,
+     ]
+
+&#125;
+</code></pre>
+<p><strong>realtime_streaming_demo.c</strong></p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;math.h&gt;
+#include &lt;ohos_init.h&gt;
+#include &quot;hi_types_base.h&quot;
+#include &quot;hi_config.h&quot;
+#include &quot;hi_i2s.h&quot;
+#include &quot;hi_i2c.h&quot;
+#include &quot;hi_gpio.h&quot;
+#include &quot;hi_io.h&quot;
+#include &quot;hi_time.h&quot;
+#include &quot;hi_mem.h&quot;
+#include &quot;hi_dma.h&quot;
+#include &quot;hi_stdlib.h&quot;
+#include &quot;hi_wifi_api.h&quot;
+#include &quot;lwip/netif.h&quot;
+#include &quot;lwip/netifapi.h&quot;
+#include &quot;lwip/ip_addr.h&quot;
+#include &quot;librws.h&quot;
+#include &quot;i2s_microphone.h&quot;
+#include &quot;ws_client_demo.h&quot;
+#include &quot;i2s_codec_common.h&quot;
+#include &quot;mbedtls/base64.h&quot;
+#include &quot;cmsis_os2.h&quot;
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+#define WIFI_SSID &quot;ZTE-cCCKEK&quot;
+#define WIFI_PASSWORD &quot;13471551659abc&quot;
+
+#define I2S_AUDIO_CHUNK_SIZE         320     
+
+#define ES8311_RESET_REG00 0x00
+#define ES8311_CLK_MANAGER_REG01 0x01
+#define ES8311_CLK_MANAGER_REG02 0x02
+#define ES8311_CLK_MANAGER_REG03 0x03
+#define ES8311_CLK_MANAGER_REG04 0x04
+#define ES8311_CLK_MANAGER_REG05 0x05
+#define ES8311_CLK_MANAGER_REG06 0x06
+#define ES8311_CLK_MANAGER_REG07 0x07
+#define ES8311_CLK_MANAGER_REG08 0x08
+#define ES8311_SDPIN_REG09 0x09
+#define ES8311_SDPOUT_REG0A 0x0A
+#define ES8311_SYSTEM_REG0B 0x0B
+#define ES8311_SYSTEM_REG0C 0x0C
+#define ES8311_SYSTEM_REG0D 0x0D
+#define ES8311_SYSTEM_REG0E 0x0E
+#define ES8311_SYSTEM_REG0F 0x0F
+#define ES8311_SYSTEM_REG10 0x10
+#define ES8311_SYSTEM_REG11 0x11
+#define ES8311_SYSTEM_REG12 0x12
+#define ES8311_SYSTEM_REG13 0x13
+#define ES8311_SYSTEM_REG14 0x14
+#define ES8311_ADC_REG15 0x15
+#define ES8311_ADC_REG16 0x16
+#define ES8311_ADC_REG17 0x17
+#define ES8311_ADC_REG18 0x18
+#define ES8311_ADC_REG19 0x19
+#define ES8311_ADC_REG1A 0x1A
+#define ES8311_ADC_REG1B 0x1B
+#define ES8311_ADC_REG1C 0x1C
+#define ES8311_DAC_REG31 0x31
+#define ES8311_DAC_REG32 0x32
+#define ES8311_DAC_REG33 0x33
+#define ES8311_DAC_REG34 0x34
+#define ES8311_DAC_REG35 0x35
+#define ES8311_DAC_REG37 0x37
+#define ES8311_GPIO_REG44 0x44
+#define ES8311_GP_REG45 0x45
+
+#define CODEC_DEVICE_ADDR 0x30
+
+hi_u32 realtime_demo_init_i2s(hi_void)
+&#123;
+    hi_u32 ret;
+    hi_codec_attribute codec_attr = &#123;0&#125;;
+    
+    printf(&quot;[I2S] I2S 初始化开始...\n&quot;);
+    
+    ret = hi_gpio_init();
+    if (ret != HI_ERR_SUCCESS) &#123;
+        printf(&quot;[I2S] GPIO 初始化失败: 0x%x\n&quot;, ret);
+        return ret;
+    &#125;
+    
+    hi_io_set_func(HI_IO_NAME_GPIO_0, HI_IO_FUNC_GPIO_0_I2C1_SDA);
+    ret |= hi_io_set_func(HI_IO_NAME_GPIO_1, HI_IO_FUNC_GPIO_1_I2C1_SCL);
+    ret |= hi_io_set_func(HI_IO_NAME_GPIO_5, HI_IO_FUNC_GPIO_5_I2S0_MCLK);
+    ret |= hi_io_set_func(HI_IO_NAME_GPIO_6, HI_IO_FUNC_GPIO_6_I2S0_TX);
+    ret |= hi_io_set_func(HI_IO_NAME_GPIO_7, HI_IO_FUNC_GPIO_7_I2S0_BCLK);
+    ret |= hi_io_set_func(HI_IO_NAME_GPIO_8, HI_IO_FUNC_GPIO_8_I2S0_WS);
+    ret |= hi_io_set_func(HI_IO_NAME_GPIO_11, HI_IO_FUNC_GPIO_11_I2S0_RX);
+    
+    if (ret != HI_ERR_SUCCESS) &#123;
+        printf(&quot;[I2S] GPIO 功能设置失败: 0x%x\n&quot;, ret);
+        return ret;
+    &#125;
+    
+    ret = hi_i2c_init(HI_I2C_IDX_1, 100000);
+    if (ret != HI_ERR_SUCCESS) &#123;
+        printf(&quot;[I2S] I2C 初始化失败: 0x%x\n&quot;, ret);
+        return ret;
+    &#125;
+    
+    ret = hi_dma_init();
+    if (ret != HI_ERR_SUCCESS) &#123;
+        printf(&quot;[I2S] DMA 初始化失败: 0x%x\n&quot;, ret);
+        return ret;
+    &#125;
+    
+    codec_attr.sample_rate = HI_CODEC_SAMPLE_RATE_16K;
+    codec_attr.resolution = HI_CODEC_RESOLUTION_16BIT;
+    
+    ret = codec_init(&amp;codec_attr);
+    if (ret != HI_ERR_SUCCESS) &#123;
+        printf(&quot;[I2S] Codec 初始化失败: 0x%x\n&quot;, ret);
+        return ret;
+    &#125;
+    
+    hi_i2s_attribute i2s_cfg = &#123;0&#125;;
+    i2s_cfg.sample_rate = HI_I2S_SAMPLE_RATE_16K;
+    i2s_cfg.resolution = HI_I2S_RESOLUTION_16BIT;
+    
+    ret = hi_i2s_init(&amp;i2s_cfg);
+    if (ret != HI_ERR_SUCCESS) &#123;
+        printf(&quot;[I2S] I2S 初始化失败: 0x%x\n&quot;, ret);
+        return ret;
+    &#125;
+    
+    printf(&quot;[I2S] I2S 初始化成功\n&quot;);
+    printf(&quot;[I2S] 采样率: 16kHz\n&quot;);
+    printf(&quot;[I2S] 声道数: 1\n&quot;);
+    printf(&quot;[I2S] 位深: 16 bits\n&quot;);
+    
+    return HI_ERR_SUCCESS;
+&#125;
+
+static hi_void test_realtime_echo(hi_void)
+&#123;
+    hi_u32 ret;
+
+    printf(&quot;\n&quot;);
+    printf(&quot;========================================\n&quot;);
+    printf(&quot;  I2S 测试：实时回声（优化版）\n&quot;);
+    printf(&quot;========================================\n\n&quot;);
+
+    // 清空缓冲区
+    ret = hi_i2s_write(HI_NULL, 0, 0);
+
+    hi_u32 echo_duration_ms = 5000;
+    hi_u32 chunk_size = I2S_AUDIO_CHUNK_SIZE; // 10ms块
+    hi_u8 *chunk_buf = hi_malloc(HI_MOD_ID_DRV, chunk_size);
+
+    if (chunk_buf == HI_NULL)
+    &#123;
+        printf(&quot;[ECHO] 缓冲区分配失败\n&quot;);
+        return;
+    &#125;
+
+    hi_u32 start_time = hi_get_tick();
+    hi_u32 end_time = start_time + echo_duration_ms;
+    hi_u32 processed_chunks = 0;
+    hi_u32 read_ret, write_ret;
+
+    while (hi_get_tick() &lt; end_time)
+    &#123;
+        // 使用超时机制，避免无限阻塞
+        read_ret = hi_i2s_read(chunk_buf, chunk_size, 50); // 50ms超时
+
+        if (read_ret == HI_ERR_SUCCESS)
+        &#123;
+            write_ret = hi_i2s_write(chunk_buf, chunk_size, 50); // 50ms超时
+
+            if (write_ret == HI_ERR_SUCCESS)
+            &#123;
+                processed_chunks++;
+
+                if (processed_chunks % 50 == 0)
+                &#123;
+                    hi_u32 elapsed = hi_get_tick() - start_time;
+                    printf(&quot;[ECHO] 处理中: %u ms, %u 个数据块\n&quot;, elapsed, processed_chunks);
+                &#125;
+            &#125;
+        &#125;
+
+    &#125;
+
+    hi_free(HI_MOD_ID_DRV, chunk_buf);
+
+    printf(&quot;[ECHO] 实时回声测试完成，处理了 %u 个数据块\n&quot;, processed_chunks);
+    printf(&quot;[ECHO] 每个数据块 %u 字节，总数据量 %u 字节\n&quot;,
+           chunk_size, processed_chunks * chunk_size);
+&#125;
+
+hi_void realtime_demo_cleanup_i2s(hi_void)
+&#123;
+    hi_i2s_deinit();
+    hi_i2c_deinit(HI_I2C_IDX_1);
+&#125;
+
+void on_ws_audio_received(const hi_u8 *pcm_data, hi_u32 len)
+&#123;
+    static hi_u32 total_audio_received = 0;
+    static hi_u32 total_audio_played = 0;
+
+    total_audio_received += len;
+    printf(&quot;[AUDIO] 收到音频数据: %u bytes (总计: %u bytes)\n&quot;, len, total_audio_received);
+
+    if (pcm_data != HI_NULL &amp;&amp; len &gt; 0) &#123;
+        hi_u32 offset = 0;
+        hi_u32 chunk_size = I2S_AUDIO_CHUNK_SIZE;
+        hi_u32 ret;
+        hi_u32 retry_count = 0;
+
+        while (offset &lt; len) &#123;
+            hi_u32 write_size = (offset + chunk_size &gt; len) ? (len - offset) : chunk_size;
+            ret = hi_i2s_write((hi_u8 *)(pcm_data + offset), write_size, 100);
+
+            if (ret == HI_ERR_SUCCESS) &#123;
+                offset += write_size;
+                total_audio_played += write_size;
+                retry_count = 0;
+            &#125; else &#123;
+                retry_count++;
+                printf(&quot;[AUDIO] I2S 写入失败，重试 %u/10\n&quot;, retry_count);
+                hi_sleep(5);
+
+                if (retry_count &gt;= 10) &#123;
+                    printf(&quot;[AUDIO] I2S 写入失败，跳过此音频块\n&quot;);
+                    break;
+                &#125;
+            &#125;
+        &#125;
+
+        printf(&quot;[AUDIO] 音频播放完成: %u / %u bytes\n&quot;, offset, len);
+    &#125;
+&#125;
+
+
+static void Realtime_Streaming_Demo_Entry_Task(const char *arg)
+&#123;
+    hi_u32 ret;
+
+    (void)arg;
+
+    printf(&quot;\n&quot;);
+    printf(&quot;========================================\n&quot;);
+    printf(&quot;  实时流传输演示程序\n&quot;);
+    printf(&quot;========================================\n\n&quot;);
+
+    printf(&quot;[MAIN] 步骤 1: I2S 录音和回放测试\n&quot;);
+    ret = realtime_demo_init_i2s();
+    if (ret != HI_ERR_SUCCESS) &#123;
+        printf(&quot;[MAIN] I2S 初始化失败，程序退出\n&quot;);
+        return;
+    &#125;
+    hi_sleep(1000);
+    
+    printf(&quot;[MAIN] 步骤 2: I2S 实时回声测试\n&quot;);
+    //test_realtime_echo();
+
+    printf(&quot;[MAIN] 步骤 3: 连接 WiFi\n&quot;);
+    ret = realtime_demo_connect_wifi(WIFI_SSID, WIFI_PASSWORD);
+    if (ret == HI_FALSE) &#123;
+        printf(&quot;[MAIN] WiFi 连接失败，程序退出\n&quot;);
+        return;
+    &#125;
+
+    hi_sleep(2000);
+
+    printf(&quot;[MAIN] 步骤 4: 连接 WebSocket\n&quot;);
+    ws_set_audio_callback(on_ws_audio_received);
+    ws_client_init();
+
+    // 等待 WebSocket 连接建立
+    printf(&quot;[MAIN] 等待 WebSocket 连接建立...\n&quot;);
+    hi_u32 wait_count = 0;
+    while (!ws_is_connected() &amp;&amp; wait_count &lt; 100) &#123;
+        hi_sleep(100);
+        wait_count++;
+    &#125;
+
+    if (!ws_is_connected()) &#123;
+        printf(&quot;[MAIN] WebSocket 连接超时\n&quot;);
+        return;
+    &#125;
+
+    printf(&quot;[MAIN] WebSocket 已连接，等待会话配置完成...\n&quot;);
+    hi_sleep(3000);  // 等待 session.update 和 session.updated 完成
+
+    printf(&quot;[MAIN] 步骤 5: 开始发送测试音频\n&quot;);
+    ws_start_audio_sending();
+
+    // 保持任务运行，等待音频发送完成
+    printf(&quot;[MAIN] 主任务继续运行...\n&quot;);
+    while (1) &#123;
+        hi_sleep(1000);
+        // 可以在这里添加其他逻辑，比如检查连接状态等
+    &#125;
+&#125;
+
+void realtime_streaming_demo_init(hi_void)
+&#123;
+    osThreadAttr_t attr;
+
+    attr.name = &quot;realtime_streaming&quot;;
+    attr.attr_bits = 0U;
+    attr.cb_mem = NULL;
+    attr.cb_size = 0U;
+    attr.stack_mem = NULL;
+    attr.stack_size = 0x8000;
+    attr.priority = osPriorityNormal;
+
+    if (osThreadNew((osThreadFunc_t)Realtime_Streaming_Demo_Entry_Task, NULL, &amp;attr) == NULL) &#123;
+        printf(&quot;[MAIN] 创建实时流传输任务失败\n&quot;);
+    &#125;
+&#125;
+
+void Realtime_Streaming_Demo_Entry(void)
+&#123;
+    osThreadAttr_t attr;
+
+    attr.name = &quot;realtime_streaming&quot;;
+    attr.attr_bits = 0U;
+    attr.cb_mem = NULL;
+    attr.cb_size = 0U;
+    attr.stack_mem = NULL;
+    attr.stack_size = 0x8000;
+    attr.priority = osPriorityNormal;
+
+    if (osThreadNew((osThreadFunc_t)Realtime_Streaming_Demo_Entry_Task, NULL, &amp;attr) == NULL) &#123;
+        printf(&quot;[MAIN] 创建实时流传输任务失败\n&quot;);
+    &#125;
+&#125;
+
+
+SYS_RUN(Realtime_Streaming_Demo_Entry);
+</code></pre>
+<p><strong>i2s_codec_common.c</strong></p>
+<pre><code class="c">/*
+ * I2S 和 Codec 共享函数
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ohos_init.h&gt;
+#include &lt;hi_types_base.h&gt;
+#include &lt;hi_config.h&gt;
+#include &lt;hi_i2s.h&gt;
+#include &lt;hi_i2c.h&gt;
+#include &lt;hi_gpio.h&gt;
+#include &lt;hi_io.h&gt;
+#include &lt;hi_time.h&gt;
+#include &lt;hi_mem.h&gt;
+#include &lt;hi_dma.h&gt;
+#include &lt;hi_stdlib.h&gt;
+#include &quot;hi_wifi_api.h&quot;
+#include &quot;lwip/netif.h&quot;
+#include &quot;lwip/netifapi.h&quot;
+#include &quot;lwip/ip_addr.h&quot;
+
+// Codec 寄存器定义
+#define ES8311_RESET_REG00 0x00
+#define ES8311_CLK_MANAGER_REG01 0x01
+#define ES8311_CLK_MANAGER_REG02 0x02
+#define CODEC_DEVICE_ADDR 0x30
+
+typedef enum &#123;
+    HI_CODEC_SAMPLE_RATE_8K = 8,
+    HI_CODEC_SAMPLE_RATE_16K = 16,
+    HI_CODEC_SAMPLE_RATE_24K = 24,
+    HI_CODEC_SAMPLE_RATE_32K = 32,
+    HI_CODEC_SAMPLE_RATE_48K = 48,
+&#125; hi_codec_sample_rate;
+
+typedef enum &#123;
+    HI_CODEC_RESOLUTION_16BIT = 16,
+&#125; hi_codec_resolution;
+
+typedef struct &#123;
+    hi_codec_sample_rate sample_rate;
+    hi_codec_resolution resolution;
+&#125; hi_codec_attribute;
+
+// 全局网络接口
+struct netif *g_lwip_netif = NULL;
+
+/**
+ * 写入 Codec 寄存器
+ */
+hi_u32 codec_write_reg(hi_u8 reg, hi_u8 val)
+&#123;
+    hi_i2c_data i2c_data;
+    hi_u8 send_data[2] = &#123; reg, val &#125;;
+    i2c_data.send_buf = send_data;
+    i2c_data.send_len = 2;
+    return hi_i2c_write(HI_I2C_IDX_1, CODEC_DEVICE_ADDR, &amp;i2c_data);
+&#125;
+
+/**
+ * 设置 Codec 增益
+ */
+hi_u32 codec_set_gain(hi_void)
+&#123;
+    hi_u32 ret = HI_ERR_SUCCESS;
+    ret |= codec_write_reg(0x0E, 0x02);
+    ret |= codec_write_reg(0x0F, 0x44);
+    ret |= codec_write_reg(0x15, 0x40);
+    ret |= codec_write_reg(0x1B, 0x0A);
+    ret |= codec_write_reg(0x1C, 0x6A);
+    ret |= codec_write_reg(0x17, 0xBF);
+    ret |= codec_write_reg(0x37, 0x48);
+    ret |= codec_write_reg(0x32, 0x84);
+    ret |= codec_write_reg(0x16, 0x22);
+    ret |= codec_write_reg(0x17, 0xDF);
+    ret |= codec_write_reg(0x18, 0x87);
+    ret |= codec_write_reg(0x19, 0xFB);
+    ret |= codec_write_reg(0x1A, 0x03);
+    ret |= codec_write_reg(0x1B, 0xEA);
+    return ret;
+&#125;
+
+/**
+ * 初始化 Codec
+ */
+hi_u32 codec_init(const hi_codec_attribute *codec_attr)
+&#123;
+    if (codec_attr == HI_NULL) &#123;
+        return HI_ERR_FAILURE;
+    &#125;
+
+    hi_u32 ret;
+    ret = codec_write_reg(0x44, 0x08);
+    hi_udelay(5000);
+    ret = codec_write_reg(0x31, 0x40);
+    ret |= codec_write_reg(0x00, 0x1F);
+    ret |= codec_write_reg(0x45, 0x00);
+    ret |= codec_write_reg(0x01, 0x30);
+    ret |= codec_write_reg(0x02, 0x10);
+
+    // 设置采样率
+    if (codec_attr-&gt;sample_rate == HI_CODEC_SAMPLE_RATE_8K) &#123;
+        ret |= codec_write_reg(0x02, 0xA0);
+    &#125; else if (codec_attr-&gt;sample_rate == HI_CODEC_SAMPLE_RATE_16K) &#123;
+        ret |= codec_write_reg(0x02, 0x40);
+    &#125; else if (codec_attr-&gt;sample_rate == HI_CODEC_SAMPLE_RATE_32K) &#123;
+        ret |= codec_write_reg(0x02, 0x48); 
+    &#125; else if (codec_attr-&gt;sample_rate == HI_CODEC_SAMPLE_RATE_48K) &#123;
+        ret |= codec_write_reg(0x02, 0x00);
+    &#125;
+
+    ret |= codec_write_reg(0x03, 0x10);
+    ret |= codec_write_reg(0x16, 0x24);
+    ret |= codec_write_reg(0x04, 0x10);
+    ret |= codec_write_reg(0x05, 0x00);
+    ret |= codec_write_reg(0x0B, 0x00);
+    ret |= codec_write_reg(0x0C, 0x00);
+    ret |= codec_write_reg(0x10, 0x1F);
+    ret |= codec_write_reg(0x11, 0x7F);
+    ret |= codec_write_reg(0x00, 0x80);
+    hi_udelay(50000);
+    ret |= codec_write_reg(0x0D, 0x01);
+    ret |= codec_write_reg(0x01, 0x3F);
+    ret |= codec_write_reg(0x14, 0x18);
+    ret |= codec_write_reg(0x12, 0x00);
+    ret |= codec_write_reg(0x13, 0x10);
+    if ((codec_attr-&gt;resolution == HI_CODEC_RESOLUTION_16BIT))
+    &#123;
+        /* set adc/dac data format */
+        ret |= codec_write_reg(0x09, 0x0C);  /* set dac format=16bit i2s */
+        ret |= codec_write_reg(0x0A, 0x0C); /* set adc format=16bit i2s */
+    &#125;
+    else
+    &#123;
+        /* set adc/dac data format */
+        ret |= codec_write_reg(0x09, 0x00);                /* set dac format=24bit i2s */
+        ret |= codec_write_reg(0x0A, 0x00);                /* set adc format=24bit i2s */
+    &#125;
+    ret |= codec_set_gain();
+    ret |= codec_write_reg(0x31, 0x00);
+    return ret;
+&#125;
+
+/**
+ * WiFi 事件处理
+ */
+void wifi_event_handler(const hi_wifi_event *event)
+&#123;
+    if (event == NULL) &#123;
+        return;
+    &#125;
+
+    switch (event-&gt;event) &#123;
+        case HI_WIFI_EVT_SCAN_DONE:
+            printf(&quot;WiFi: Scan completed\n&quot;);
+            break;
+        case HI_WIFI_EVT_CONNECTED:
+            printf(&quot;WiFi: Connected to AP\n&quot;);
+            printf(&quot;WiFi: SSID: %s\n&quot;, event-&gt;info.wifi_connected.ssid);
+            if (g_lwip_netif != NULL) &#123;
+                netifapi_dhcp_start(g_lwip_netif);
+            &#125;
+            break;
+        case HI_WIFI_EVT_DISCONNECTED:
+            printf(&quot;WiFi: Disconnected from AP\n&quot;);
+            if (g_lwip_netif != NULL) &#123;
+                netifapi_dhcp_stop(g_lwip_netif);
+                ip4_addr_t st_gw, st_ipaddr, st_netmask;
+                IP4_ADDR(&amp;st_gw, 0, 0, 0, 0);
+                IP4_ADDR(&amp;st_ipaddr, 0, 0, 0, 0);
+                IP4_ADDR(&amp;st_netmask, 0, 0, 0, 0);
+                netifapi_netif_set_addr(g_lwip_netif, &amp;st_ipaddr, &amp;st_netmask, &amp;st_gw);
+            &#125;
+            break;
+        default:
+            break;
+    &#125;
+&#125;
+
+/**
+ * 连接 WiFi
+ */
+hi_bool realtime_demo_connect_wifi(const char *ssid, const char *password)
+&#123;
+    int ret;
+    hi_wifi_assoc_request assoc_req = &#123;0&#125;;
+    char ifname[WIFI_IFNAME_MAX_SIZE + 1] = &#123;0&#125;;
+    int len = sizeof(ifname);
+    const unsigned char wifi_vap_res_num = 2;
+    const unsigned char wifi_user_res_num = 2;
+
+    printf(&quot;========================================\n&quot;);
+    printf(&quot;  步骤 1: 连接 WiFi\n&quot;);
+    printf(&quot;========================================\n&quot;);
+    printf(&quot;SSID: %s\n&quot;, ssid);
+
+    if (hi_wifi_get_init_status() == 1) &#123;
+        printf(&quot;WiFi: Already initialized\n&quot;);
+    &#125; else &#123;
+        ret = hi_wifi_init(wifi_vap_res_num, wifi_user_res_num);
+        if (ret != HISI_OK) &#123;
+            printf(&quot;WiFi: Init failed, ret = %d\n&quot;, ret);
+            return HI_FALSE;
+        &#125;
+        printf(&quot;WiFi: Init success\n&quot;);
+    &#125;
+
+    ret = hi_wifi_sta_start(ifname, &amp;len);
+    if (ret != HISI_OK) &#123;
+        printf(&quot;WiFi: STA start failed, ret = %d\n&quot;, ret);
+        hi_wifi_deinit();
+        return HI_FALSE;
+    &#125;
+    printf(&quot;WiFi: STA start success, ifname: %s\n&quot;, ifname);
+
+    ret = hi_wifi_register_event_callback(wifi_event_handler);
+    if (ret != HISI_OK) &#123;
+        printf(&quot;WiFi: Register event callback failed, ret = %d\n&quot;, ret);
+        hi_wifi_sta_stop();
+        hi_wifi_deinit();
+        return HI_FALSE;
+    &#125;
+    printf(&quot;WiFi: Event callback registered\n&quot;);
+
+    g_lwip_netif = netifapi_netif_find(ifname);
+    if (g_lwip_netif == NULL) &#123;
+        printf(&quot;WiFi: Get netif failed\n&quot;);
+        hi_wifi_sta_stop();
+        hi_wifi_deinit();
+        return HI_FALSE;
+    &#125;
+
+    strncpy(assoc_req.ssid, ssid, HI_WIFI_MAX_SSID_LEN);
+    assoc_req.auth = HI_WIFI_SECURITY_WPA2PSK;
+    strncpy(assoc_req.key, password, HI_WIFI_MAX_KEY_LEN);
+
+    ret = hi_wifi_sta_connect(&amp;assoc_req);
+    if (ret != HISI_OK) &#123;
+        printf(&quot;WiFi: Connect failed, ret = %d\n&quot;, ret);
+        hi_wifi_sta_stop();
+        hi_wifi_deinit();
+        return HI_FALSE;
+    &#125;
+
+    printf(&quot;WiFi: Waiting for IP address...\n&quot;);
+    sleep(10);
+
+    if (g_lwip_netif == NULL) &#123;
+        printf(&quot;WiFi: Netif is NULL, cannot get IP address\n&quot;);
+        return HI_FALSE;
+    &#125;
+
+    const ip4_addr_t *ipaddr, *netmask, *gw;
+    ipaddr = netif_ip4_addr(g_lwip_netif);
+    netmask = netif_ip4_netmask(g_lwip_netif);
+    gw = netif_ip4_gw(g_lwip_netif);
+
+    if (ipaddr == NULL || netmask == NULL || gw == NULL) &#123;
+        printf(&quot;WiFi: Failed to get IP address info\n&quot;);
+        return HI_FALSE;
+    &#125;
+
+    printf(&quot;WiFi: IP address: %s\n&quot;, ip4addr_ntoa(ipaddr));
+    printf(&quot;WiFi: Netmask: %s\n&quot;, ip4addr_ntoa(netmask));
+    printf(&quot;WiFi: Gateway: %s\n&quot;, ip4addr_ntoa(gw));
+    printf(&quot;\n&quot;);
+
+    return HI_TRUE;
+&#125;
+
+</code></pre>
+<p><strong>i2s_codec_common.h</strong></p>
+<pre><code class="c">/*
+ * I2S 和 Codec 共享函数头文件
+ */
+
+#ifndef __I2S_CODEC_COMMON_H__
+#define __I2S_CODEC_COMMON_H__
+
+#include &quot;hi_types_base.h&quot;
+
+// Codec 属性类型
+typedef enum &#123;
+    HI_CODEC_SAMPLE_RATE_8K = 8,
+    HI_CODEC_SAMPLE_RATE_16K = 16,
+    HI_CODEC_SAMPLE_RATE_24K = 24,
+    HI_CODEC_SAMPLE_RATE_32K = 32,
+    HI_CODEC_SAMPLE_RATE_48K = 48,
+&#125; hi_codec_sample_rate;
+
+typedef enum &#123;
+    HI_CODEC_RESOLUTION_16BIT = 16,
+&#125; hi_codec_resolution;
+
+typedef struct &#123;
+    hi_codec_sample_rate sample_rate;
+    hi_codec_resolution resolution;
+&#125; hi_codec_attribute;
+
+// 全局网络接口声明
+extern struct netif *g_lwip_netif;
+
+/**
+ * 写入 Codec 寄存器
+ */
+hi_u32 codec_write_reg(hi_u8 reg, hi_u8 val);
+
+/**
+ * 设置 Codec 增益
+ */
+hi_u32 codec_set_gain(hi_void);
+
+/**
+ * 初始化 Codec
+ */
+hi_u32 codec_init(const hi_codec_attribute *codec_attr);
+
+/**
+ * WiFi 事件处理
+ */
+void wifi_event_handler(const hi_wifi_event *event);
+
+/**
+ * 连接 WiFi
+ */
+hi_bool realtime_demo_connect_wifi(const char *ssid, const char *password);
+
+#endif /* __I2S_CODEC_COMMON_H__ */
+
+</code></pre>
+<p><strong>ws_client_demo.c</strong></p>
+<pre><code class="c">/*
+ * WebSocket Client Demo for Hi3861
+ * 连接到本地 PC 代理服务器，通过代理访问智谱AI GLM-Realtime API
+ *
+ * 功能：
+ * 1. 连接到 PC 代理服务器 (ws://PC_IP:8080)
+ * 2. 发送会话配置事件
+ * 3. 接收服务器响应
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+// 定义数学常量
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+#include &lt;ohos_init.h&gt;
+#include &quot;hi_wifi_api.h&quot;
+#include &quot;hi_time.h&quot;
+#include &quot;lwip/netif.h&quot;
+#include &quot;lwip/netifapi.h&quot;
+#include &quot;librws.h&quot;
+#include &quot;ws_client_demo.h&quot;
+#include &quot;mbedtls/base64.h&quot;
+#include &quot;cmsis_os2.h&quot;
+#include &quot;i2s_microphone.h&quot;
+
+// ==================== 配置区域 (请修改此处) ====================
+
+// TODO: 填写你的 PC IP 地址
+// 确保 PC 和设备在同一个局域网，PC 已启动 proxy_server.py
+// 获取 PC IP: Windows 上运行 ipconfig, Linux/Mac 上运行 ifconfig
+#define PC_PROXY_IP &quot;192.168.1.2&quot;
+#define PC_PROXY_PORT 8080
+
+// ==================== 以下代码无需修改 ====================
+
+#define SERVER_HOST PC_PROXY_IP
+#define SERVER_PORT PC_PROXY_PORT
+#define SERVER_PATH &quot;/&quot;
+
+static rws_socket g_ws_socket = NULL;
+static hi_bool g_is_connected = HI_FALSE;
+static ws_on_audio_callback g_audio_callback = NULL;
+
+// 音频发送任务控制
+static osThreadId_t g_audio_send_task = NULL;
+static hi_bool g_audio_send_running = HI_FALSE;
+
+// 优化后的缓冲区，减少内存占用
+static hi_u8 g_audio_temp_buf[8192];  // 8KB 足够处理单次 WebSocket 音频消息
+static char g_response_text_buf[256];  // 响应文本缓冲区
+
+// 音频发送任务使用的全局缓冲区，避免栈溢出
+static hi_u8 g_audio_send_chunk[320];  // 音频数据块
+static hi_u8 g_audio_send_base64_buf[512];  // base64编码缓冲区
+
+// 函数前置声明
+static hi_void start_audio_sending_task(hi_void);
+
+/**
+ * 解码 Base64 音频数据并调用回调 - 暂时禁用以避免内存耗尽
+ */
+static hi_void process_audio_delta(const char *base64_data)
+&#123;
+    // 暂时禁用音频播放，避免内存耗尽导致内核崩溃
+    // TODO: 实现流式音频播放，避免一次性解码大数据
+    printf(&quot;[WS] 音频数据已跳过 (大小: %u 字符) - 音频播放功能暂时禁用\n&quot;, (hi_u32)strlen(base64_data));
+    return;
+
+    /* 原代码已禁用，待实现流式处理后再启用
+
+    if (!g_audio_callback || !base64_data) &#123;
+        return;
+    &#125;
+
+    static hi_u8 decode_buf[4096];  // 4KB 解码缓冲区，分多次解码
+    size_t input_len = strlen(base64_data);
+    const char *p = base64_data;
+    const char *end = base64_data + input_len;
+
+    // 安全地处理引号
+    if (input_len &gt; 0 &amp;&amp; *p == '&quot;') &#123;
+        p++;
+        input_len--;
+    &#125;
+    if (input_len &gt; 0 &amp;&amp; *(end - 1) == '&quot;') &#123;
+        end--;
+        input_len--;
+    &#125;
+
+    // 再次检查长度
+    if (input_len == 0) &#123;
+        printf(&quot;[WS] Empty base64 data\n&quot;);
+        return;
+    &#125;
+
+    // 如果数据太大，分块解码
+    const size_t max_base64_chunk = 3000;  // 每次最多解码 3000 字符 Base64
+    size_t remaining = input_len;
+    const char *current_pos = p;
+
+    while (remaining &gt; 0)
+    &#123;
+        size_t chunk_size = (remaining &gt; max_base64_chunk) ? max_base64_chunk : remaining;
+
+        size_t output_len = 0;
+        int ret = mbedtls_base64_decode(decode_buf, sizeof(decode_buf), &amp;output_len,
+                                         (const unsigned char *)current_pos, chunk_size);
+
+        if (ret != 0) &#123;
+            printf(&quot;[WS] Base64 decode failed, err = %d\n&quot;, ret);
+            // 继续尝试下一块
+        &#125; else if (output_len &gt; 0) &#123;
+            // 成功解码，播放音频
+            printf(&quot;[WS] 播放音频块: %u bytes (remaining: %u)\n&quot;, output_len, (hi_u32)remaining);
+            g_audio_callback(decode_buf, output_len);
+        &#125;
+
+        current_pos += chunk_size;
+        remaining -= chunk_size;
+    &#125;
+
+    printf(&quot;[WS] 音频数据处理完成\n&quot;);
+    */
+&#125;
+
+/* 连接成功回调 */
+/* 音频发送任务入口函数 - 使用 I2S 麦克风实时录音 */
+static void audio_send_task_entry(void *arg)
+&#123;
+    printf(&quot;[AUDIO] 实时录音任务开始\n&quot;);
+
+    // 初始化 I2S 麦克风
+    i2s_microphone_init();
+    i2s_microphone_start();
+
+    printf(&quot;[AUDIO] 等待连接稳定...\n&quot;);
+    hi_sleep(2000);
+
+    printf(&quot;[AUDIO] 开始实时录音并发送...\n&quot;);
+    printf(&quot;[AUDIO] 请对着麦克风说话...\n&quot;);
+
+    size_t base64_len;
+    hi_u32 frame_count = 0;
+    hi_u32 read_size;
+
+    // 持续录音并发送，直到任务被停止
+    while (g_audio_send_running &amp;&amp; ws_is_connected())
+    &#123;
+        // 从 I2S 麦克风读取一帧音频数据 (320 bytes = 20ms)
+        read_size = i2s_microphone_read_frame(g_audio_send_chunk, sizeof(g_audio_send_chunk));
+
+        if (read_size &gt; 0)
+        &#123;
+            // Base64 编码
+            mbedtls_base64_encode(g_audio_send_base64_buf, sizeof(g_audio_send_base64_buf),
+                                      &amp;base64_len, g_audio_send_chunk, read_size);
+            g_audio_send_base64_buf[base64_len] = '\0';
+
+            // 发送到服务器
+            ws_send_audio_base64((const char *)g_audio_send_base64_buf);
+
+            frame_count++;
+
+            // 每 50 帧打印一次（约 1 秒）
+            if (frame_count % 50 == 0)
+            &#123;
+                printf(&quot;[AUDIO] 已发送 %u 帧\n&quot;, frame_count);
+            &#125;
+
+            // 控制发送速率：每帧 20ms，避免超过 50 QPS
+            // 50 QPS = 每 100ms 最多 5 帧 = 每 20ms 1 帧
+            hi_sleep(10);  // 10ms 延迟
+        &#125;
+        else
+        &#123;
+            // 如果读取失败，稍微等待后重试
+            hi_sleep(1);
+        &#125;
+    &#125;
+
+    printf(&quot;[AUDIO] 录音任务结束，共发送 %u 帧\n&quot;, frame_count);
+
+    // 停止麦克风
+    i2s_microphone_stop();
+
+    g_audio_send_running = HI_FALSE;
+    g_audio_send_task = NULL;
+&#125;
+
+
+/* 启动音频发送任务 - 公共函数 */
+hi_void ws_start_audio_sending(hi_void)
+&#123;
+    if (g_audio_send_task != NULL)
+    &#123;
+        printf(&quot;[AUDIO] 任务已在运行\n&quot;);
+        return;
+    &#125;
+
+    // 先设置运行标志，再创建任务（避免竞态条件）
+    g_audio_send_running = HI_TRUE;
+
+    // 使用 CMSIS-RTOS v2 API 创建任务
+    // Hi3861内存有限，减少栈大小
+    osThreadAttr_t attr = &#123;
+        .name = &quot;audio_send&quot;,
+        .stack_size = 0x2000,  // 8KB - 减少栈大小防止内存不足
+        .priority = osPriorityNormal,
+    &#125;;
+
+    g_audio_send_task = osThreadNew((osThreadFunc_t)audio_send_task_entry, NULL, &amp;attr);
+
+    if (g_audio_send_task == NULL)
+    &#123;
+        printf(&quot;[AUDIO] 创建任务失败\n&quot;);
+        g_audio_send_running = HI_FALSE;
+        return;
+    &#125;
+
+    printf(&quot;[AUDIO] 音频发送任务已创建\n&quot;);
+&#125;
+
+/* 连接成功回调 - 添加实际发送代码 */
+static void on_connected(rws_socket socket)
+&#123;
+    printf(&quot;[WS] connected\n&quot;);
+    g_is_connected = HI_TRUE;
+
+    // 生成时间戳
+    hi_u32 timestamp = hi_get_tick();
+
+    // 使用静态缓冲区避免栈溢出 - 根据文档示例构建完整的 session.update
+    static char session_update[1024];
+    static char event_id_str[64];
+
+    // 生成 UUID 格式的 event_id（简化版）
+    snprintf(event_id_str, sizeof(event_id_str), &quot;evt-%u-%u&quot;,
+             (hi_u32)(timestamp &gt;&gt; 16), (hi_u32)(timestamp &amp; 0xFFFF));
+
+    hi_u32 msg_len = snprintf(session_update, sizeof(session_update),
+        &quot;&#123;\&quot;type\&quot;:\&quot;session.update\&quot;,&quot;
+        &quot;\&quot;event_id\&quot;:\&quot;%s\&quot;,&quot;
+        &quot;\&quot;client_timestamp\&quot;:%u,&quot;
+        &quot;\&quot;session\&quot;:&#123;&quot;
+        &quot;\&quot;model\&quot;:\&quot;glm-realtime\&quot;,&quot;
+        &quot;\&quot;modalities\&quot;:[\&quot;audio\&quot;,\&quot;text\&quot;],&quot;
+        &quot;\&quot;voice\&quot;:\&quot;tongtong\&quot;,&quot;
+        &quot;\&quot;input_audio_format\&quot;:\&quot;pcm16\&quot;,&quot;
+        &quot;\&quot;output_audio_format\&quot;:\&quot;pcm\&quot;,&quot;
+        &quot;\&quot;input_audio_noise_reduction\&quot;:&#123;\&quot;type\&quot;:\&quot;far_field\&quot;&#125;,&quot;
+        &quot;\&quot;turn_detection\&quot;:&#123;&quot;
+        &quot;\&quot;type\&quot;:\&quot;server_vad\&quot;,&quot;
+        &quot;\&quot;threshold\&quot;:0.3,&quot;
+        &quot;\&quot;prefix_padding_ms\&quot;:300,&quot;
+        &quot;\&quot;silence_duration_ms\&quot;:800,&quot;
+        &quot;\&quot;create_response\&quot;:true,&quot;
+        &quot;\&quot;interrupt_response\&quot;:true&quot;
+        &quot;&#125;,&quot;
+        &quot;\&quot;temperature\&quot;:0.8,&quot;
+        &quot;\&quot;beta_fields\&quot;:&#123;&quot;
+        &quot;\&quot;chat_mode\&quot;:\&quot;audio\&quot;,&quot;
+        &quot;\&quot;tts_source\&quot;:\&quot;e2e\&quot;&quot;
+        &quot;&#125;&quot;
+        &quot;&#125;&#125;&quot;,
+        event_id_str, timestamp);
+
+    if (msg_len &gt;= sizeof(session_update)) &#123;
+        printf(&quot;[WS] msg too long\n&quot;);
+        return;
+    &#125;
+
+    if (!rws_socket_send_text(socket, session_update))
+    &#123;
+        printf(&quot;[WS] send failed\n&quot;);
+        return;
+    &#125;
+    printf(&quot;[WS] session.update sent\n&quot;);
+
+    // 等待一小段时间让 session.update 被处理，然后开始发送音频
+    // 注意：这里不能直接调用 start_audio_sending_task()
+    // 因为我们在网络回调上下文中，需要延迟到单独的任务中执行
+&#125;
+
+/* 断开连接回调 */
+static void on_disconnected(rws_socket socket)
+&#123;
+    printf(&quot;[WS] disconnected\n&quot;);
+    g_is_connected = HI_FALSE;
+    g_audio_send_running = HI_FALSE;
+    g_ws_socket = NULL;
+&#125;
+
+/* 接收文本消息回调 */
+static void on_received_text(rws_socket socket, const char *text, const unsigned int length)
+&#123;
+    // 简单解析事件类型 - 减少printf避免栈溢出
+    if (strstr(text, &quot;\&quot;type\&quot;:&quot;))
+    &#123;
+        const char *type_start = strstr(text, &quot;\&quot;type\&quot;:&quot;);
+        if (type_start &amp;&amp; strlen(type_start) &gt; 7)
+        &#123;
+            static char event_type[32] = &#123;0&#125;;  // 使用静态缓冲区
+            const char *p = type_start + 7;
+
+            while (*p == ' ' || *p == ':') p++;
+
+            if (*p == '&quot;') &#123;
+                p++;
+                hi_u32 i = 0;
+                while (*p &amp;&amp; *p != '&quot;' &amp;&amp; i &lt; sizeof(event_type) - 1) &#123;
+                    event_type[i++] = *p++;
+                &#125;
+                event_type[i] = '\0';
+            &#125;
+
+            // 处理关键事件，减少日志输出
+            if (strstr(event_type, &quot;response.audio.delta&quot;))
+            &#123;
+                const char *fields[] = &#123;&quot;\&quot;content\&quot;:&quot;, &quot;\&quot;audio\&quot;:&quot;, &quot;\&quot;delta\&quot;:&quot;&#125;;
+                const char *value_start = NULL;
+                const char *value_end = NULL;
+                hi_u32 len = 0;
+                hi_bool found = HI_FALSE;
+
+                for (hi_u32 i = 0; i &lt; 3; i++)
+                &#123;
+                    const char *field_start = strstr(text, fields[i]);
+                    if (field_start)
+                    &#123;
+                        value_start = strchr(field_start + strlen(fields[i]), '&quot;');
+                        if (value_start)
+                        &#123;
+                            value_start++;
+                            value_end = strchr(value_start, '&quot;');
+                            if (value_end)
+                            &#123;
+                                len = value_end - value_start;
+                                if (len &gt; 0 &amp;&amp; len &lt; sizeof(g_audio_temp_buf))
+                                &#123;
+                                    found = HI_TRUE;
+                                    break;
+                                &#125;
+                            &#125;
+                        &#125;
+                    &#125;
+                &#125;
+
+                if (found &amp;&amp; value_start &amp;&amp; value_end)
+                &#123;
+                    memcpy(g_audio_temp_buf, value_start, len);
+                    g_audio_temp_buf[len] = '\0';
+                    process_audio_delta((const char *)g_audio_temp_buf);
+                &#125;
+            &#125;
+            else if (strstr(event_type, &quot;response.text.done&quot;))
+            &#123;
+                const char *text_start = strstr(text, &quot;\&quot;text\&quot;:&quot;);
+                if (text_start)
+                &#123;
+                    memset_s(g_response_text_buf, sizeof(g_response_text_buf), 0, sizeof(g_response_text_buf));
+                    if (sscanf(text_start + 7, &quot;\&quot;%255[^\&quot;]&quot;, g_response_text_buf) == 1) &#123;
+                        printf(&quot;[AI] %s\n&quot;, g_response_text_buf);
+                    &#125;
+                &#125;
+            &#125;
+            else if (strstr(event_type, &quot;session.updated&quot;))
+            &#123;
+                printf(&quot;[WS] session.updated\n&quot;);
+            &#125;
+            else if (strstr(event_type, &quot;error&quot;))
+            &#123;
+                printf(&quot;[ERR] %.*s\n&quot;, 100, text);
+            &#125;
+        &#125;
+    &#125;
+&#125;
+
+/* 接收二进制消息回调 (暂不使用) */
+static void on_received_bin(rws_socket socket, const void *data, const unsigned int length)
+&#123;
+    printf(&quot;[WS] 收到二进制数据: %u bytes\n&quot;, length);
+&#125;
+
+/* 发送文本消息 */
+hi_void ws_send_text(const char *text)
+&#123;
+    if (g_ws_socket &amp;&amp; g_is_connected) &#123;
+        if (rws_socket_send_text(g_ws_socket, text)) &#123;
+            printf(&quot;[WS] 发送成功: %s\n&quot;, text);
+        &#125; else &#123;
+            printf(&quot;[WS] 发送失败\n&quot;);
+        &#125;
+    &#125; else &#123;
+        printf(&quot;[WS] 未连接，无法发送\n&quot;);
+    &#125;
+&#125;
+
+/* 发送音频数据 (Base64编码) - 修正版本 */
+hi_void ws_send_audio_base64(const char *base64_audio)
+&#123;
+    if (!g_ws_socket || !g_is_connected || !base64_audio)
+    &#123;
+        return;
+    &#125;
+
+    // 使用静态缓冲区避免栈溢出
+    static char msg[512];
+    static hi_u32 audio_counter = 0;
+    hi_u32 timestamp = hi_get_tick();
+
+    hi_u32 msg_len = snprintf(msg, sizeof(msg),
+                              &quot;&#123;\&quot;type\&quot;:\&quot;input_audio_buffer.append\&quot;,\&quot;audio\&quot;:\&quot;%s\&quot;,\&quot;client_timestamp\&quot;:%u&#125;&quot;,
+                              base64_audio, timestamp);
+
+    if (msg_len &gt;= sizeof(msg) || !rws_socket_send_text(g_ws_socket, msg))
+    &#123;
+        printf(&quot;[WS] send fail #%u\n&quot;, audio_counter);
+    &#125;
+    else if (audio_counter % 100 == 0)
+    &#123;
+        printf(&quot;[WS] sent #%u\n&quot;, audio_counter);
+    &#125;
+
+    audio_counter++;
+&#125;
+
+/* 提交音频缓冲区 - Server VAD 模式下不需要手动提交 */
+hi_void ws_commit_audio(hi_void)
+&#123;
+    if (!g_ws_socket || !g_is_connected)
+    &#123;
+        printf(&quot;[WS] 未连接，无法提交音频\n&quot;);
+        return;
+    &#125;
+
+    printf(&quot;[WS] Server VAD 模式: 音频由服务器自动检测和提交，无需手动提交\n&quot;);
+    printf(&quot;[WS] 继续发送音频数据即可，服务器会自动处理\n&quot;);
+&#125;
+
+/* 初始化 WebSocket 连接 */
+hi_void ws_client_init(hi_void)
+&#123;
+    printf(&quot;\n&quot;);
+    printf(&quot;========================================\n&quot;);
+    printf(&quot;  WebSocket 客户端初始化\n&quot;);
+    printf(&quot;  代理服务器: %s:%d\n&quot;, SERVER_HOST, SERVER_PORT);
+    printf(&quot;========================================\n\n&quot;);
+
+    // 创建 WebSocket
+    g_ws_socket = rws_socket_create();
+    if (!g_ws_socket) &#123;
+        printf(&quot;[WS] 创建 socket 失败\n&quot;);
+        return;
+    &#125;
+
+    // 设置连接参数
+    rws_socket_set_url(g_ws_socket, &quot;ws&quot;, SERVER_HOST, SERVER_PORT, SERVER_PATH);
+
+    // 设置回调函数
+    rws_socket_set_on_connected(g_ws_socket, on_connected);
+    rws_socket_set_on_disconnected(g_ws_socket, on_disconnected);
+    rws_socket_set_on_received_text(g_ws_socket, on_received_text);
+    rws_socket_set_on_received_bin(g_ws_socket, on_received_bin);
+
+    // 启动连接
+    printf(&quot;[WS] 正在连接到 %s:%d...\n&quot;, SERVER_HOST, SERVER_PORT);
+    if (!rws_socket_connect(g_ws_socket)) &#123;
+        printf(&quot;[WS] 连接失败\n&quot;);
+        rws_error error = rws_socket_get_error(g_ws_socket);
+        if (error) &#123;
+            printf(&quot;[WS] 错误代码: %d\n&quot;, rws_error_get_code(error));
+            printf(&quot;[WS] 错误描述: %s\n&quot;, rws_error_get_description(error));
+        &#125;
+    &#125;
+
+    printf(&quot;[WS] WebSocket 连接已启动\n&quot;);
+&#125;
+
+/* 断开 WebSocket 连接 */
+hi_void ws_client_disconnect(hi_void)
+&#123;
+    printf(&quot;[WS] 断开连接...\n&quot;);
+
+    // 停止音频发送任务
+    g_audio_send_running = HI_FALSE;
+
+    // 等待任务结束并删除
+    if (g_audio_send_task != NULL)
+    &#123;
+        hi_sleep(100);  // 给任务时间清理
+        osThreadTerminate(g_audio_send_task);
+        g_audio_send_task = NULL;
+    &#125;
+
+    if (g_ws_socket) &#123;
+        rws_socket_disconnect_and_release(g_ws_socket);
+        g_ws_socket = NULL;
+    &#125;
+
+    g_is_connected = HI_FALSE;
+    printf(&quot;[WS] 已断开连接\n&quot;);
+&#125;
+
+/* 检查连接状态 */
+hi_bool ws_is_connected(hi_void)
+&#123;
+    return g_is_connected &amp;&amp; g_ws_socket &amp;&amp; rws_socket_is_connected(g_ws_socket);
+&#125;
+
+/* 设置音频接收回调 */
+hi_void ws_set_audio_callback(ws_on_audio_callback callback)
+&#123;
+    g_audio_callback = callback;
+&#125;
+
+
+/* 发送测试音频数据（模拟录音） */
+
+</code></pre>
+<p><strong>ws_client_demo.h</strong></p>
+<pre><code class="c">/*
+ * WebSocket Client Demo Header
+ */
+
+#ifndef __WS_CLIENT_DEMO_H__
+#define __WS_CLIENT_DEMO_H__
+
+#include &quot;hi_types_base.h&quot;
+
+/*
+ * 初始化 WebSocket 连接
+ * 连接到配置的 PC 代理服务器
+ */
+hi_void ws_client_init(hi_void);
+
+/*
+ * 断开 WebSocket 连接
+ */
+hi_void ws_client_disconnect(hi_void);
+
+/*
+ * 发送文本消息
+ * @param text: JSON格式的字符串
+ */
+hi_void ws_send_text(const char *text);
+
+/*
+ * 发送音频数据 (Base64编码)
+ * @param base64_audio: base64编码的PCM音频数据
+ */
+hi_void ws_send_audio_base64(const char *base64_audio);
+
+/*
+ * 提交音频缓冲区
+ * 触发AI处理已上传的音频
+ */
+hi_void ws_commit_audio(hi_void);
+
+/*
+ * 检查连接状态
+ * @return: HI_TRUE if connected, HI_FALSE otherwise
+ */
+hi_bool ws_is_connected(hi_void);
+
+/*
+ * 音频数据接收回调
+ * @param pcm_data: PCM音频数据
+ * @param len: 数据长度
+ */
+typedef void (*ws_on_audio_callback)(const hi_u8 *pcm_data, hi_u32 len);
+
+/*
+ * 设置音频接收回调函数
+ * @param callback: 接收到音频数据时的回调函数
+ */
+hi_void ws_set_audio_callback(ws_on_audio_callback callback);
+
+/*
+ * 启动音频发送任务
+ * 开始发送测试音频数据到服务器
+ */
+hi_void ws_start_audio_sending(hi_void);
+
+#endif /* __WS_CLIENT_DEMO_H__ */
+</code></pre>
+<p><strong>i2s_microphone.c</strong></p>
+<pre><code class="c">#include &quot;i2s_microphone.h&quot;
+#include &lt;hi_i2s.h&gt;
+#include &lt;hi_io.h&gt;
+#include &lt;hi_types_base.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+/**
+ * @brief I2S 麦克风初始化
+ */
+hi_void i2s_microphone_init(hi_void)
+&#123;
+    hi_u32 ret;
+
+    printf(&quot;[MIC] I2S 麦克风初始化...\n&quot;);
+
+    // 1. 配置 I2S GPIO - 使用正确的 GPIO 引脚
+    // 根据 Hi3861 硬件手册，I2S RX 引脚为：
+    // GPIO_7: I2S0_BCLK
+    // GPIO_8: I2S0_WS
+    // GPIO_11: I2S0_RX
+    hi_io_set_func(HI_IO_NAME_GPIO_7, HI_IO_FUNC_GPIO_7_I2S0_BCLK);  // BCLK
+    hi_io_set_func(HI_IO_NAME_GPIO_8, HI_IO_FUNC_GPIO_8_I2S0_WS);    // WS
+    hi_io_set_func(HI_IO_NAME_GPIO_11, HI_IO_FUNC_GPIO_11_I2S0_RX);  // RX DATA
+
+    // 2. 配置 I2S
+    hi_i2s_attribute i2s_cfg = &#123;0&#125;;
+    i2s_cfg.sample_rate = HI_I2S_SAMPLE_RATE_16K;  // 16kHz 采样率
+    i2s_cfg.resolution = HI_I2S_RESOLUTION_16BIT;  // 16-bit 位深
+
+    ret = hi_i2s_init(&amp;i2s_cfg);
+    if (ret != HI_ERR_SUCCESS) &#123;
+        printf(&quot;[MIC] I2S 初始化失败: 0x%x\n&quot;, ret);
+        return;
+    &#125;
+
+    printf(&quot;[MIC] I2S 初始化成功\n&quot;);
+    printf(&quot;[MIC] 采样率: %u Hz\n&quot;, I2S_MIC_SAMPLE_RATE);
+    printf(&quot;[MIC] 声道数: %u\n&quot;, I2S_MIC_CHANNELS);
+    printf(&quot;[MIC] 位深: %u bits\n&quot;, I2S_MIC_BITS_PER_SAMPLE);
+
+    printf(&quot;[MIC] 麦克风初始化完成\n&quot;);
+&#125;
+
+/**
+ * @brief I2S 麦克风启动
+ */
+hi_void i2s_microphone_start(hi_void)
+&#123;
+    printf(&quot;[MIC] I2S 麦克风已启动（自动读取模式）\n&quot;);
+&#125;
+
+/**
+ * @brief I2S 麦克风停止
+ */
+hi_void i2s_microphone_stop(hi_void)
+&#123;
+    printf(&quot;[MIC] I2S 麦克风已停止\n&quot;);
+&#125;
+
+/**
+ * @brief I2S 麦克风读取一帧数据
+ * @param buffer 接收缓冲区
+ * @param size 读取大小
+ * @return 实际读取的字节数
+ */
+hi_u32 i2s_microphone_read_frame(hi_u8 *buffer, hi_u32 size)
+&#123;
+    hi_u32 ret;
+
+    // 使用 hi_i2s_read 读取音频数据
+    // 超时时间设置为 20ms（一帧的时长）
+    ret = hi_i2s_read(buffer, size, 20);
+
+    if (ret != HI_ERR_SUCCESS) &#123;
+        // 超时或错误不算失败，返回0表示暂无数据
+        return 0;
+    &#125;
+
+    return size;  // 返回请求的大小
+&#125;
+
+</code></pre>
+<p><strong>i2s_microphone.h</strong></p>
+<pre><code class="c">#ifndef I2S_MICROPHONE_H
+#define I2S_MICROPHONE_H
+
+#ifdef __cplusplus
+extern &quot;C&quot; &#123;
+#endif
+
+#include &lt;hi_types_base.h&gt;
+
+// I2S 麦克风采集配置
+#define I2S_MIC_SAMPLE_RATE        16000       // 采样率 16kHz
+#define I2S_MIC_CHANNELS          1            // 单声道
+#define I2S_MIC_BITS_PER_SAMPLE   16           // 16-bit
+#define I2S_MIC_FRAME_SIZE        320          // 每帧 320 字节 = 20ms @ 16kHz
+#define I2S_MIC_BUFFER_SIZE       640          // 缓冲区大小（2 帧）
+
+// I2S 麦克风采集初始化
+hi_void i2s_microphone_init(hi_void);
+
+// I2S 麦克风采集一帧数据
+hi_u32 i2s_microphone_read_frame(hi_u8 *buffer, hi_u32 size);
+
+// I2S 麦克风启动
+hi_void i2s_microphone_start(hi_void);
+
+// I2S 麦克风停止
+hi_void i2s_microphone_stop(hi_void);
+
+#ifdef __cplusplus
+&#125;
+#endif
+
+#endif // I2S_MICROPHONE_H
+
+</code></pre>
+<p><strong>proxy_server.py</strong></p>
+<pre><code class="python">#!/usr/bin/env python3
+&quot;&quot;&quot;
+WebSocket to WSS Proxy Server
+本地 WS 服务器转发到远程 WSS 服务器
+&quot;&quot;&quot;
+
+import asyncio
+import websockets
+import websockets.server
+import logging
+from datetime import datetime
+import json
+import signal
+import sys
+import time
+import jwt
+import base64
+
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[
+        logging.FileHandler('proxy_server.log', encoding='utf-8'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+
+def generate_jwt_token(api_key, expire_seconds=600):
+    &quot;&quot;&quot;生成JWT Token用于鉴权&quot;&quot;&quot;
+    api_key_parts = api_key.split('.')
+    api_key_id = api_key_parts[0]
+    api_secret = api_key_parts[1] if len(api_key_parts) &gt; 1 else &quot;&quot;
+
+    payload = &#123;
+        &quot;api_key&quot;: api_key_id,
+        &quot;exp&quot;: int(time.time()) + expire_seconds,
+        &quot;timestamp&quot;: int(time.time() * 1000)
+    &#125;
+    token = jwt.encode(payload, api_secret, algorithm=&quot;HS256&quot;, headers=&#123;&quot;alg&quot;: &quot;HS256&quot;, &quot;sign_type&quot;: &quot;SIGN&quot;&#125;)
+    return token
+
+
+class WSProxyConfig:
+    &quot;&quot;&quot;代理服务器配置&quot;&quot;&quot;
+
+    def __init__(self, config_file='config.json'):
+        self.local_host = &quot;0.0.0.0&quot;
+        self.local_port = 8080
+        self.remote_wss_url = &quot;wss://open.bigmodel.cn/api/paas/v4/realtime&quot;
+        self.api_key = &quot;8dbddcd50b44fea252fc99fa881f9c3e.2m10cAx1oOdz26h7&quot;  # 智谱AI的API Key
+        self.reconnect_interval = 5
+        self.ping_interval = 20
+        self.ping_timeout = 10
+
+        # 尝试从配置文件加载
+        try:
+            with open(config_file, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+                self.__dict__.update(config)
+                logger.info(f&quot;已加载配置文件: &#123;config_file&#125;&quot;)
+        except FileNotFoundError:
+            logger.warning(f&quot;配置文件不存在，使用默认配置: &#123;config_file&#125;&quot;)
+        except Exception as e:
+            logger.error(f&quot;加载配置文件失败: &#123;e&#125;&quot;)
+
+
+class WSProxyClient:
+    &quot;&quot;&quot;单个客户端代理连接&quot;&quot;&quot;
+
+    def __init__(self, client_ws, config):
+        self.client_ws = client_ws
+        self.config = config
+        self.server_ws = None
+        self.client_addr = f&quot;&#123;client_ws.remote_address[0]&#125;:&#123;client_ws.remote_address[1]&#125;&quot;
+        self.running = True
+
+    async def connect_to_remote(self):
+        &quot;&quot;&quot;连接到远程 WSS 服务器&quot;&quot;&quot;
+        try:
+            logger.info(f&quot;[&#123;self.client_addr&#125;] 正在连接远程服务器: &#123;self.config.remote_wss_url&#125;&quot;)
+
+            # 构建JWT Token用于鉴权
+            headers = &#123;&#125;
+            if self.config.api_key:
+                jwt_token = generate_jwt_token(self.config.api_key)
+                headers['Authorization'] = f'Bearer &#123;jwt_token&#125;'
+                logger.info(f&quot;[&#123;self.client_addr&#125;] 使用JWT Token鉴权&quot;)
+                logger.debug(f&quot;[&#123;self.client_addr&#125;] JWT Token: &#123;jwt_token[:50]&#125;...&quot;)
+            else:
+                logger.warning(f&quot;[&#123;self.client_addr&#125;] 未配置API Key，可能导致鉴权失败&quot;)
+
+            # 使用 websockets.connect 并传递 additional_headers
+            # 禁用ping/pong，因为GLM-Realtime服务器可能不期望客户端发送heartbeat
+            self.server_ws = await websockets.connect(
+                self.config.remote_wss_url,
+                ping_interval=None,  # 禁用ping
+                ping_timeout=None,   # 禁用ping timeout
+                additional_headers=headers
+            )
+            logger.info(f&quot;[&#123;self.client_addr&#125;] 成功连接到远程服务器&quot;)
+            return True
+        except Exception as e:
+            logger.error(f&quot;[&#123;self.client_addr&#125;] 连接远程服务器失败: &#123;e&#125;&quot;)
+            return False
+
+    async def forward_client_to_server(self):
+        &quot;&quot;&quot;客户端消息 -&gt; 远程服务器&quot;&quot;&quot;
+        logger.info(f&quot;[&#123;self.client_addr&#125;] [客户端-&gt;服务器] 转发任务开始&quot;)
+        try:
+            async for message in self.client_ws:
+                if not self.running:
+                    logger.warning(f&quot;[&#123;self.client_addr&#125;] [客户端-&gt;服务器] running=False，退出循环&quot;)
+                    break
+                if self.server_ws:
+                    try:
+                        # 打印消息内容用于调试
+                        try:
+                            msg_json = json.loads(message)
+                            logger.info(f&quot;[&#123;self.client_addr&#125;] 客户端 -&gt; 服务器: &#123;len(message)&#125; bytes, type=&#123;msg_json.get('type', 'unknown')&#125;&quot;)
+                            # 如果是 session.update，打印完整内容
+                            if msg_json.get('type') == 'session.update':
+                                logger.info(f&quot;[&#123;self.client_addr&#125;] session.update 内容: &#123;json.dumps(msg_json, ensure_ascii=False, indent=2)&#125;&quot;)
+                        except:
+                            # 记录非JSON数据的前100个字符，用于调试
+                            truncated = message[:100] if len(message) &gt; 100 else message
+                            logger.info(f&quot;[&#123;self.client_addr&#125;] 客户端 -&gt; 服务器: &#123;len(message)&#125; bytes (非JSON): &#123;truncated&#125;&quot;)
+
+                        await self.server_ws.send(message)
+                    except Exception:
+                        logger.warning(f&quot;[&#123;self.client_addr&#125;] 远程连接未建立，消息丢弃&quot;)
+                else:
+                    logger.warning(f&quot;[&#123;self.client_addr&#125;] 远程连接未建立，消息丢弃&quot;)
+        except websockets.exceptions.ConnectionClosed as e:
+            logger.info(f&quot;[&#123;self.client_addr&#125;] [客户端-&gt;服务器] 客户端断开连接: code=&#123;e.code&#125;, reason=&#123;e.reason&#125;&quot;)
+        except Exception as e:
+            logger.error(f&quot;[&#123;self.client_addr&#125;] [客户端-&gt;服务器] 转发客户端消息错误: &#123;type(e).__name__&#125;: &#123;e&#125;&quot;)
+        finally:
+            logger.info(f&quot;[&#123;self.client_addr&#125;] [客户端-&gt;服务器] 转发任务结束&quot;)
+            self.running = False
+
+    async def forward_server_to_client(self):
+        &quot;&quot;&quot;远程服务器消息 -&gt; 客户端&quot;&quot;&quot;
+        logger.info(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] 转发任务开始&quot;)
+        message_count = 0
+        skipped_audio_count = 0  # 跳过的音频消息计数
+
+        try:
+            async for message in self.server_ws:
+                if not self.running:
+                    logger.warning(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] running=False，退出循环&quot;)
+                    break
+
+                message_count += 1
+
+                # 检查消息大小，拦截超大音频包
+                msg_size = len(message)
+
+                # 如果消息超过 10KB，解析类型判断是否为音频包
+                if msg_size &gt; 10240:
+                    try:
+                        msg_json = json.loads(message)
+                        msg_type = msg_json.get('type', 'unknown')
+
+                        # 拦截大音频包，避免 Hi3861 内存不足
+                        if msg_type == 'response.audio.delta':
+                            skipped_audio_count += 1
+                            logger.info(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] 跳过大音频包: &#123;msg_size&#125; bytes, type=&#123;msg_type&#125; (累计跳过: &#123;skipped_audio_count&#125;)&quot;)
+                            continue  # 不转发此消息
+                        elif msg_type == 'response.audio.done':
+                            logger.info(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] 音频完成: &#123;msg_size&#125; bytes, type=&#123;msg_type&#125;&quot;)
+                        elif msg_type == 'response.text.delta':
+                            # 文本消息通常很小，可以正常转发
+                            logger.info(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] 文本回复: &#123;msg_size&#125; bytes, type=&#123;msg_type&#125;&quot;)
+                        elif msg_type == 'response.text.done':
+                            logger.info(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] 文本完成: &#123;msg_size&#125; bytes, type=&#123;msg_type&#125;&quot;)
+                        else:
+                            logger.info(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] 大消息: &#123;msg_size&#125; bytes, type=&#123;msg_type&#125;&quot;)
+                    except Exception as e:
+                        logger.warning(f&quot;[&#123;self.client_addr&#125;] 解析大消息失败: &#123;e&#125;&quot;)
+
+                # 打印消息内容用于调试
+                try:
+                    msg_json = json.loads(message)
+                    msg_type = msg_json.get('type', 'unknown')
+
+                    # 特殊处理错误消息
+                    if msg_type == 'error':
+                        logger.error(f&quot;[&#123;self.client_addr&#125;] 服务器返回错误: &#123;json.dumps(msg_json, ensure_ascii=False, indent=2)&#125;&quot;)
+                    elif msg_type in ['session.updated', 'session.created']:
+                        logger.info(f&quot;[&#123;self.client_addr&#125;] 服务器 -&gt; 客户端: &#123;len(message)&#125; bytes, type=&#123;msg_type&#125;&quot;)
+                    elif msg_type in ['input_audio_buffer.speech_started', 'input_audio_buffer.speech_stopped',
+                                      'input_audio_buffer.committed', 'response.created']:
+                        logger.info(f&quot;[&#123;self.client_addr&#125;] 服务器 -&gt; 客户端: &#123;len(message)&#125; bytes, type=&#123;msg_type&#125;&quot;)
+                    elif msg_type == 'heartbeat':
+                        logger.info(f&quot;[&#123;self.client_addr&#125;] 服务器 -&gt; 客户端: &#123;len(message)&#125; bytes, type=&#123;msg_type&#125; (已处理 &#123;message_count&#125; 条消息)&quot;)
+                    elif msg_type == 'response.text.delta':
+                        # 提取文本内容
+                        text_content = msg_json.get('text', '')
+                        if text_content:
+                            logger.info(f&quot;[&#123;self.client_addr&#125;] [AI回复] &#123;text_content[:100]&#125;...&quot;)
+                    elif msg_type == 'response.text.done':
+                        logger.info(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] &#123;len(message)&#125; bytes, type=&#123;msg_type&#125;&quot;)
+                    else:
+                        # 其他小消息正常转发
+                        if msg_size &lt; 4096:  # 小于 4KB 的消息才转发
+                            logger.info(f&quot;[&#123;self.client_addr&#125;] 服务器 -&gt; 客户端: &#123;len(message)&#125; bytes, type=&#123;msg_type&#125;&quot;)
+                except Exception as e:
+                    logger.warning(f&quot;[&#123;self.client_addr&#125;] 服务器 -&gt; 客户端: &#123;len(message)&#125; bytes (非JSON), 解析错误: &#123;e&#125;&quot;)
+
+                # 转发消息到客户端（如果是小消息）
+                if msg_size &lt; 4096:  # 只转发小于 4KB 的消息
+                    await self.client_ws.send(message)
+                else:
+                    logger.info(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] 跳过大消息: &#123;msg_size&#125; bytes&quot;)
+
+        except websockets.exceptions.ConnectionClosed as e:
+            logger.warning(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] 远程服务器断开连接: code=&#123;e.code&#125;, reason=&#123;e.reason&#125;&quot;)
+        except Exception as e:
+            logger.error(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] 转发服务器消息错误: &#123;type(e).__name__&#125;: &#123;e&#125;&quot;)
+        finally:
+            logger.info(f&quot;[&#123;self.client_addr&#125;] [服务器-&gt;客户端] 转发任务结束，共处理 &#123;message_count&#125; 条消息，跳过 &#123;skipped_audio_count&#125; 个大音频包&quot;)
+            self.running = False
+
+    async def handle(self):
+        &quot;&quot;&quot;处理双向转发&quot;&quot;&quot;
+        if not await self.connect_to_remote():
+            await self.client_ws.close()
+            return
+
+        logger.info(f&quot;[&#123;self.client_addr&#125;] 开始双向转发...&quot;)
+
+        try:
+            # 并行运行两个方向的转发
+            results = await asyncio.gather(
+                self.forward_client_to_server(),
+                self.forward_server_to_client(),
+                return_exceptions=True
+            )
+
+            # 检查是否有异常
+            for i, result in enumerate(results):
+                task_name = &quot;客户端-&gt;服务器&quot; if i == 0 else &quot;服务器-&gt;客户端&quot;
+                if isinstance(result, Exception):
+                    logger.warning(f&quot;[&#123;self.client_addr&#125;] &#123;task_name&#125; 任务异常: &#123;type(result).__name__&#125;: &#123;result&#125;&quot;)
+                else:
+                    logger.info(f&quot;[&#123;self.client_addr&#125;] &#123;task_name&#125; 任务正常结束&quot;)
+
+            logger.info(f&quot;[&#123;self.client_addr&#125;] 双向转发任务结束&quot;)
+        except Exception as e:
+            logger.error(f&quot;[&#123;self.client_addr&#125;] 双向转发异常: &#123;type(e).__name__&#125;: &#123;e&#125;&quot;)
+            import traceback
+            logger.error(f&quot;[&#123;self.client_addr&#125;] 异常堆栈:\n&#123;''.join(traceback.format_tb(e.__traceback__))&#125;&quot;)
+        finally:
+            await self.cleanup()
+
+    async def cleanup(self):
+        &quot;&quot;&quot;清理资源&quot;&quot;&quot;
+        self.running = False
+        logger.info(f&quot;[&#123;self.client_addr&#125;] 开始清理资源...&quot;)
+
+        # 检查客户端连接状态
+        try:
+            if self.client_ws:
+                logger.info(f&quot;[&#123;self.client_addr&#125;] 关闭客户端连接...&quot;)
+                await self.client_ws.close()
+                logger.info(f&quot;[&#123;self.client_addr&#125;] 客户端连接已关闭&quot;)
+        except Exception as e:
+            logger.error(f&quot;[&#123;self.client_addr&#125;] 关闭客户端连接错误: &#123;e&#125;&quot;)
+
+        # 检查服务器连接状态
+        try:
+            if self.server_ws:
+                logger.info(f&quot;[&#123;self.client_addr&#125;] 关闭服务器连接...&quot;)
+                await self.server_ws.close()
+                logger.info(f&quot;[&#123;self.client_addr&#125;] 服务器连接已关闭&quot;)
+        except Exception as e:
+            logger.error(f&quot;[&#123;self.client_addr&#125;] 关闭服务器连接错误: &#123;e&#125;&quot;)
+
+        logger.info(f&quot;[&#123;self.client_addr&#125;] 连接已关闭&quot;)
+
+
+class WSProxyServer:
+    &quot;&quot;&quot;WebSocket 代理服务器&quot;&quot;&quot;
+
+    def __init__(self, config):
+        self.config = config
+        self.server = None
+        self.clients = []
+        self.shutdown_event = asyncio.Event()
+
+    async def handle_client(self, client_ws):
+        &quot;&quot;&quot;处理新的客户端连接&quot;&quot;&quot;
+        client_addr = f&quot;&#123;client_ws.remote_address[0]&#125;:&#123;client_ws.remote_address[1]&#125;&quot;
+        logger.info(f&quot;新客户端连接: &#123;client_addr&#125;&quot;)
+
+        proxy_client = WSProxyClient(client_ws, self.config)
+        self.clients.append(proxy_client)
+
+        try:
+            await proxy_client.handle()
+        finally:
+            if proxy_client in self.clients:
+                self.clients.remove(proxy_client)
+
+    async def start(self):
+        &quot;&quot;&quot;启动代理服务器&quot;&quot;&quot;
+        logger.info(f&quot;启动代理服务器: ws://&#123;self.config.local_host&#125;:&#123;self.config.local_port&#125;&quot;)
+        logger.info(f&quot;转发目标: &#123;self.config.remote_wss_url&#125;&quot;)
+
+        self.server = await websockets.server.serve(
+            self.handle_client,
+            self.config.local_host,
+            self.config.local_port,
+            ping_interval=self.config.ping_interval,
+            ping_timeout=self.config.ping_timeout
+        )
+
+        logger.info(&quot;代理服务器已启动，等待连接...&quot;)
+        await self.shutdown_event.wait()
+
+    async def stop(self):
+        &quot;&quot;&quot;停止代理服务器&quot;&quot;&quot;
+        logger.info(&quot;正在停止代理服务器...&quot;)
+        self.shutdown_event.set()
+
+        if self.server:
+            self.server.close()
+            await self.server.wait_closed()
+
+        # 关闭所有客户端连接
+        for client in self.clients:
+            await client.cleanup()
+
+        logger.info(&quot;代理服务器已停止&quot;)
+
+
+def signal_handler(signum, frame):
+    &quot;&quot;&quot;信号处理器&quot;&quot;&quot;
+    logger.info(f&quot;收到信号 &#123;signum&#125;，准备退出...&quot;)
+    sys.exit(0)
+
+
+async def main():
+    &quot;&quot;&quot;主函数&quot;&quot;&quot;
+    # 注册信号处理
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+
+    # 加载配置
+    config = WSProxyConfig()
+
+    # 创建并启动服务器
+    server = WSProxyServer(config)
+
+    try:
+        await server.start()
+    except KeyboardInterrupt:
+        logger.info(&quot;收到中断信号&quot;)
+    finally:
+        await server.stop()
+
+
+if __name__ == &quot;__main__&quot;:
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        logger.info(&quot;程序已退出&quot;)
+
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2026 zero two
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;lAn_rEd
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+
+    
+    
+
+</footer>
+
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo="styundydsg/styundydsg.github.io"
+    data-repo-id="R_kgDOK0X3wA"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOK0X3wM4Cok6S"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="1"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin
+    async
+></script>
+
+
+
+
+
+    
+
+    <!-- 问答按钮和窗口 -->
+    <div id="qa-button">
+        <i class="fa-solid fa-question"></i>
+    </div>
+    <div id="qa-window">
+        <div class="qa-header">
+            <h3>问答</h3>
+            <button id="qa-close">&times;</button>
+        </div>
+        <div class="qa-content">
+            <div class="qa-input">
+                <input type="text" id="qa-question" placeholder="请输入您的问题...">
+                <button id="qa-submit">提问</button>
+            </div>
+            <div class="qa-results" id="qa-results">
+                <!-- 问答结果将在这里显示 -->
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
