@@ -194,6 +194,399 @@
         
 
 <div class="post">
+    <a href="/2026/02/28/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-03-%E5%AE%8C%E6%88%90ws63%E7%9A%84es8311%E9%A9%B1%E5%8A%A8%E7%A7%BB%E6%A4%8D%E5%92%8Cmpu6050%E5%AE%9E%E7%8E%B0%E9%9F%B3%E9%A2%91%E6%92%AD%E6%94%BE%E5%92%8C%E8%BF%90%E5%8A%A8%E6%95%B0%E6%8D%AE%E6%8E%A5%E6%94%B6/">
+        <h2 class="post-title">毕业设计 (3) - 完成 WS63 的 ES8311 驱动移植和 MPU6050，实现音频播放和运动数据接收</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                毕业设计
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/2/28
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            
+            <h2 id="踩坑：">踩坑：</h2>
+<p> <br>
+模块的DI连接mcu的DO，DOUT连接模块的DI<br>
+又因为奇怪的原因浪费三四天时间</p>
+<h2 id="代码：">代码：</h2>
+<p><strong>es8311音频播放代码</strong></p>
+<pre><code class="c">/*使用本案例前先把sio_porting.h和sio_porting.c中的FREQ_OF_NEED改成16*/
+#include &quot;i2s.h&quot;
+#include &quot;watchdog.h&quot;
+#include &quot;hal_sio.h&quot;
+#include &quot;hal_dma.h&quot;
+#include &quot;soc_osal.h&quot;
+#include &quot;app_init.h&quot;
+#include &quot;converted_audio_data.h&quot;
+#include &quot;common_def.h&quot;
+#include &quot;osal_debug.h&quot;
+#include &quot;cmsis_os2.h&quot;
+#include &quot;pinctrl.h&quot;
+#include &quot;i2c.h&quot;
+
+#define I2S_DIV_NUMBER 16
+#define I2S_CHANNEL_NUMBER 2
+#define I2S_TX_INT_THRESHOLD 7
+#define I2S_RX_INT_THRESHOLD 1
+#define I2S_DMA_SRC_WIDTH 2
+#define I2S_DMA_DEST_WIDTH 2
+#define I2S_DMA_BURST_LENGTH 0
+#define I2S_DMA_TRANS_STEP 2
+
+#define I2S_TASK_PRIO 24
+#define I2S_TASK_STACK_SIZE 0xc00
+
+extern const int16_t my_converted_audio[];
+#define MY_AUDIO_SAMPLES_LEN 56842
+int16_t my_txdata[256] = &#123;0&#125;;
+
+#define I2S_SAMPLE_DELAY_MS 1000
+
+/* ES8311 I2C配置 */
+#define ES8311_I2C_BUS 1           /* I2C总线号 */
+#define ES8311_I2C_ADDR 0x18       /* ES8311的7位I2C地址 */
+#define ES8311_I2C_BAUDRATE 400000 /* I2C波特率 400kHz */
+
+#define AUDIO_PLAY_BUF_SIZE 4096
+
+#define ES8311_RESET_REG00 0x00 /* reset digital,csm,clock manager etc. */
+
+#define ES8311_CLK_MANAGER_REG01 0x01 /* select clk src for mclk, enable clock for codec */
+#define ES8311_CLK_MANAGER_REG02 0x02 /* clk divider and clk multiplier */
+#define ES8311_CLK_MANAGER_REG03 0x03 /* adc fsmode and osr  */
+#define ES8311_CLK_MANAGER_REG04 0x04 /* dac osr */
+#define ES8311_CLK_MANAGER_REG05 0x05 /* clk divier for adc and dac */
+#define ES8311_CLK_MANAGER_REG06 0x06 /* bclk inverter and divider */
+#define ES8311_CLK_MANAGER_REG07 0x07 /* tri-state, lrck divider */
+#define ES8311_CLK_MANAGER_REG08 0x08 /* lrck divider */
+#define ES8311_SDPIN_REG09 0x09       /* dac serial digital port */
+#define ES8311_SDPOUT_REG0A 0x0A      /* adc serial digital port */
+#define ES8311_SYSTEM_REG0B 0x0B      /* system */
+#define ES8311_SYSTEM_REG0C 0x0C      /* system */
+#define ES8311_SYSTEM_REG0D 0x0D      /* system, power up/down */
+#define ES8311_SYSTEM_REG0E 0x0E      /* system, power up/down */
+#define ES8311_SYSTEM_REG0F 0x0F      /* system, low power */
+#define ES8311_SYSTEM_REG10 0x10      /* system */
+#define ES8311_SYSTEM_REG11 0x11      /* system */
+#define ES8311_SYSTEM_REG12 0x12      /* system, Enable DAC */
+#define ES8311_SYSTEM_REG13 0x13      /* system */
+#define ES8311_SYSTEM_REG14 0x14      /* system, select DMIC, select analog pga gain */
+#define ES8311_ADC_REG15 0x15         /* ADC, adc ramp rate, dmic sense */
+#define ES8311_ADC_REG16 0x16         /* ADC */
+#define ES8311_ADC_REG17 0x17         /* ADC, volume */
+#define ES8311_ADC_REG18 0x18         /* ADC, alc enable and winsize */
+#define ES8311_ADC_REG19 0x19         /* ADC, alc maxlevel */
+#define ES8311_ADC_REG1A 0x1A         /* ADC, alc automute */
+#define ES8311_ADC_REG1B 0x1B         /* ADC, alc automute, adc hpf s1 */
+#define ES8311_ADC_REG1C 0x1C         /* ADC, equalizer, hpf s2 */
+#define ES8311_DAC_REG31 0x31         /* DAC, mute */
+#define ES8311_DAC_REG32 0x32         /* DAC, volume */
+#define ES8311_DAC_REG33 0x33         /* DAC, offset */
+#define ES8311_DAC_REG34 0x34         /* DAC, drc enable, drc winsize */
+#define ES8311_DAC_REG35 0x35         /* DAC, drc maxlevel, minilevel */
+#define ES8311_DAC_REG37 0x37         /* DAC, ramprate */
+#define ES8311_GPIO_REG44 0x44        /* GPIO, dac2adc for test */
+#define ES8311_GP_REG45 0x45          /* GP CONTROL */
+#define ES8311_CHD1_REGFD 0xFD        /* CHIP ID1 */
+#define ES8311_CHD2_REGFE 0xFE        /* CHIP ID2 */
+#define ES8311_CHVER_REGFF 0xFF       /* VERSION */
+
+#define ES8311_MAX_REGISTER 0xFF
+
+#define ES8311_PDN_DAC_BIT (1 &lt;&lt; 1)
+
+#define CODEC_DEVICE_ADDR 0x30 /* 0011 00x */
+
+typedef enum &#123;
+    HI_CODEC_SAMPLE_RATE_8K = 8,
+    HI_CODEC_SAMPLE_RATE_16K = 16,
+    HI_CODEC_SAMPLE_RATE_32K = 32,
+    HI_CODEC_SAMPLE_RATE_48K = 48,
+&#125; hi_codec_sample_rate;
+
+typedef enum &#123;
+    HI_CODEC_RESOLUTION_16BIT = 16,
+    HI_CODEC_RESOLUTION_24BIT = 24,
+&#125; hi_codec_resolution;
+
+typedef struct &#123;
+    hi_codec_sample_rate sample_rate;
+    hi_codec_resolution resolution;
+&#125; hi_codec_attribute;
+
+/**
+ * @brief ES8311写寄存器
+ * @param reg_addr 寄存器地址
+ * @param data 写入数据
+ * @return ERRCODE_SUCC成功，其他失败
+ */
+static errcode_t es8311_write_reg(uint8_t reg_addr, uint8_t data)
+&#123;
+    uint8_t tx_buf[2] = &#123;reg_addr, data&#125;;
+    i2c_data_t i2c_data = &#123;.send_buf = tx_buf, .send_len = 2, .receive_buf = NULL, .receive_len = 0&#125;;
+
+    return uapi_i2c_master_write(ES8311_I2C_BUS, ES8311_I2C_ADDR, &amp;i2c_data);
+&#125;
+
+/**
+ * @brief ES8311读寄存器
+ * @param reg_addr 寄存器地址
+ * @param data 读取数据指针
+ * @return ERRCODE_SUCC成功，其他失败
+ */
+static errcode_t __attribute__((unused)) es8311_read_reg(uint8_t reg_addr, uint8_t *data)
+&#123;
+    errcode_t ret;
+    uint8_t tx_buf[1] = &#123;reg_addr&#125;;
+    uint8_t rx_buf[1] = &#123;0&#125;;
+    i2c_data_t i2c_data;
+
+    /* 先写寄存器地址 */
+    i2c_data.send_buf = tx_buf;
+    i2c_data.send_len = 1;
+    i2c_data.receive_buf = NULL;
+    i2c_data.receive_len = 0;
+    ret = uapi_i2c_master_write(ES8311_I2C_BUS, ES8311_I2C_ADDR, &amp;i2c_data);
+    if (ret != ERRCODE_SUCC) &#123;
+        return ret;
+    &#125;
+
+    /* 再读寄存器数据 */
+    osal_msleep(1);
+    i2c_data.send_buf = NULL;
+    i2c_data.send_len = 0;
+    i2c_data.receive_buf = rx_buf;
+    i2c_data.receive_len = 1;
+    ret = uapi_i2c_master_read(ES8311_I2C_BUS, ES8311_I2C_ADDR, &amp;i2c_data);
+    if (ret == ERRCODE_SUCC) &#123;
+        *data = rx_buf[0];
+    &#125;
+
+    return ret;
+&#125;
+
+__attribute__((unused)) static uint32_t codec_set_gain(void)
+&#123;
+    uint32_t ret = ERRCODE_SUCC;
+    ret |= es8311_write_reg(ES8311_SYSTEM_REG0E, 0x02);
+    ret |= es8311_write_reg(ES8311_SYSTEM_REG0F, 0x44);
+    ret |= es8311_write_reg(ES8311_ADC_REG15, 0x40);
+    ret |= es8311_write_reg(ES8311_ADC_REG1B, 0x0A);
+    ret |= es8311_write_reg(ES8311_ADC_REG1C, 0x6A);
+    ret |= es8311_write_reg(ES8311_ADC_REG17, 0xBF);
+    ret |= es8311_write_reg(ES8311_DAC_REG37, 0x48);
+    ret |= es8311_write_reg(ES8311_DAC_REG32, 0x84);
+    ret |= es8311_write_reg(ES8311_ADC_REG16, 0x22);
+    ret |= es8311_write_reg(ES8311_ADC_REG17, 0xDF);
+    ret |= es8311_write_reg(ES8311_ADC_REG18, 0x87);
+    ret |= es8311_write_reg(ES8311_ADC_REG19, 0xFB);
+    ret |= es8311_write_reg(ES8311_ADC_REG1A, 0x03);
+    ret |= es8311_write_reg(ES8311_ADC_REG1B, 0xEA);
+
+    return ret;
+&#125;
+
+/**
+ * @brief 初始化ES8311音频编解码器
+ * @param codec_attr 编解码器属性配置
+ * @return ERRCODE_SUCC成功，其他失败
+ */
+__attribute__((unused)) static errcode_t es8311_init(const hi_codec_attribute *codec_attr)
+&#123;
+    uint32_t ret;
+
+    osal_printk(&quot;========== ES8311 Init Start ==========\r\n&quot;);
+
+    if (codec_attr == NULL) &#123;
+        osal_printk(&quot;codec_attr is NULL!\r\n&quot;);
+        return ERRCODE_FAIL;
+    &#125;
+
+    /* 配置采样率 */
+    osal_printk(&quot;ES8311 sample_rate: %dK, resolution: %dbit\r\n&quot;, codec_attr-&gt;sample_rate, codec_attr-&gt;resolution);
+
+    ret = es8311_write_reg(ES8311_GPIO_REG44, 0x08);
+    osal_msleep(5);
+
+    ret |= es8311_write_reg(ES8311_DAC_REG31, 0x40);
+    ret |= es8311_write_reg(ES8311_RESET_REG00, 0x1F);
+
+    ret |= es8311_write_reg(ES8311_GP_REG45, 0x00);
+    ret |= es8311_write_reg(ES8311_CLK_MANAGER_REG01, 0x30);
+    ret |= es8311_write_reg(ES8311_CLK_MANAGER_REG02, 0x10);
+
+    if (codec_attr-&gt;sample_rate == HI_CODEC_SAMPLE_RATE_8K) &#123;
+        ret |= es8311_write_reg(ES8311_CLK_MANAGER_REG02, 0xA0);
+    &#125; else if (codec_attr-&gt;sample_rate == HI_CODEC_SAMPLE_RATE_16K) &#123;
+        ret |= es8311_write_reg(ES8311_CLK_MANAGER_REG02, 0x40);
+    &#125; else if (codec_attr-&gt;sample_rate == HI_CODEC_SAMPLE_RATE_32K) &#123;
+        ret |= es8311_write_reg(ES8311_CLK_MANAGER_REG02, 0x48);
+    &#125; else if (codec_attr-&gt;sample_rate == HI_CODEC_SAMPLE_RATE_48K) &#123;
+        ret |= es8311_write_reg(ES8311_CLK_MANAGER_REG02, 0x00);
+    &#125;
+
+    if ((codec_attr-&gt;resolution == HI_CODEC_RESOLUTION_16BIT)) &#123;
+        ret |= es8311_write_reg(ES8311_SDPIN_REG09, 0x0C);
+        ret |= es8311_write_reg(ES8311_SDPOUT_REG0A, 0x0C);
+    &#125; else &#123;
+        ret |= es8311_write_reg(ES8311_SDPIN_REG09, 0x00);
+        ret |= es8311_write_reg(ES8311_SDPOUT_REG0A, 0x00);
+    &#125;
+
+    return ERRCODE_SUCC;
+&#125;
+
+static void i2s_dma_master_init(void)
+&#123;
+    uapi_i2s_deinit(SIO_BUS_0);
+    uapi_i2s_init(SIO_BUS_0, NULL);
+    sio_porting_i2s_pinmux();
+    uapi_pin_set_mode(7, PIN_MODE_4);
+    i2s_config_t config = &#123;
+        .drive_mode = MASTER,
+        .transfer_mode = STD_MODE,
+        .data_width = SIXTEEN_BIT,
+        .channels_num = TWO_CH,
+        .timing = NONE_TIMING_MODE,
+        .clk_edge = RISING_EDGE,
+        .div_number = I2S_DIV_NUMBER,
+        .number_of_channels = I2S_CHANNEL_NUMBER,
+    &#125;;
+    i2s_dma_attr_t attr = &#123;
+        .tx_dma_enable = 1,
+        .tx_int_threshold = I2S_TX_INT_THRESHOLD,
+        .rx_dma_enable = 0,
+        .rx_int_threshold = I2S_RX_INT_THRESHOLD,
+    &#125;;
+    uapi_i2s_set_config(SIO_BUS_0, &amp;config);
+    uapi_i2s_dma_config(SIO_BUS_0, &amp;attr);
+&#125;
+
+static void *i2s_dma_master_task(const char *arg)
+&#123;
+    /* 配置I2C引脚：GPIO15为SCL，GPIO16为SDA，设置为模式2（I2C功能） */
+    uapi_pin_set_mode(15, PIN_MODE_2); /* I2C_SCL */
+    uapi_pin_set_mode(16, PIN_MODE_2); /* I2C_SDA */
+
+    /* 初始化I2C主机 */
+    uapi_i2c_master_init(ES8311_I2C_BUS, ES8311_I2C_BAUDRATE, 0);
+
+    /* 配置编解码器属性 */
+    __attribute__((unused)) hi_codec_attribute codec_attr = &#123;
+        .sample_rate = HI_CODEC_SAMPLE_RATE_16K, .resolution = HI_CODEC_RESOLUTION_16BIT, /* 16位分辨率 */
+    &#125;;
+
+    /* 初始化ES8311 */
+    // es8311_init(&amp;codec_attr);
+
+    unused(arg);
+    int32_t ret = 128;
+#if defined(CONFIG_SIO_USING_V151)
+    ret = ERRCODE_SUCC;
+#endif
+    osal_printk(&quot;ret=%d\r\n&quot;, ret);
+    uapi_dma_deinit();
+    i2s_dma_master_init();
+
+    /* DMA init. */
+    uapi_dma_init();
+    uapi_dma_open();
+    i2s_dma_config_t dma_cfg = &#123;
+        .src_width = I2S_DMA_SRC_WIDTH,
+        .dest_width = I2S_DMA_DEST_WIDTH,
+        .burst_length = I2S_DMA_BURST_LENGTH,
+        .priority = 0,
+    &#125;;
+    osal_printk(&quot;playing threading start.\r\n&quot;);
+
+    int p = 0;
+    while (1) &#123;
+        uapi_watchdog_kick();
+
+        while (1) &#123;
+            for (int i = 0; i &lt; 64; i++) &#123;
+                for (int j = 0; j &lt; 4; j++) &#123;
+                    my_txdata[i * 4 + j] = my_converted_audio[p + i];
+                &#125;
+            &#125;
+
+            int16_t length = 128;
+            if (uapi_i2s_merge_write_by_dma(SIO_BUS_0, &amp;my_txdata, length, &amp;dma_cfg, (uintptr_t)NULL, true) != ret) &#123;
+                osal_printk(&quot;master uapi_i2s_merge_write_by_dma error.\r\n&quot;);
+            &#125;
+
+            p += 64; // 更新 p 以指向下一个数据块
+            if (p &gt; MY_AUDIO_SAMPLES_LEN - 64) &#123;
+                osal_printk(&quot;master uapi_i2s_merge_write_by_dma end.\r\n&quot;);
+                p = 0; // 重置 p 以循环播放音频数据
+                break; // 跳出循环，等待下一次播放
+            &#125;
+        &#125;
+    &#125;
+    return NULL;
+&#125;
+
+static void i2s_entry(void)
+&#123;
+    osal_task *task_handle = NULL;
+    osal_kthread_lock();
+    task_handle =
+        osal_kthread_create((osal_kthread_handler)i2s_dma_master_task, 0, &quot;I2sDmaMasterTask&quot;, I2S_TASK_STACK_SIZE);
+    if (task_handle != NULL) &#123;
+        osal_kthread_set_priority(task_handle, I2S_TASK_PRIO);
+    &#125;
+    osal_kthread_unlock();
+&#125;
+
+/* Run the i2s_entry. */
+app_run(i2s_entry);
+</code></pre>
+<p> <br>
+ <br>
+ <br>
+下一步准备开始数据采集打标签</p>
+
+            
+            
+        </div>
+    </div>
+    
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-ES8311-MPU6050/" style="color: #ffa2c4">毕业设计 WS63 ES8311 MPU6050</a>
+        </span>
+        
+    </div>
+    
+    <a href="/2026/02/28/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-03-%E5%AE%8C%E6%88%90ws63%E7%9A%84es8311%E9%A9%B1%E5%8A%A8%E7%A7%BB%E6%A4%8D%E5%92%8Cmpu6050%E5%AE%9E%E7%8E%B0%E9%9F%B3%E9%A2%91%E6%92%AD%E6%94%BE%E5%92%8C%E8%BF%90%E5%8A%A8%E6%95%B0%E6%8D%AE%E6%8E%A5%E6%94%B6/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2026/02/24/hi3861%E4%B8%8E%E6%99%BA%E8%B0%B1ai%E7%9A%84realtime%E6%A8%A1%E5%9E%8B%E5%AF%B9%E8%AF%9D%EF%BC%88%E6%88%90%E5%8A%9F%E8%BF%94%E5%9B%9E%E6%96%87%E6%9C%AC%EF%BC%89/">
         <h2 class="post-title">hi3861与智谱ai的realtime模型对话（成功返回文本）</h2>
     </a>
@@ -229,10 +622,19 @@
 </div>
 
 <div class="post">
-    <a href="/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863-%E5%B9%B3%E5%8F%B0/">
-        <h2 class="post-title">毕设(2)-部署 TFLM hello_world demo 到 WS63(Hi3863) 平台</h2>
+    <a href="/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-02-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863%E5%B9%B3%E5%8F%B0/">
+        <h2 class="post-title">毕业设计 (2) - 部署 TFLM hello_world demo 到 WS63 (Hi3863) 平台</h2>
     </a>
     <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                毕业设计
+            </a>
+        </span>
         
         <span class="date">
             <span class="icon">
@@ -633,19 +1035,28 @@ static uint8_t tensor_arena[kTensorArenaSize];
         
         <span class="tag">
             
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/" style="color: #00bcd4">毕业设计</a>
+            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-Hi3863-TFLM/" style="color: #00a596">毕业设计 WS63 Hi3863 TFLM</a>
         </span>
         
     </div>
     
-    <a href="/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863-%E5%B9%B3%E5%8F%B0/" class="go-post">阅读全文</a>
+    <a href="/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-02-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863%E5%B9%B3%E5%8F%B0/" class="go-post">阅读全文</a>
 </div>
 
 <div class="post">
-    <a href="/2026/02/08/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-ws63-hi3863-%E5%AE%8C%E6%88%90c-%E6%94%AF%E6%8C%81%E8%BF%87%E7%A8%8B/">
-        <h2 class="post-title">毕设(1)-ws63(hi3863)完成c++支持过程</h2>
+    <a href="/2026/02/08/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-01-ws63-hi3863%E5%AE%8C%E6%88%90c%E6%94%AF%E6%8C%81%E8%BF%87%E7%A8%8B/">
+        <h2 class="post-title">毕业设计 (1) - WS63 (Hi3863) 完成 C++ 支持过程</h2>
     </a>
     <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                毕业设计
+            </a>
+        </span>
         
         <span class="date">
             <span class="icon">
@@ -1068,12 +1479,12 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
         
         <span class="tag">
             
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/" style="color: #ffa2c4">毕业设计</a>
+            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-Hi3863-C/" style="color: #03a9f4">毕业设计 WS63 Hi3863 C++</a>
         </span>
         
     </div>
     
-    <a href="/2026/02/08/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-ws63-hi3863-%E5%AE%8C%E6%88%90c-%E6%94%AF%E6%8C%81%E8%BF%87%E7%A8%8B/" class="go-post">阅读全文</a>
+    <a href="/2026/02/08/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-01-ws63-hi3863%E5%AE%8C%E6%88%90c%E6%94%AF%E6%8C%81%E8%BF%87%E7%A8%8B/" class="go-post">阅读全文</a>
 </div>
 
 <div class="post">
@@ -1187,7 +1598,7 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
         
         <span class="tag">
             
-            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #ffa2c4">学习日记</a>
+            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #03a9f4">学习日记</a>
         </span>
         
     </div>
@@ -1310,7 +1721,7 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
         
         <span class="tag">
             
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #03a9f4">解决方案</a>
+            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00a596">解决方案</a>
         </span>
         
     </div>
@@ -1377,80 +1788,12 @@ podman run -dt --pod mypod --name sidecar busybox sh -c “while true; do echo h
         
         <span class="tag">
             
-            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #03a9f4">学习日记</a>
+            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #ffa2c4">学习日记</a>
         </span>
         
     </div>
     
     <a href="/2025/07/02/20250702%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2025/07/02/20250702/">
-        <h2 class="post-title">podman在pod里创建容器的时候无法运行</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                解决方案
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/7/2
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <p><strong>问题：</strong><br>
-<code>podman run -d --pod myapp-pod --name mysql 00a697b8380c</code> 无法运行<br>
-<strong>解决过程：</strong></p>
-<ol>
-<li class="lvl-4">使用 <code>podman logs &lt;容器ID&gt;</code> 查看问题，发现错误信息：<pre><code>2025-07-02 12:53:55+00:00 [ERROR] [Entrypoint]: Database is uninitialized and password option is not specified
-你需要通过环境变量指定以下之一：
-- MYSQL_ROOT_PASSWORD
-- MYSQL_ALLOW_EMPTY_PASSWORD
-- MYSQL_RANDOM_ROOT_PASSWORD
-</code></pre>
-</li>
-<li class="lvl-4">原因是容器启动时未进行必要的初始化，特别是未设置 root 密码。</li>
-<li class="lvl-4">添加环境变量 <code>MYSQL_ROOT_PASSWORD</code> 重新运行容器：<pre><code class="bash">podman run -d --pod myapp-pod --name mysql -e MYSQL_ROOT_PASSWORD=root1573 00a697b8380c
-</code></pre>
-</li>
-</ol>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00bcd4">解决方案</a>
-        </span>
-        
-    </div>
-    
-    <a href="/2025/07/02/20250702/" class="go-post">阅读全文</a>
 </div>
 
 
