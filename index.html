@@ -194,6 +194,198 @@
         
 
 <div class="post">
+    <a href="/2026/03/02/%E8%A7%A3%E5%86%B3mpu6050%E6%89%93%E5%8D%B0z%E8%BD%B4%E6%95%B0%E6%8D%AE%E5%87%BA%E7%8E%B00-000/">
+        <h2 class="post-title">解决mpu6050打印z轴数据出现0.000</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/3/2
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            
+            <p><strong>原来的代码</strong></p>
+<pre><code class="c">/**
+ * @brief 打印校准后的传感器数据（物理单位）
+ */
+#define INT_PART(x) ((int)(x))
+#define FRAC_PART(x) (abs((int)(((x) - (int)(x)) * 100 + 0.5)) % 100)
+void mpu6050_print_calibrated(void)
+&#123;
+    mpu6050_raw_data_t raw_data;
+    mpu6050_calibrated_data_t calibrated_data, corrected_data;
+
+    if (mpu6050_read_raw(&amp;raw_data) == ERRCODE_SUCC) &#123;
+        mpu6050_convert_to_physical(&amp;raw_data, &amp;calibrated_data);
+        mpu6050_apply_calibration(&amp;calibrated_data, &amp;corrected_data);
+
+        osal_printk(&quot;=== MPU6050 Data ===\r\n&quot;);
+        osal_printk(&quot;Temperature: %d C\r\n&quot;, (int)corrected_data.temperature_c);
+        osal_printk(&quot;Accel: X=%d.%03d g, Y=%d.%03d g, Z=%d.%03d g\r\n&quot;,
+                   (int)corrected_data.accel_x_g, (int)(abs(corrected_data.accel_x_g * 1000 + 0.5) % 1000),
+                   (int)corrected_data.accel_y_g, (int)(abs(corrected_data.accel_y_g * 1000 + 0.5) % 1000),
+                   (int)corrected_data.accel_z_g, (int)(abs(corrected_data.accel_z_g * 1000 + 0.5) % 1000));
+        osal_printk(&quot;Gyro: X=%d.%02d dps, Y=%d.%02d dps, Z=%d.%02d dps\r\n\r\n&quot;,
+                    INT_PART(corrected_data.gyro_x_dps), FRAC_PART(corrected_data.gyro_x_dps),
+                    INT_PART(corrected_data.gyro_y_dps), FRAC_PART(corrected_data.gyro_y_dps),
+                    INT_PART(corrected_data.gyro_z_dps), FRAC_PART(corrected_data.gyro_z_dps));
+        osal_printk(&quot;====================\r\n&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>修改后的代码</strong></p>
+<pre><code class="c">void mpu6050_print_calibrated(mpu6050_calibrated_data_t *corrected_data)
+&#123;
+    // 将浮点数转换为整数（毫g单位和百分度每秒）
+    int16_t accel_x_mg = (int16_t)(corrected_data-&gt;accel_x_g * 1000 + 0.5f);
+    int16_t accel_y_mg = (int16_t)(corrected_data-&gt;accel_y_g * 1000 + 0.5f);
+    int16_t accel_z_mg = (int16_t)(corrected_data-&gt;accel_z_g * 1000 + 0.5f);
+
+    int16_t gyro_x_cdps = (int16_t)(corrected_data-&gt;gyro_x_dps * 100 + 0.5f); // 百分度每秒
+    int16_t gyro_y_cdps = (int16_t)(corrected_data-&gt;gyro_y_dps * 100 + 0.5f);
+    int16_t gyro_z_cdps = (int16_t)(corrected_data-&gt;gyro_z_dps * 100 + 0.5f);
+
+    osal_printk(&quot;=== MPU6050 Data ===\r\n&quot;);
+    osal_printk(&quot;Temperature: %d C\r\n&quot;, (int)corrected_data-&gt;temperature_c);
+
+    // 打印加速度计（单位：g）
+    osal_printk(&quot;Accel: X=%d.%03d g, Y=%d.%03d g, Z=%d.%03d g\r\n&quot;, accel_x_mg / 1000, abs(accel_x_mg) % 1000,
+                accel_y_mg / 1000, abs(accel_y_mg) % 1000, accel_z_mg / 1000, abs(accel_z_mg) % 1000);
+
+    // 打印陀螺仪（单位：dps）
+    osal_printk(&quot;Gyro: X=%d.%02d dps, Y=%d.%02d dps, Z=%d.%02d dps\r\n&quot;, gyro_x_cdps / 100, abs(gyro_x_cdps) % 100,
+                gyro_y_cdps / 100, abs(gyro_y_cdps) % 100, gyro_z_cdps / 100, abs(gyro_z_cdps) % 100);
+
+    osal_printk(&quot;====================\r\n\r\n&quot;);
+&#125;
+</code></pre>
+<p> <br>
+  貌似两个代码都是同一个AI生成的。。<br>
+ </p>
+<h1>AI总结：</h1>
+<h2 id="您的原代码：">您的原代码：</h2>
+<pre><code class="c">#define INT_PART(x) ((int)(x))
+#define FRAC_PART(x) (abs((int)(((x) - (int)(x)) * 100 + 0.5)) % 100)
+
+osal_printk(&quot;Accel: X=%d.%03d g, Y=%d.%03d g, Z=%d.%03d g\r\n&quot;,
+           (int)corrected_data.accel_x_g, (int)(abs(corrected_data.accel_x_g * 1000 + 0.5) % 1000),
+           (int)corrected_data.accel_y_g, (int)(abs(corrected_data.accel_y_g * 1000 + 0.5) % 1000),
+           (int)corrected_data.accel_z_g, (int)(abs(corrected_data.accel_z_g * 1000 + 0.5) % 1000));
+</code></pre>
+<h2 id="我的新代码：">我的新代码：</h2>
+<pre><code class="c">int16_t accel_z_mg = (int16_t)(corrected_data-&gt;accel_z_g * 1000.0f + 0.5f);
+osal_printk(&quot;Accel: X=%d.%03d g, Y=%d.%03d g, Z=%d.%03d g\r\n&quot;,
+           accel_x_mg / 1000, abs(accel_x_mg) % 1000,
+           accel_y_mg / 1000, abs(accel_y_mg) % 1000,
+           accel_z_mg / 1000, abs(accel_z_mg) % 1000);
+</code></pre>
+<h2 id="关键区别：">关键区别：</h2>
+<h3 id="1-运算顺序和精度">1. <strong>运算顺序和精度</strong></h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>您的代码</strong>：在格式化字符串中直接计算，每次打印都重新计算</p>
+</li>
+<li class="lvl-2">
+<p><strong>我的代码</strong>：先计算好整数结果，再打印</p>
+</li>
+</ul>
+<h3 id="2-数值稳定性">2. <strong>数值稳定性</strong></h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>您的代码</strong>：<code>corrected_data.accel_z_g * 1000 + 0.5</code> 中的 <code>corrected_data.accel_z_g</code> 是浮点数，直接用在 <code>abs()</code> 中</p>
+</li>
+<li class="lvl-2">
+<p><strong>我的代码</strong>：先将浮点数转换为整数，后续全部用整数运算</p>
+</li>
+</ul>
+<h3 id="3-类型转换">3. <strong>类型转换</strong></h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>您的代码</strong>：<code>abs(corrected_data.accel_z_g * 1000 + 0.5)</code> - <code>abs()</code> 是整数函数，但传入的是浮点数表达式</p>
+</li>
+<li class="lvl-2">
+<p><strong>我的代码</strong>：<code>abs(accel_z_mg)</code> - <code>accel_z_mg</code> 已经是整数</p>
+</li>
+</ul>
+<h3 id="4-问题所在">4. <strong>问题所在</strong></h3>
+<p>当 <code>corrected_data.accel_z_g = 0.1000</code> 时：</p>
+<p><strong>您的代码执行过程</strong>：</p>
+<ol>
+<li class="lvl-3">
+<p><code>corrected_data.accel_z_g * 1000 + 0.5</code> = 100.5（浮点数）</p>
+</li>
+<li class="lvl-3">
+<p>将这个浮点数传入 <code>abs()</code> - 但 <code>abs()</code> 期望整数参数</p>
+</li>
+<li class="lvl-3">
+<p>编译器可能隐式转换：<code>(int)100.5 = 100</code></p>
+</li>
+<li class="lvl-3">
+<p><code>abs(100) = 100</code></p>
+</li>
+<li class="lvl-3">
+<p><code>100 % 1000 = 100</code> ✓ 按理应该显示正确</p>
+</li>
+</ol>
+<p><strong>但为什么显示0？</strong> 可能是编译器在处理浮点数到整数的隐式转换时出了问题，或者浮点精度导致 <code>100.5</code> 变成了 <code>99.999</code>，取整后变成99。</p>
+<p><strong>我的代码执行过程</strong>：</p>
+<ol>
+<li class="lvl-3">
+<p><code>corrected_data.accel_z_g * 1000.0f + 0.5f</code> = 100.5f</p>
+</li>
+<li class="lvl-3">
+<p>显式转换为 <code>(int16_t)100.5f</code> = 100（四舍五入正确）</p>
+</li>
+<li class="lvl-3">
+<p><code>accel_z_mg = 100</code></p>
+</li>
+<li class="lvl-3">
+<p><code>accel_z_mg / 1000 = 0</code></p>
+</li>
+<li class="lvl-3">
+<p><code>abs(accel_z_mg) % 1000 = 100</code></p>
+</li>
+<li class="lvl-3">
+<p>打印 “0.100 g” ✓</p>
+</li>
+</ol>
+<h2 id="总结">总结</h2>
+<p>您的代码逻辑上是正确的，但可能因为：</p>
+<ol>
+<li class="lvl-3">
+<p><strong>隐式类型转换的问题</strong></p>
+</li>
+<li class="lvl-3">
+<p><strong>浮点数精度损失</strong></p>
+</li>
+<li class="lvl-3">
+<p><strong>编译器优化导致的问题</strong></p>
+</li>
+</ol>
+
+            
+            
+        </div>
+    </div>
+    
+    <div class="post-tags">
+        
+        
+        
+    </div>
+    
+    <a href="/2026/03/02/%E8%A7%A3%E5%86%B3mpu6050%E6%89%93%E5%8D%B0z%E8%BD%B4%E6%95%B0%E6%8D%AE%E5%87%BA%E7%8E%B00-000/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2026/02/28/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-03-%E5%AE%8C%E6%88%90ws63%E7%9A%84es8311%E9%A9%B1%E5%8A%A8%E7%A7%BB%E6%A4%8D%E5%92%8Cmpu6050%E5%AE%9E%E7%8E%B0%E9%9F%B3%E9%A2%91%E6%92%AD%E6%94%BE%E5%92%8C%E8%BF%90%E5%8A%A8%E6%95%B0%E6%8D%AE%E6%8E%A5%E6%94%B6/">
         <h2 class="post-title">毕业设计 (3) - 完成 WS63 的 ES8311 驱动移植和 MPU6050，实现音频播放和运动数据接收</h2>
     </a>
@@ -578,7 +770,7 @@ app_run(i2s_entry);
         
         <span class="tag">
             
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-ES8311-MPU6050/" style="color: #ffa2c4">毕业设计 WS63 ES8311 MPU6050</a>
+            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-ES8311-MPU6050/" style="color: #03a9f4">毕业设计 WS63 ES8311 MPU6050</a>
         </span>
         
     </div>
@@ -1035,7 +1227,7 @@ static uint8_t tensor_arena[kTensorArenaSize];
         
         <span class="tag">
             
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-Hi3863-TFLM/" style="color: #00a596">毕业设计 WS63 Hi3863 TFLM</a>
+            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-Hi3863-TFLM/" style="color: #00bcd4">毕业设计 WS63 Hi3863 TFLM</a>
         </span>
         
     </div>
@@ -1479,7 +1671,7 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
         
         <span class="tag">
             
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-Hi3863-C/" style="color: #03a9f4">毕业设计 WS63 Hi3863 C++</a>
+            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-Hi3863-C/" style="color: #00bcd4">毕业设计 WS63 Hi3863 C++</a>
         </span>
         
     </div>
@@ -1598,7 +1790,7 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
         
         <span class="tag">
             
-            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #03a9f4">学习日记</a>
+            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #ff7d73">学习日记</a>
         </span>
         
     </div>
@@ -1727,73 +1919,6 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
     </div>
     
     <a href="/2025/07/05/%E8%A7%A3%E5%86%B3redhat-echo-$http_proxy%E6%97%A0%E6%B3%95%E6%89%BE%E5%88%B0%E6%96%87%E4%BB%B6%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95%E5%8F%8Aredhat%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BB%88%E7%AB%AF%E6%8C%89%E9%94%AE%E5%93%92%E5%93%92%E5%93%92%E5%A3%B0%E9%9F%B3%E7%9A%84%E9%97%AE%E9%A2%98%E6%8E%A2%E8%AE%A8/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2025/07/02/20250702%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/">
-        <h2 class="post-title">20250702学习日记</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E6%97%A5%E8%AE%B0/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                日记
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2025/7/2
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <p>今天对podman进行了更深入地学习,包括podman对pod的创建,然后使用映像文件将容器创建在pod里<br>
-还有创建网络,对pod的网络进行指定(只在创建时还是有点不方便的)</p>
-<p>了解到一个pod迁移方式:<br>
-将现有 Pod 导出为 Compose 风格 YAML<br>
-你可以用 podman generate kube 从已有 Pod 自动导出配置文件，方便迁移或复用：</p>
-<h1>创建 Pod 和容器</h1>
-<p>podman pod create --name mypod<br>
-podman run -dt --pod mypod --name web nginx:alpine<br>
-podman run -dt --pod mypod --name sidecar busybox sh -c “while true; do echo hello; sleep 10; done”</p>
-<h1>生成 Kubernetes 风格 YAML</h1>
-<p>podman generate kube mypod &gt; pod-compose.yaml<br>
-然后你可以用 pod-compose.yaml 作为配置模板修改后再部署：</p>
-<p>podman play kube pod-compose.yaml</p>
-<p>基础设施容器:<br>
-在Podman中，Pod创建时会自动生成一个名为“infra”的基础设施容器（也称Pause容器），它的核心作用是初始化并维护Pod的网络命名空间，使Pod内所有容器能共享同一个网络环境、IP地址，从而实现它们之间通过localhost互相通信。这个轻量级且对用户隐藏的容器几乎不占用资源，但其生命周期与Pod绑定，确保即使Pod内没有其他容器运行，网络环境也能保持存活，直到Pod被删除时一同销毁。这种设计简化了网络管理，提高了资源利用率，并提升了可维护性，其理念与Kubernetes中的Pause容器类似，都是为了解决多容器共享网络的问题。</p>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #ffa2c4">学习日记</a>
-        </span>
-        
-    </div>
-    
-    <a href="/2025/07/02/20250702%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" class="go-post">阅读全文</a>
 </div>
 
 

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>DECA实践 | zero two</title>
+    <title>解决mpu6050打印z轴数据出现0.000 | zero two</title>
     <meta name="author" content="lAn_rEd" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -170,38 +170,178 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>DECA实践</h1>
+        <h1>解决mpu6050打印z轴数据出现0.000</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/10/13
+            2026/3/2
         </span>
         
-        
-        <span class="tags">
-            <span class="icon">
-                <i class="fa-solid fa-tags fa-fw"></i>
-            </span>
-            
-            
-            <span class="tag">
-                
-                <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #03a9f4">
-                    学习日记
-                </a>
-            </span>
-            
-        </span>
         
     </div>
     
     <div class="content" v-pre>
-        <p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/yangowen/article/details/127560680">https://blog.csdn.net/yangowen/article/details/127560680</a></p>
-<p>结果：<br>
-<img src="/PictureRecord/my_face_vis.jpg" alt="my face"></p>
+        <p><strong>原来的代码</strong></p>
+<pre><code class="c">/**
+ * @brief 打印校准后的传感器数据（物理单位）
+ */
+#define INT_PART(x) ((int)(x))
+#define FRAC_PART(x) (abs((int)(((x) - (int)(x)) * 100 + 0.5)) % 100)
+void mpu6050_print_calibrated(void)
+&#123;
+    mpu6050_raw_data_t raw_data;
+    mpu6050_calibrated_data_t calibrated_data, corrected_data;
+
+    if (mpu6050_read_raw(&amp;raw_data) == ERRCODE_SUCC) &#123;
+        mpu6050_convert_to_physical(&amp;raw_data, &amp;calibrated_data);
+        mpu6050_apply_calibration(&amp;calibrated_data, &amp;corrected_data);
+
+        osal_printk(&quot;=== MPU6050 Data ===\r\n&quot;);
+        osal_printk(&quot;Temperature: %d C\r\n&quot;, (int)corrected_data.temperature_c);
+        osal_printk(&quot;Accel: X=%d.%03d g, Y=%d.%03d g, Z=%d.%03d g\r\n&quot;,
+                   (int)corrected_data.accel_x_g, (int)(abs(corrected_data.accel_x_g * 1000 + 0.5) % 1000),
+                   (int)corrected_data.accel_y_g, (int)(abs(corrected_data.accel_y_g * 1000 + 0.5) % 1000),
+                   (int)corrected_data.accel_z_g, (int)(abs(corrected_data.accel_z_g * 1000 + 0.5) % 1000));
+        osal_printk(&quot;Gyro: X=%d.%02d dps, Y=%d.%02d dps, Z=%d.%02d dps\r\n\r\n&quot;,
+                    INT_PART(corrected_data.gyro_x_dps), FRAC_PART(corrected_data.gyro_x_dps),
+                    INT_PART(corrected_data.gyro_y_dps), FRAC_PART(corrected_data.gyro_y_dps),
+                    INT_PART(corrected_data.gyro_z_dps), FRAC_PART(corrected_data.gyro_z_dps));
+        osal_printk(&quot;====================\r\n&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p><strong>修改后的代码</strong></p>
+<pre><code class="c">void mpu6050_print_calibrated(mpu6050_calibrated_data_t *corrected_data)
+&#123;
+    // 将浮点数转换为整数（毫g单位和百分度每秒）
+    int16_t accel_x_mg = (int16_t)(corrected_data-&gt;accel_x_g * 1000 + 0.5f);
+    int16_t accel_y_mg = (int16_t)(corrected_data-&gt;accel_y_g * 1000 + 0.5f);
+    int16_t accel_z_mg = (int16_t)(corrected_data-&gt;accel_z_g * 1000 + 0.5f);
+
+    int16_t gyro_x_cdps = (int16_t)(corrected_data-&gt;gyro_x_dps * 100 + 0.5f); // 百分度每秒
+    int16_t gyro_y_cdps = (int16_t)(corrected_data-&gt;gyro_y_dps * 100 + 0.5f);
+    int16_t gyro_z_cdps = (int16_t)(corrected_data-&gt;gyro_z_dps * 100 + 0.5f);
+
+    osal_printk(&quot;=== MPU6050 Data ===\r\n&quot;);
+    osal_printk(&quot;Temperature: %d C\r\n&quot;, (int)corrected_data-&gt;temperature_c);
+
+    // 打印加速度计（单位：g）
+    osal_printk(&quot;Accel: X=%d.%03d g, Y=%d.%03d g, Z=%d.%03d g\r\n&quot;, accel_x_mg / 1000, abs(accel_x_mg) % 1000,
+                accel_y_mg / 1000, abs(accel_y_mg) % 1000, accel_z_mg / 1000, abs(accel_z_mg) % 1000);
+
+    // 打印陀螺仪（单位：dps）
+    osal_printk(&quot;Gyro: X=%d.%02d dps, Y=%d.%02d dps, Z=%d.%02d dps\r\n&quot;, gyro_x_cdps / 100, abs(gyro_x_cdps) % 100,
+                gyro_y_cdps / 100, abs(gyro_y_cdps) % 100, gyro_z_cdps / 100, abs(gyro_z_cdps) % 100);
+
+    osal_printk(&quot;====================\r\n\r\n&quot;);
+&#125;
+</code></pre>
+<p> <br>
+  貌似两个代码都是同一个AI生成的。。<br>
+ </p>
+<h1>AI总结：</h1>
+<h2 id="您的原代码：">您的原代码：</h2>
+<pre><code class="c">#define INT_PART(x) ((int)(x))
+#define FRAC_PART(x) (abs((int)(((x) - (int)(x)) * 100 + 0.5)) % 100)
+
+osal_printk(&quot;Accel: X=%d.%03d g, Y=%d.%03d g, Z=%d.%03d g\r\n&quot;,
+           (int)corrected_data.accel_x_g, (int)(abs(corrected_data.accel_x_g * 1000 + 0.5) % 1000),
+           (int)corrected_data.accel_y_g, (int)(abs(corrected_data.accel_y_g * 1000 + 0.5) % 1000),
+           (int)corrected_data.accel_z_g, (int)(abs(corrected_data.accel_z_g * 1000 + 0.5) % 1000));
+</code></pre>
+<h2 id="我的新代码：">我的新代码：</h2>
+<pre><code class="c">int16_t accel_z_mg = (int16_t)(corrected_data-&gt;accel_z_g * 1000.0f + 0.5f);
+osal_printk(&quot;Accel: X=%d.%03d g, Y=%d.%03d g, Z=%d.%03d g\r\n&quot;,
+           accel_x_mg / 1000, abs(accel_x_mg) % 1000,
+           accel_y_mg / 1000, abs(accel_y_mg) % 1000,
+           accel_z_mg / 1000, abs(accel_z_mg) % 1000);
+</code></pre>
+<h2 id="关键区别：">关键区别：</h2>
+<h3 id="1-运算顺序和精度">1. <strong>运算顺序和精度</strong></h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>您的代码</strong>：在格式化字符串中直接计算，每次打印都重新计算</p>
+</li>
+<li class="lvl-2">
+<p><strong>我的代码</strong>：先计算好整数结果，再打印</p>
+</li>
+</ul>
+<h3 id="2-数值稳定性">2. <strong>数值稳定性</strong></h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>您的代码</strong>：<code>corrected_data.accel_z_g * 1000 + 0.5</code> 中的 <code>corrected_data.accel_z_g</code> 是浮点数，直接用在 <code>abs()</code> 中</p>
+</li>
+<li class="lvl-2">
+<p><strong>我的代码</strong>：先将浮点数转换为整数，后续全部用整数运算</p>
+</li>
+</ul>
+<h3 id="3-类型转换">3. <strong>类型转换</strong></h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>您的代码</strong>：<code>abs(corrected_data.accel_z_g * 1000 + 0.5)</code> - <code>abs()</code> 是整数函数，但传入的是浮点数表达式</p>
+</li>
+<li class="lvl-2">
+<p><strong>我的代码</strong>：<code>abs(accel_z_mg)</code> - <code>accel_z_mg</code> 已经是整数</p>
+</li>
+</ul>
+<h3 id="4-问题所在">4. <strong>问题所在</strong></h3>
+<p>当 <code>corrected_data.accel_z_g = 0.1000</code> 时：</p>
+<p><strong>您的代码执行过程</strong>：</p>
+<ol>
+<li class="lvl-3">
+<p><code>corrected_data.accel_z_g * 1000 + 0.5</code> = 100.5（浮点数）</p>
+</li>
+<li class="lvl-3">
+<p>将这个浮点数传入 <code>abs()</code> - 但 <code>abs()</code> 期望整数参数</p>
+</li>
+<li class="lvl-3">
+<p>编译器可能隐式转换：<code>(int)100.5 = 100</code></p>
+</li>
+<li class="lvl-3">
+<p><code>abs(100) = 100</code></p>
+</li>
+<li class="lvl-3">
+<p><code>100 % 1000 = 100</code> ✓ 按理应该显示正确</p>
+</li>
+</ol>
+<p><strong>但为什么显示0？</strong> 可能是编译器在处理浮点数到整数的隐式转换时出了问题，或者浮点精度导致 <code>100.5</code> 变成了 <code>99.999</code>，取整后变成99。</p>
+<p><strong>我的代码执行过程</strong>：</p>
+<ol>
+<li class="lvl-3">
+<p><code>corrected_data.accel_z_g * 1000.0f + 0.5f</code> = 100.5f</p>
+</li>
+<li class="lvl-3">
+<p>显式转换为 <code>(int16_t)100.5f</code> = 100（四舍五入正确）</p>
+</li>
+<li class="lvl-3">
+<p><code>accel_z_mg = 100</code></p>
+</li>
+<li class="lvl-3">
+<p><code>accel_z_mg / 1000 = 0</code></p>
+</li>
+<li class="lvl-3">
+<p><code>abs(accel_z_mg) % 1000 = 100</code></p>
+</li>
+<li class="lvl-3">
+<p>打印 “0.100 g” ✓</p>
+</li>
+</ol>
+<h2 id="总结">总结</h2>
+<p>您的代码逻辑上是正确的，但可能因为：</p>
+<ol>
+<li class="lvl-3">
+<p><strong>隐式类型转换的问题</strong></p>
+</li>
+<li class="lvl-3">
+<p><strong>浮点数精度损失</strong></p>
+</li>
+<li class="lvl-3">
+<p><strong>编译器优化导致的问题</strong></p>
+</li>
+</ol>
 
     </div>
     
