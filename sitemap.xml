@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://styundydsg.github.io/about/index.html</loc>
+    
+    <lastmod>2026-04-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://styundydsg.github.io/2026/01/21/%E6%9C%80%E8%BF%91%E6%83%B3%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%9C%E8%A5%BF/</loc>
     
     <lastmod>2026-04-28</lastmod>
@@ -122,15 +131,6 @@
     <loc>https://styundydsg.github.io/2025/05/19/mit-6s081-lab02-System-call-tracing/</loc>
     
     <lastmod>2026-02-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/about/index.html</loc>
-    
-    <lastmod>2026-01-13</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

@@ -1,3 +1,4 @@
+https://styundydsg.github.io/about/index.html
 https://styundydsg.github.io/2026/01/21/%E6%9C%80%E8%BF%91%E6%83%B3%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%9C%E8%A5%BF/
 https://styundydsg.github.io/2026/03/13/openclaw%E8%B5%8B%E8%83%BD%E4%B9%8B%E5%89%8D%E7%9A%84%E8%AF%BE%E7%A8%8B%E8%AE%BE%E8%AE%A1/
 https://styundydsg.github.io/2026/03/13/%E9%83%A8%E7%BD%B2%E4%BA%86openclaw/
@@ -12,7 +13,6 @@ https://styundydsg.github.io/2026/02/28/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-03-
 https://styundydsg.github.io/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-02-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863%E5%B9%B3%E5%8F%B0/
 https://styundydsg.github.io/2026/02/08/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-01-ws63-hi3863%E5%AE%8C%E6%88%90c%E6%94%AF%E6%8C%81%E8%BF%87%E7%A8%8B/
 https://styundydsg.github.io/2025/05/19/mit-6s081-lab02-System-call-tracing/
-https://styundydsg.github.io/about/index.html
 https://styundydsg.github.io/2025/12/15/20251215%E8%AE%B0%E5%BD%95/
 https://styundydsg.github.io/2025/03/31/%E6%83%B3%E5%81%9A%E6%B8%B8%E6%88%8F%E7%9A%84%E7%AC%AC%E4%BA%8C%E5%A4%A9/
 https://styundydsg.github.io/2025/03/23/3%E6%9C%8823%E6%97%A5%E8%B5%B7%E5%BA%8A/
