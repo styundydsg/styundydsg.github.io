@@ -1,3 +1,4 @@
+https://styundydsg.github.io/2026/08/09/Godot%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0-%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84Godot%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/
 https://styundydsg.github.io/about/index.html
 https://styundydsg.github.io/2026/01/21/%E6%9C%80%E8%BF%91%E6%83%B3%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%9C%E8%A5%BF/
 https://styundydsg.github.io/2026/03/13/openclaw%E8%B5%8B%E8%83%BD%E4%B9%8B%E5%89%8D%E7%9A%84%E8%AF%BE%E7%A8%8B%E8%AE%BE%E8%AE%A1/
@@ -55,6 +56,7 @@ https://styundydsg.github.io/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-INMP441-P
 https://styundydsg.github.io/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-MPU6050-%E8%B0%83%E8%AF%95/
 https://styundydsg.github.io/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-I2S-%E9%80%BB%E8%BE%91%E5%88%86%E6%9E%90%E4%BB%AA/
 https://styundydsg.github.io/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-%E5%A3%B0%E9%9F%B3%E5%88%86%E7%B1%BB-TFLM/
+https://styundydsg.github.io/tags/Godot-%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/
 https://styundydsg.github.io/categories/%E6%97%A5%E8%AE%B0/
 https://styundydsg.github.io/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/
 https://styundydsg.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/
