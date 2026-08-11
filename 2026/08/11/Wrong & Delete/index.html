@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Godot课程笔记--从零开始的Godot游戏开发001 | zero two</title>
+    <title>Wrong &amp; Delete | zero two</title>
     <meta name="author" content="lAn_rEd" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -170,23 +170,14 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>Godot课程笔记--从零开始的Godot游戏开发001</h1>
+        <h1>Wrong &amp; Delete</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2026/8/8
-        </span>
-        
-        <span class="category">
-            <a href="/categories/%E5%AD%A6%E4%B9%A0/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                学习
-            </a>
+            2026/8/11
         </span>
         
         
@@ -198,8 +189,8 @@
             
             <span class="tag">
                 
-                <a href="/tags/Godot-%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #00bcd4">
-                    Godot, 学习日记
+                <a href="/tags/%E8%AF%BE%E7%A8%8B/" style="color: #03a9f4">
+                    课程
                 </a>
             </span>
             
@@ -208,172 +199,7 @@
     </div>
     
     <div class="content" v-pre>
-        <h2 id="一、导入素材模糊问题-——-纹理过滤">一、导入素材模糊问题 —— 纹理过滤</h2>
-<p>导入图片素材后显示模糊，原因在于纹理过滤模式。Godot 提供两种过滤方式：</p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>邻近过滤（Nearest Filter / 最近邻）：这个位置该显示什么颜色，就直接拿离它最近的像素颜色来用。效果：边缘锐利、像素感强，放大后会出现明显的&quot;马赛克&quot;颗粒感。</p>
-</li>
-<li class="lvl-2">
-<p>线性过滤（Linear Filter）：参考周围几个像素，把颜色做一个平滑的混合。效果：边缘平滑、模糊过渡，放大后没有锯齿感。</p>
-</li>
-</ul>
-<h3 id="选择规则">选择规则</h3>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>像素风格（像素画、复古风）：用邻近过滤，保持像素的锐利感。</p>
-</li>
-<li class="lvl-2">
-<p>非像素风格（普通插画、写实贴图）：用线性过滤，画面更平滑。</p>
-</li>
-</ul>
-<p>设置位置：选中素材 → 导入面板（Import）→ Filter（过滤模式），可选 Nearest / Linear 等；也可以在项目设置里统一设置默认过滤模式。</p>
-<h2 id="二、节点命名规范">二、节点命名规范</h2>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>节点命名采用大驼峰命名法（PascalCase）：每个单词首字母大写，单词间不加分隔符。</p>
-</li>
-<li class="lvl-2">
-<p>例：<code>Player</code>、<code>MainCamera</code>、<code>TileMapLayer</code>。</p>
-</li>
-<li class="lvl-2">
-<p>这样命名的好处：与引擎内置节点风格一致，脚本里引用时不易混淆，也方便区分小驼峰命名的函数/变量（<code>player</code>、<code>mainCamera</code>）。</p>
-</li>
-</ul>
-<h2 id="三、TileMap-TileSet-TileSetLayer">三、TileMap / TileSet / TileSetLayer</h2>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p><strong>TileMap</strong>：用来在二维网格上摆放瓦片、绘制地图的节点。</p>
-</li>
-<li class="lvl-2">
-<p><strong>TileSet</strong>：它是 TileMap 要使用的瓦片的资源库。不只是存放瓦片，还可以给每种瓦片附加额外信息，比如：</p>
-<ul class="lvl-2">
-<li class="lvl-5">碰撞（physics）</li>
-<li class="lvl-5">导航（navigation）</li>
-<li class="lvl-5">遮挡（occlusion）</li>
-</ul>
-</li>
-<li class="lvl-2">
-<p><strong>TileSetLayer</strong>：实际执行绘画操作的层（画布）。</p>
-</li>
-</ul>
-<h3 id="类比记忆">类比记忆</h3>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>TileMap = 颜料</p>
-</li>
-<li class="lvl-2">
-<p>TileSet = 调色板</p>
-</li>
-<li class="lvl-2">
-<p>TileSetLayer = 实际执行绘画操作的画布</p>
-</li>
-</ul>
-<h3 id="工作流程">工作流程</h3>
-<ol>
-<li class="lvl-3">
-<p>先创建 TileSet，导入瓦片资源（把瓦片图切分成格子）。</p>
-</li>
-<li class="lvl-3">
-<p>给 TileSet 的每个瓦片按需配置碰撞 / 导航 / 遮挡。</p>
-</li>
-<li class="lvl-3">
-<p>TileMap（或其图层）选择瓦片进行绘制，把地图&quot;画&quot;出来。</p>
-</li>
-</ol>
-<h2 id="四、常见的-2D-节点">四、常见的 2D 节点</h2>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p><strong>Node2D</strong>：所有 2D 节点的基类。自身可设置位置（position）、旋转（rotation）、缩放（scale）。</p>
-</li>
-<li class="lvl-2">
-<p><strong>CharacterBody2D</strong>：角色类物体（玩家、NPC）。通常配合 <code>move_and_slide()</code> 等移动方法，在 <code>_physics_process()</code> 里做移动与碰撞。</p>
-</li>
-<li class="lvl-2">
-<p><strong>RigidBody2D</strong>：刚体。完全由物理引擎驱动（受重力、力、碰撞影响），适合做被推的箱子、弹跳物等。</p>
-</li>
-<li class="lvl-2">
-<p>其他常用 2D 节点：</p>
-<ul class="lvl-2">
-<li class="lvl-5">Sprite2D：显示一张 2D 图片。</li>
-<li class="lvl-5">AnimatedSprite2D：播放动画序列帧，逐帧。</li>
-<li class="lvl-5">Area2D：区域，检测其他物体进出、重叠（触发型，不物理阻挡）。</li>
-<li class="lvl-5">StaticBody2D：静态物体（地板、墙壁），不移动但可以挡住别人。</li>
-<li class="lvl-5">Camera2D：2D 摄像机，画面跟随它。</li>
-<li class="lvl-5">CanvasLayer：画布层，常用于 UI、血条等不受坐标影响的层。</li>
-</ul>
-</li>
-</ul>
-<h2 id="五、游戏循环回调">五、游戏循环回调</h2>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p><strong>_process(delta)</strong>：每帧都调用，执行频率跟帧率走（比如 60fps 每秒调 60 次）。适合做普通逻辑：输入响应、动画播放、即时更新。</p>
-</li>
-<li class="lvl-2">
-<p><strong>_physics_process(delta)</strong>：每个物理帧固定频率调用，默认 60 次/秒，与渲染帧率无关。适合做物理相关的逻辑：移动角色、碰撞检测。</p>
-</li>
-</ul>
-<p>补充一点：物理帧频率恒定，游戏内计算更稳定；普通 _process 依赖帧率，掉帧时可能不稳定。</p>
-<h2 id="六、GDScript-语法两个要点">六、GDScript 语法两个要点</h2>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p><code>:=</code> ：类型推断赋值。写 <code>var name := &quot;player&quot;</code> 时，Godot 自动推断 name 的类型（这里是 String），比直接 <code>=</code> 多了类型检查。</p>
-</li>
-<li class="lvl-2">
-<p><code>&amp;&quot;xxx&quot;</code> ：StringName 字面量。<code>&amp;&quot;hello&quot;</code> 生成 StringName（字符串名），常用于节点组、属性名、信号名等大量重复比较的场景，比普通字符串比较更快，内存也更省。</p>
-</li>
-</ul>
-<h2 id="七、信号与-connect">七、信号与 connect</h2>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>信号（signal）是 Godot 的消息机制：一个节点发出事件，其他节点监听并响应。</p>
-</li>
-<li class="lvl-2">
-<p><code>connect</code>：把信号和接收方的方法连接起来。</p>
-<pre><code class="gdscript">button.pressed.connect(_on_pressed)
-</code></pre>
-<p>当 button 发出 pressed 信号时，自动调用 <code>_on_pressed()</code>。</p>
-</li>
-<li class="lvl-2">
-<p>也在编辑器里用节点面板的&quot;信号&quot;标签页连接，连接后会自动生成并绑定处理函数。</p>
-</li>
-<li class="lvl-2">
-<p>断开用 <code>disconnect(...)</code>。</p>
-</li>
-</ul>
-<h2 id="八、什么是场景">八、什么是场景</h2>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>场景（Scene）是 Godot 的基本构建单元：一棵<strong>由节点组成的树</strong>（Node 树）。</p>
-</li>
-<li class="lvl-2">
-<p>一个场景 = 一些节点的组合 + 它们的关系，表示游戏里的一个对象/关卡/元素（比如一个玩家、一个敌人、一个关卡）。</p>
-</li>
-<li class="lvl-2">
-<p>场景可以嵌套：把一个场景作为节点放进另一个场景里（实例化），实现模块化复用。</p>
-</li>
-<li class="lvl-2">
-<p>保存为 .tscn 文件，游戏程序就是由一个大场景把各个小场景组合起来的。</p>
-</li>
-</ul>
-<h2 id="附：TileSet-物理层的操作步骤（碰撞配置）">附：TileSet 物理层的操作步骤（碰撞配置）</h2>
-<ol>
-<li class="lvl-3">
-<p>选中 TileSet 资源，切到&quot;物理层（Physics Layers）&quot;标签页。</p>
-</li>
-<li class="lvl-3">
-<p>添加（Add）一个物理层（Physical Layer）。</p>
-</li>
-<li class="lvl-3">
-<p>在瓦片集编辑器里选择&quot;点击绘制&quot;工具（Paint）。</p>
-</li>
-<li class="lvl-3">
-<p>在瓦片集上框选要设置碰撞的瓦片，被选中的瓦片会变<strong>蓝色</strong>，表示这些瓦片带有碰撞信息。</p>
-</li>
-<li class="lvl-3">
-<p>之后在 TileMap 里绘制这些瓦片时，就会带碰撞体。</p>
-</li>
-</ol>
+        <p>Think</p>
 
     </div>
     
