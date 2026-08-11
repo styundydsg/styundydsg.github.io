@@ -1369,3 +1369,9 @@ ol li {
         padding: 8px 16px;
     }
 }
+
+/* 首页列表固定高度摘要：不手动加 more 也会裁剪，点进文章看全文 */
+#home-posts .post .description .content {
+    max-height: 150px;
+    overflow: hidden;
+}
