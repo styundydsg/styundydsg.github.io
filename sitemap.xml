@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://styundydsg.github.io/about/index.html</loc>
+    
+    <lastmod>2026-08-11</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://styundydsg.github.io/2026/08/11/Wrong%20&%20Delete/</loc>
     
     <lastmod>2026-08-11</lastmod>
@@ -95,15 +104,6 @@
     <loc>https://styundydsg.github.io/2025/03/31/%E6%83%B3%E5%81%9A%E6%B8%B8%E6%88%8F%E7%9A%84%E7%AC%AC%E4%BA%8C%E5%A4%A9/</loc>
     
     <lastmod>2026-08-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/about/index.html</loc>
-    
-    <lastmod>2026-04-28</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
