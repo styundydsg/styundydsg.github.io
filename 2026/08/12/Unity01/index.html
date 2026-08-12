@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>3月23日起床 | zero two</title>
+    <title>Unity01 | zero two</title>
     <meta name="author" content="lAn_rEd" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -43,9 +43,6 @@
 
 <script src="/js/lib/preview.js"></script>
 
-
-<script src="https://s4.zstatic.net/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
-<script src="/js/lib/crypto.js"></script>
 
 
 
@@ -173,23 +170,14 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>3月23日起床</h1>
+        <h1>Unity01</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/3/23
-        </span>
-        
-        <span class="category">
-            <a href="/categories/%E6%97%A5%E8%AE%B0/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                日记
-            </a>
+            2026/8/12
         </span>
         
         
@@ -201,22 +189,8 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #03a9f4">
-                    想法
-                </a>
-            </span>
-            
-            <span class="tag">
-                
-                <a href="/tags/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/" style="color: #00a596">
-                    探索自我
-                </a>
-            </span>
-            
-            <span class="tag">
-                
-                <a href="/tags/%E8%BF%B7%E8%8C%AB/" style="color: #00bcd4">
-                    迷茫
+                <a href="/tags/Unity/" style="color: #ff7d73">
+                    Unity
                 </a>
             </span>
             
@@ -224,20 +198,56 @@
         
     </div>
     
-    
-    <input
-        id="crypto"
-        :class="['input', cryptoStatus]"
-        :disabled="cryptoStatus === 'success'"
-        ref="crypto"
-        placeholder="文章被加密，请输入密码"
-        data-encrypted="U2FsdGVkX18bUf9FTClfQtL6GQZ1Rs1Yy2KwZpUyXyOQeTrIH0W/+V+6SdavLWf3b5aXzXXKHnTSlxHD+72MR7JoYw/wPYndJUQwf66SnkpizfZ7jXzy3KvZZR96yddcciPsH7rIqHbb5kNrVoKiQGFWK8K5M9WeTwJ5aWLg/u0YxfrIwMDIMCuUV/Jse5F8E0X0HMoU4QqooyoyTTpPi/cr5++BRlu074Xly9XWFTcM8+Rs7S6kfIyfuf2G4374h93uQvWuAXpoanujmu3vEdM+8jbDDu1E8NNLIRWBH1KkjZUXTMBCfmnGKDvdBExuInOA9LZqIBUt22rFpy6qFbmDbRhUa57SN3kGM+Smp91HzqnOKj1Ieu64Kb8lH6rmYfxZgWl99SkMB1LM4sRGAFLlU0quYspXneP9G51BjwZpQq5a0NGudNhISG4Vm0RTnR48ZsaKq+AjP2oOUTXPqqcCuiCchxJHFXFXVsJE4Vw1WLlyxdoZhBhmFhuUEC8IsSaZu7iNibEJV0HzTpg5WX89JCalQY+MLd+TdFwrIBzvJnosbmnf/qLG0uIqy6y7cSH1jDQY0GJEeHqoKN0RZ3IQIedqhiye6+Yznbt8NnEyI4QGTennx5vl9Y5uIb9wOIkscnqZyDyWFjpKU63k5hApHgMs+z7ihcsWG0B8PQOHLrsfJKgmCc9ftUb5+VP05+CyHsMquwP698dJteXJtWTWbJS9zlIZZzF1K+7KLyyNe19teAQXh7XjzKf4XbW5k6EXTh4yUAOL8+mHovtXMKD+64fmeOs2HrXKslQSAPk="
-        data-shasum="f137101c72341df927535150a96926b2f3bf7de6c2bf8b2df47edaadd0ac1aae"
-        v-model="crypto"
-    />
-    <transition name="fade">
-        <div class="content" ref="content" v-show="cryptoStatus === 'success'"></div>
-    </transition>
+    <div class="content" v-pre>
+        <ul class="lvl-0">
+<li class="lvl-2">
+<p>一个Unity游戏等于一个或多个场景</p>
+</li>
+<li class="lvl-2">
+<p>场景由GameObject组成</p>
+</li>
+<li class="lvl-2">
+<p>GameObject只是一个容器，由Component实现功能</p>
+</li>
+<li class="lvl-2">
+<p>Unity的设计核心：组合，而非继承</p>
+</li>
+<li class="lvl-2">
+<p>特殊的组件Transform，每个GameObject有且只有一个，定义位置、旋转、缩放这三件事</p>
+</li>
+<li class="lvl-2">
+<p>子对象的Transform相对于父对象</p>
+</li>
+<li class="lvl-2">
+<p>脚本的文件名和里面的类名是一致的</p>
+</li>
+</ul>
+<hr>
+<ul class="lvl-0">
+<li class="lvl-2">对象激活是GameObject的activeself设置为true，就是Inspector上的左上角复选框打勾</li>
+<li class="lvl-2">Start() ，对象激活后的第一帧前调用一次，等其他的对象都Awake了</li>
+<li class="lvl-2">Update()，每帧调用一次，帧率越高，调用越频繁</li>
+<li class="lvl-2">FixedUpdate()，固定时间间隔调用，默认每秒50次</li>
+<li class="lvl-2">LateUpdate()，等Update()之后调用</li>
+<li class="lvl-2">游戏逐帧渲染。一帧等于一次完整的游戏逻辑加上渲染画面，Update 里改变物体的位置,引擎在帧末把这帧画面渲染出来,下一帧继续。</li>
+<li class="lvl-2">有个关键问题，假如你在update里写了移动0.1米，那么帧率越高的设备移动越快。所以我们使用的应该是时间，就是Time.deltaTime，她表示的是上一帧到这帧花的时间。</li>
+</ul>
+<hr>
+<ul class="lvl-0">
+<li class="lvl-2">.unity是YAML格式，里面每个条目是对象或者组件。组件通过 m_GameObject 字段指向它属于哪个对象；组件条目里的 m_GameObject 字段,是组件在声明&quot;我是属于哪个物体的&quot;；父子关系通过 Transform 的 m_Father 记录</li>
+<li class="lvl-2">挂载脚本是通过guid，找到那个脚本文件，而不是根据文件名，所以更改了文件名挂载的脚本还是继续链接的</li>
+<li class="lvl-2">Assets 下每个文件(.cs、.prefab、.png、.unity)旁边都有一个同名 .meta 文件,里面最重要的字段就是 guid。</li>
+<li class="lvl-2">Prefab 是一个可重复使用的资源，它存储了一个 GameObject（游戏对象）及其所有组件、子对象和属性设置。你可以把它从 Project 窗口拖到场景中任意位置，多次实例化，生成多个一模一样的克隆体。</li>
+</ul>
+<hr>
+<ul class="lvl-0">
+<li class="lvl-2">Collider组件定义体积形状，collider决定的是别人碰到我，在哪个范围上算碰上</li>
+<li class="lvl-2">Rigidbody 组件让物体进入物理模拟:受重力下落、被碰撞弹开、被力推动。没有 Rigidbody 的物体,物理引擎只把它当&quot;不可动的障碍物&quot;。</li>
+<li class="lvl-2">三种组合规则：只有 Collider(静态碰撞体):不动的地面、墙壁、环境。物理引擎知道&quot;这里有东西挡路&quot;,但它自己永不移动；Collider + Rigidbody(动态刚体):会掉落的箱子、被撞飞的物体、角色。Rigidbody 提供&quot;会动&quot;的能力,Collider 提供&quot;动的过程中跟别人发生碰撞的体积&quot;；Collider + Is Trigger 勾选(触发器):不挡路、不弹开,只是&quot;感应区&quot;。物体穿过它时触发事件(OnTriggerEnter),常用于捡道具、进区域、检测子弹命中。</li>
+<li class="lvl-2">物理模拟不在 Update 里跑,而是在 FixedUpdate 的固定节奏里跑(默认每秒 50 次)。所以凡是操作 Rigidbody(加力、设速度、移动带刚体的物体),应该写在 FixedUpdate 里,而不是 Update。</li>
+</ul>
+
+    </div>
     
     
     
