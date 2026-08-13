@@ -194,872 +194,6 @@
         
 
 <div class="post">
-    <a href="/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-02-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863%E5%B9%B3%E5%8F%B0/">
-        <h2 class="post-title">毕业设计 (2) - 部署 TFLM hello_world demo 到 WS63 (Hi3863) 平台</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                毕业设计
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2026/2/9
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <h2 id="前置工作">前置工作</h2>
-<p>在开始部署之前，需要准备以下环境：</p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>WS63 (Hi3863) 开发环境</p>
-</li>
-<li class="lvl-2">
-<p>TensorFlow Lite Micro 源码</p>
-</li>
-<li class="lvl-2">
-<p>CMake 构建工具</p>
-</li>
-</ul>
-<h2 id="CMakeLists-配置">CMakeLists 配置</h2>
-<pre><code class="cmake">set(TFLM_SRC_PATH &quot;G:/HiSpark_SDK/fbb_ws63/tflite-micro&quot;)
-set(TFLM_CORE_PATH &quot;$&#123;TFLM_SRC_PATH&#125;/tensorflow/lite&quot;)
-set(FLATBUFFERS_DIR &quot;G:/HiSpark_SDK/fbb_ws63/tflite-micro/tensorflow/lite/micro/tools/make/downloads/flatbuffers&quot;)
-set(TFLM_COMPILER_PATH &quot;$&#123;TFLM_SRC_PATH&#125;/tensorflow/compiler&quot;)
-
-set(RUY_PATHS
-    &quot;$&#123;TFLM_SRC_PATH&#125;/tensorflow/lite/micro/tools/make/downloads/ruy&quot;
-)
-
-set(GEMMLOWP_FIXEDPOINT_PATHS
-    &quot;$&#123;TFLM_SRC_PATH&#125;/tensorflow/lite/micro/tools/make/downloads/gemmlowp&quot;
-    &quot;$&#123;TFLM_SRC_PATH&#125;/tmp/tflm-ws63/third_party/gemmlowp&quot;
-    &quot;$&#123;TFLM_SRC_PATH&#125;/third_party/gemmlowp&quot;
-)
-
-set(FOUND_GEMMLOWP FALSE)
-foreach(path $&#123;GEMMLOWP_FIXEDPOINT_PATHS&#125;)
-    if(EXISTS &quot;$&#123;path&#125;/fixedpoint/fixedpoint.h&quot;)
-        set(GEMMLOWP_PATH $&#123;path&#125;)
-        set(FOUND_GEMMLOWP TRUE)
-        message(STATUS &quot;✓ Found gemmlowp at: $&#123;path&#125;&quot;)
-        break()
-    endif()
-endforeach()
-
-unset(PUBLIC_HEADER)
-
-if(FOUND_GEMMLOWP)
-    list(APPEND PUBLIC_HEADER
-        $&#123;GEMMLOWP_PATH&#125;
-    )
-endif()
-
-# 设置 PUBLIC_HEADER 变量以包含所有需要的头文件路径
-list(APPEND PUBLIC_HEADER
-    $&#123;TFLM_SRC_PATH&#125;
-    $&#123;TFLM_SRC_PATH&#125;/tensorflow
-    $&#123;TFLM_SRC_PATH&#125;/tensorflow/lite/kernels
-    $&#123;TFLM_CORE_PATH&#125;
-    $&#123;TFLM_CORE_PATH&#125;/micro
-    $&#123;TFLM_CORE_PATH&#125;/micro/kernels
-    $&#123;TFLM_CORE_PATH&#125;/micro/memory_planner
-    $&#123;TFLM_CORE_PATH&#125;/micro/testing
-    $&#123;TFLM_CORE_PATH&#125;/schema
-    $&#123;TFLM_CORE_PATH&#125;/c
-    $&#123;TFLM_CORE_PATH&#125;/core/api
-    $&#123;FLATBUFFERS_DIR&#125;/include
-    $&#123;TFLM_CORE_PATH&#125;/micro/kernels/cmsis_nn
-    CACHE INTERNAL &quot;&quot;
-)
-
-list(APPEND PUBLIC_HEADER $&#123;RUY_PATHS&#125;)
-
-# 设置源文件
-set(CORE_API_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/core/api/flatbuffer_conversions.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/tflite_bridge/flatbuffer_conversions_bridge.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/core/api/tensor_utils.cc&quot;
-)
-
-set(SCHEMA_SOURCES
-    &quot;$&#123;TFLM_COMPILER_PATH&#125;/mlir/lite/schema/schema_utils.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/flatbuffer_utils.cc&quot;
-)
-
-set(C_API_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/core/c/common.cc&quot;
-)
-
-set(CORE_INTERPRETER_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_interpreter.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_utils.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_op_resolver.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_context.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_interpreter_context.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_interpreter_graph.cc&quot;
-)
-
-set(MEMORY_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/memory_planner/greedy_memory_planner.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/memory_planner/linear_memory_planner.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/arena_allocator/single_arena_buffer_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/arena_allocator/persistent_arena_buffer_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/arena_allocator/non_persistent_arena_buffer_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/arena_allocator/recording_single_arena_buffer_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/recording_micro_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/memory_helpers.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_allocation_info.cc&quot;
-)
-
-set(KERNEL_REGISTRY_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/kernel_runner.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/kernel_util.cc&quot;
-)
-
-set(KERNEL_COMMON_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/fully_connected_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/softmax_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/conv_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/depthwise_conv_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/pooling_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/add_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/mul_common.cc&quot;
-)
-
-set(KERNEL_IMPLEMENTATION_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/fully_connected.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/softmax.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/reshape.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/quantize.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/dequantize.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/dequantize_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/logistic.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/add.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/mul.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/concatenation.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/pooling.cc&quot;
-)
-
-set(LOG_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_log.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/tflite_bridge/micro_error_reporter.cc&quot;
-    &quot;$&#123;TFLM_COMPILER_PATH&#125;/mlir/lite/core/api/error_reporter.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_time.cc&quot;
-)
-
-set(TENSOR_UTILS_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/kernels/internal/tensor_utils.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/kernels/internal/quantization_util.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/kernels/internal/common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/kernels/internal/portable_tensor_utils.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/kernels/kernel_util.cc&quot;
-)
-
-set(OTHER_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_profiler.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_resource_variable.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/test_helpers.cc&quot;
-)
-
-# 合并所有源文件
-set(ALL_TFLM_SOURCES
-    $&#123;CORE_API_SOURCES&#125;
-    $&#123;SCHEMA_SOURCES&#125;
-    $&#123;C_API_SOURCES&#125;
-    $&#123;CORE_INTERPRETER_SOURCES&#125;
-    $&#123;MEMORY_SOURCES&#125;
-    $&#123;KERNEL_REGISTRY_SOURCES&#125;
-    $&#123;KERNEL_COMMON_SOURCES&#125;
-    $&#123;KERNEL_IMPLEMENTATION_SOURCES&#125;
-    $&#123;LOG_SOURCES&#125;
-    $&#123;TENSOR_UTILS_SOURCES&#125;
-    $&#123;OTHER_SOURCES&#125;
-)
-
-set(PUBLIC_HEADER &quot;$&#123;PUBLIC_HEADER&#125;&quot; PARENT_SCOPE)
-
-set(SOURCES &quot;$&#123;SOURCES&#125;&quot;
-    $&#123;ALL_TFLM_SOURCES&#125;
-    &quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/tflm_hello_world.cc&quot;
-    &quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/hello_world_model.cc&quot;
-    &quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/tflm_debug_log.cc&quot;
-    PARENT_SCOPE)
-</code></pre>
-<h2 id="一、项目背景">一、项目背景</h2>
-<p>在 WS63 嵌入式平台上验证 TensorFlow Lite Micro (TFLM) 的功能，确保 TFLM 库能够正确编译和运行。</p>
-<h2 id="二、文件结构">二、文件结构</h2>
-<pre><code>src/application/samples/tflm_hello_world/
-├── CMakeLists.txt           # 构建配置，引用 TFLM 源码
-├── tflm_hello_world.cc      # 主验证程序 ⭐
-├── tflm_debug_log.cc        # 平台日志实现 ⭐
-├── hello_world_model.cc     # TFLite 模型数据
-├── test_cpp.cc              # C++ 编译测试
-└── models/
-    └── hello_world_model.h  # 模型头文件
-</code></pre>
-<h2 id="三、核心设计决策">三、核心设计决策</h2>
-<h3 id="1-日志系统设计（关键难点）">1. 日志系统设计（关键难点）</h3>
-<p><strong>问题</strong>：TFLM 的 <code>micro_log.cc</code> 需要平台相关的 <code>DebugLog</code> 函数。</p>
-<h4 id="初次尝试（错误）">初次尝试（错误）</h4>
-<pre><code class="cpp">// ❌ 错误：使用可变参数
-extern &quot;C&quot; void DebugLog(const char* format, ...) &#123;
-    va_list args;
-    va_start(args, format);
-    vsnprintf(buffer, sizeof(buffer), format, args);
-    osal_printk(&quot;%s&quot;, buffer);
-    va_end(args);
-&#125;
-</code></pre>
-<p><strong>问题表现</strong>：输出乱码</p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>Tensor arena size: 10534308 bytes（应该是 6000）</p>
-</li>
-<li class="lvl-2">
-<p>Status: 恖5（应该是 PASS/FAIL）</p>
-</li>
-</ul>
-<h4 id="根因分析">根因分析</h4>
-<pre><code class="cpp">// TFLM 的 micro_log.cc 调用方式
-void VMicroPrintf(const char* format, va_list args) &#123;
-  DebugLog(format, args);  // ❌ 传递的是 va_list，不是 ...
-&#125;
-</code></pre>
-<h4 id="最终方案（正确）">最终方案（正确）</h4>
-<pre><code class="cpp">// ✅ 正确：接受 va_list 参数
-extern &quot;C&quot; void DebugLog(const char* format, va_list args) &#123;
-    char buffer[512];
-    vsnprintf(buffer, sizeof(buffer), format, args);
-    osal_printk(&quot;%s&quot;, buffer);
-&#125;
-
-// TFLM 还需要这个函数
-extern &quot;C&quot; int DebugVsnprintf(char* buffer, size_t buf_size,
-                              const char* format, va_list vlist) &#123;
-    return vsnprintf(buffer, buf_size, format, vlist);
-&#125;
-</code></pre>
-<h3 id="2-主程序设计">2. 主程序设计</h3>
-<p><strong>核心流程</strong>：</p>
-<ol>
-<li class="lvl-3">
-<p>加载模型 (GetModel)</p>
-</li>
-<li class="lvl-3">
-<p>创建 OpResolver (注册 FullyConnected)</p>
-</li>
-<li class="lvl-3">
-<p>创建 Interpreter (分配 TensorArena)</p>
-</li>
-<li class="lvl-3">
-<p>分配张量 (AllocateTensors)</p>
-</li>
-<li class="lvl-3">
-<p>获取输入/输出张量</p>
-</li>
-<li class="lvl-3">
-<p>执行推理测试 (Invoke)</p>
-</li>
-<li class="lvl-3">
-<p>验证结果</p>
-</li>
-</ol>
-<p><strong>关键代码结构</strong>：</p>
-<pre><code class="cpp">// 使用 int8 量化模型
-input-&gt;data.int8[0] = golden_inputs_int8[i];
-interpreter.Invoke();
-float y_pred = (output-&gt;data.int8[0] - zero_point) * scale;
-</code></pre>
-<h3 id="3-内存管理">3. 内存管理</h3>
-<p>静态内存分配（嵌入式环境要求）：</p>
-<pre><code class="cpp">constexpr int kTensorArenaSize = 6000;
-static uint8_t tensor_arena[kTensorArenaSize];
-</code></pre>
-<p>避免使用 <code>new/delete</code>，防止动态内存分配问题。</p>
-<h2 id="四、遇到的问题与解决">四、遇到的问题与解决</h2>
-<table>
-<thead>
-<tr>
-<th>问题</th>
-<th>原因</th>
-<th>解决方案</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>undefined reference to ‘DebugLog’</td>
-<td>TFLM 需要平台日志函数</td>
-<td>实现 <code>DebugLog(const char*, va_list)</code></td>
-</tr>
-<tr>
-<td>输出乱码、数值错误</td>
-<td>函数签名不匹配（<code>...</code> vs <code>va_list</code>）</td>
-<td>修正为接受 <code>va_list</code> 参数</td>
-</tr>
-<tr>
-<td>编译时未发现源文件</td>
-<td>CMakeLists.txt 缺少文件</td>
-<td>添加 <code>tflm_debug_log.cc</code> 到 <code>SOURCES</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="五、验证结果">五、验证结果</h2>
-<p>测试 4 个输入值的 sin(x) 预测：</p>
-<table>
-<thead>
-<tr>
-<th>x (输入)</th>
-<th>sin(x) 期望值</th>
-<th>预测值</th>
-<th>误差</th>
-<th>状态</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0.77</td>
-<td>0.6961</td>
-<td>0.6964</td>
-<td>0.00031</td>
-<td>✅ PASS</td>
-</tr>
-<tr>
-<td>1.57</td>
-<td>1.0000</td>
-<td>0.9949</td>
-<td>0.00508</td>
-<td>✅ PASS</td>
-</tr>
-<tr>
-<td>2.30</td>
-<td>0.7457</td>
-<td>0.7296</td>
-<td>0.01610</td>
-<td>✅ PASS</td>
-</tr>
-<tr>
-<td>3.14</td>
-<td>0.0016</td>
-<td>-0.0083</td>
-<td>0.00988</td>
-<td>✅ PASS</td>
-</tr>
-</tbody>
-</table>
-<p>所有测试误差 &lt; 0.05（容差），验证成功！</p>
-<h2 id="六、关键经验">六、关键经验</h2>
-<ol>
-<li class="lvl-3">
-<p><strong>仔细阅读 TFLM 头文件</strong>：<code>debug_log.h</code> 明确定义了 <code>DebugLog</code> 的签名</p>
-</li>
-<li class="lvl-3">
-<p><strong>理解调用链</strong>：<code>MicroPrintf</code> → <code>VMicroPrintf</code> → <code>DebugLog(va_list)</code></p>
-</li>
-<li class="lvl-3">
-<p><strong>嵌入式适配要点</strong>：</p>
-<ul class="lvl-2">
-<li class="lvl-5">提供平台相关的 <code>DebugLog</code> 和 <code>DebugVsnprintf</code></li>
-<li class="lvl-5">使用静态内存分配</li>
-<li class="lvl-5">使用 <code>osal_printk</code> 而非 <code>printf</code></li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>量化模型处理</strong>：理解 <code>scale</code> 和 <code>zero_point</code> 的反量化公式</p>
-</li>
-</ol>
-<h2 id="参考资源">参考资源</h2>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p><a target="_blank" rel="noopener" href="https://www.tensorflow.org/lite/microcontrollers">TensorFlow Lite Micro 官方文档</a></p>
-</li>
-<li class="lvl-2">
-<p><a target="_blank" rel="noopener" href="https://developer.huawei.com/">WS63 Hi3863 开发指南</a></p>
-</li>
-</ul>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-Hi3863-TFLM/" style="color: #ffa2c4">毕业设计 WS63 Hi3863 TFLM</a>
-        </span>
-        
-    </div>
-    
-    <a href="/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-02-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863%E5%B9%B3%E5%8F%B0/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2026/02/08/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-01-ws63-hi3863%E5%AE%8C%E6%88%90c%E6%94%AF%E6%8C%81%E8%BF%87%E7%A8%8B/">
-        <h2 class="post-title">毕业设计 (1) - WS63 (Hi3863) 完成 C++ 支持过程</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                毕业设计
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2026/2/8
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <h1>WS63 SDK 添加 C++ 编译支持完整指南</h1>
-<h2 id="概述">概述</h2>
-<p>本文档记录了在海思 WS63 SDK 中添加 C++ 编译支持的完整过程，包括遇到的问题、解决方案和最终配置。适用于需要在 WS63 芯片上使用 TensorFlow Lite Micro (TFLM) 或其他 C++ 库的开发者。</p>
-<h2 id="开发环境">开发环境</h2>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p><strong>芯片</strong>: WS63 (RISC-V 架构，riscv31)</p>
-</li>
-<li class="lvl-2">
-<p><strong>工具链</strong>: riscv32-musl-105-fp (支持浮点)</p>
-</li>
-<li class="lvl-2">
-<p><strong>SDK 路径</strong>: <code>G:\HiSpark_SDK\fbb_ws63</code></p>
-</li>
-<li class="lvl-2">
-<p><strong>TFLite Micro</strong>: <code>G:\HiSpark_SDK\fbb_ws63\tflite-micro</code></p>
-</li>
-</ul>
-<hr>
-<h2 id="背景与目标">背景与目标</h2>
-<h3 id="初始状态">初始状态</h3>
-<p>WS63 SDK 原生只支持 C 语言编译，缺少 C++ 支持：</p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>没有 <code>cxxflags</code> 配置</p>
-</li>
-<li class="lvl-2">
-<p>构建系统未配置 C++ 编译器选项</p>
-</li>
-<li class="lvl-2">
-<p>CMake 构建脚本未区分 C/C++ 编译选项</p>
-</li>
-</ul>
-<h3 id="目标">目标</h3>
-<ol>
-<li class="lvl-3">
-<p>添加基本的 C++ 编译支持</p>
-</li>
-<li class="lvl-3">
-<p>支持浮点运算（与 C 代码 ABI 兼容）</p>
-</li>
-<li class="lvl-3">
-<p>能够编译和运行 C++ 测试程序</p>
-</li>
-<li class="lvl-3">
-<p>为集成 TFLite Micro 做准备</p>
-</li>
-</ol>
-<hr>
-<h2 id="配置步骤">配置步骤</h2>
-<h3 id="步骤-1-添加架构级别的-CXXFLAGS">步骤 1: 添加架构级别的 CXXFLAGS</h3>
-<p><strong>文件</strong>: <code>src/build/config/target_config/common_config.py</code></p>
-<p><strong>问题</strong>: <code>arch_config</code> 中所有架构只定义了 <code>ccflags</code>，缺少 <code>cxxflags</code></p>
-<p><strong>解决方案</strong>: 为每个架构添加 <code>cxxflags</code> 字段</p>
-<pre><code class="python"># ===== CUSTOM BEGIN: 添加 common_cxxflags =====
-common_cxxflags = [
-    '-std=gnu++17',            # C++17 标准
-    '-Wall',
-    '-Werror',
-    '-Wextra',
-    '-Winit-self',
-    '-Wpointer-arith',
-    # '-Wstrict-prototypes',  # C++ 不支持此选项，已移除
-    '-Wno-type-limits',
-    '-Wno-unused-parameter',  # TFLM 头文件中有未使用参数
-    '-fno-strict-aliasing',
-    '-Os',
-    '-fno-unwind-tables',
-]
-# ===== CUSTOM END =====
-</code></pre>
-<p>为每个架构添加 <code>cxxflags</code>（以 riscv31 为例，WS63 使用此架构）：</p>
-<pre><code class="python">'riscv31': &#123;
-    'ccflags': [...],
-    # ===== CUSTOM BEGIN: 为 riscv31 架构添加 C++ 编译标志 =====
-    'cxxflags': [
-        '-ffreestanding',
-        '-fdata-sections',
-        '-Wno-implicit-fallthrough',
-        '-ffunction-sections',
-        '-nostdlib',
-        '-pipe',
-        '-mabi=ilp32',
-        '-march=rv32imc',
-        '-fno-tree-scev-cprop',
-        '-fno-common',
-        '-mpush-pop',
-        '-msmall-data-limit=0',
-        '-fno-ipa-ra',
-        '-Wtrampolines',
-        '-Wlogical-op',
-        # '-Wjump-misses-init',  # C only, 已移除
-        &quot;-Wa,-enable-c-lbu-sb&quot;,
-        &quot;-Wa,-enable-c-lhu-sh&quot;,
-        &quot;-fimm-compare&quot;,
-        &quot;-femit-muliadd&quot;,
-        &quot;-fmerge-immshf&quot;,
-        &quot;-femit-uxtb-uxth&quot;,
-        &quot;-femit-lli&quot;,
-        &quot;-femit-clz&quot;,
-        &quot;-fldm-stm-optimize&quot;,
-        '-g',
-    ],
-    # ===== CUSTOM END =====
-    'linkflags': [...],
-    ...
-&#125;
-</code></pre>
-<p><strong>关键点</strong>:</p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>C++ 移除了 <code>-Wjump-misses-init</code>（仅 C 支持）</p>
-</li>
-<li class="lvl-2">
-<p>C++ 移除了 <code>-Wstrict-prototypes</code>（C++ 不支持）</p>
-</li>
-</ul>
-<hr>
-<h3 id="步骤-2-配置-CMake-区分-C-C-编译选项">步骤 2: 配置 CMake 区分 C/C++ 编译选项</h3>
-<p><strong>文件</strong>: <code>src/build/cmake/build_component.cmake</code></p>
-<p><strong>问题</strong>: CMake 使用相同的编译选项编译 C 和 C++ 文件</p>
-<p><strong>解决方案</strong>: 使用 CMake 生成器表达式区分语言</p>
-<pre><code class="cmake"># 原代码：
-target_compile_options($&#123;COMPONENT_NAME&#125;
-    PRIVATE
-    $&#123;COMPILE_CCFLAGS&#125;
-    $&lt;$&lt;BOOL:$&#123;USE_KCONFIG&#125;&gt;:-include$&#123;PROJECT_BINARY_DIR&#125;/mconfig.h&gt;
-)
-
-# 修改为：
-target_compile_options($&#123;COMPONENT_NAME&#125;
-    PRIVATE
-    # ===== CUSTOM BEGIN: 为 C++ 语言添加单独的编译选项 =====
-    # 原代码：$&#123;COMPILE_CCFLAGS&#125; （适用于所有语言）
-    # 修改原因：C++ 需要使用不同的编译标志（如 -std=gnu++17 而非 -std=gnu99）
-    $&lt;$&lt;COMPILE_LANGUAGE:C&gt;:$&#123;COMPILE_CCFLAGS&#125;&gt;
-    $&lt;$&lt;COMPILE_LANGUAGE:CXX&gt;:$&#123;CXXFLAGS&#125;&gt;
-    # ===== CUSTOM END: 原代码 $&#123;COMPILE_CCFLAGS&#125; 已被上面的生成器表达式替换 =====
-    $&lt;$&lt;BOOL:$&#123;USE_KCONFIG&#125;&gt;:-include$&#123;PROJECT_BINARY_DIR&#125;/mconfig.h&gt;
-)
-</code></pre>
-<hr>
-<h3 id="步骤-3-初始化-CXXFLAGS-变量">步骤 3: 初始化 CXXFLAGS 变量</h3>
-<p><strong>文件</strong>: <code>src/build/cmake/global_variable.cmake</code></p>
-<p><strong>问题</strong>: CXXFLAGS 变量未初始化</p>
-<p><strong>解决方案</strong>:</p>
-<pre><code class="cmake"># ===== CUSTOM BEGIN: 添加 CXXFLAGS 默认值 =====
-# 如果从 Python 构建脚本传入了 CXXFLAGS，则使用该值；否则使用 CCFLAGS 作为默认值
-if(NOT DEFINED CXXFLAGS)
-    set(CXXFLAGS &quot;$&#123;CCFLAGS&#125;&quot;)
-endif()
-# ===== CUSTOM END =====
-</code></pre>
-<hr>
-<h3 id="步骤-4-为-WS63-添加浮点支持（关键）">步骤 4: 为 WS63 添加浮点支持（关键）</h3>
-<p><strong>文件</strong>: <code>src/build/config/target_config/ws63/target_config.py</code></p>
-<p><strong>问题</strong>: C++ 代码使用软浮点 ABI (<code>-mabi=ilp32</code>)，而 C 代码使用单精度浮点 ABI (<code>-mabi=ilp32f</code>)，导致链接时 ABI 不兼容</p>
-<p><strong>错误信息</strong>:</p>
-<pre><code>can't link soft-float modules with single-float modules
-failed to merge target specific data of file
-</code></pre>
-<p><strong>解决方案</strong>:</p>
-<h4 id="4-1-为-C-添加浮点和优化选项">4.1 为 C++ 添加浮点和优化选项</h4>
-<pre><code class="python">'cxxflags': [
-    *fp_flags,  # 应用浮点 ABI 替换
-    *codesize_flags['ccflags'],
-    # 禁用异常和 RTTI 以减少运行时依赖
-    '-fno-exceptions',
-    '-fno-rtti',
-    # 解决未定义引用问题
-    '-fno-threadsafe-statics',
-],
-</code></pre>
-<h4 id="4-2-修改-Python-构建脚本使用-pretend">4.2 修改 Python 构建脚本使用 pretend</h4>
-<p><strong>文件</strong>: <code>src/build/script/enviroment.py</code></p>
-<pre><code class="python">def merge_common_config(self, com_config):
-    &quot;&quot;&quot; 将公共配置项合并到config中 &quot;&quot;&quot;
-    self.pretend('ccflags', com_config.get_ram_ccflags())
-    # ===== CUSTOM BEGIN: 为 cxxflags 也使用 pretend =====
-    # 原代码：self.extend('cxxflags', com_config.get_ram_cxxflags())
-    # 修改原因：确保 target_config 中定义的 cxxflags（包括 fp_flags）能够替换 common_cxxflags 中的选项
-    self.pretend('cxxflags', com_config.get_ram_cxxflags())
-    # ===== CUSTOM END =====
-    self.extend('rom_ccflags', com_config.get_rom_ccflags())
-    ...
-</code></pre>
-<h4 id="4-3-添加-C-标准库">4.3 添加 C++ 标准库</h4>
-<pre><code class="python"># 原代码：'std_libs': ['m', 'c', 'gcc'],
-# ===== CUSTOM BEGIN: 添加 C++ 标准库支持 =====
-# 原代码：'std_libs': ['m', 'c', 'gcc'],
-'std_libs': ['m', 'c', 'gcc', 'stdc++'],
-# ===== CUSTOM END =====
-</code></pre>
-<h4 id="4-4-添加链接器选项">4.4 添加链接器选项</h4>
-<pre><code class="python">'linkflags': [
-    *codesize_flags['linkflags'],
-    # ===== CUSTOM BEGIN: 添加 C++ 链接器选项 =====
-    # 允许未定义引用（TFLM 的某些函数可能不需要）
-    '-Wl,--allow-shlib-undefined',
-    # '-Wl,--unresolved-symbols=ignore-in-link-files',  # 此选项不支持，已移除
-    # ===== CUSTOM END =====
-],
-</code></pre>
-<hr>
-<h3 id="步骤-6-创建-C-测试程序">步骤 6: 创建 C++ 测试程序</h3>
-<p><strong>文件</strong>: <code>src/application/samples/tflm_hello_world/test_cpp.cc</code></p>
-<p><strong>目的</strong>: 验证基本的 C++ 编译和运行</p>
-<pre><code class="cpp">/**
- * Simple C++ test file for WS63
- * Tests basic C++ compilation support
- */
-
-// 在包含 C 头文件之前，为 C++ 定义正确的 NULL
-#ifdef NULL
-#undef NULL
-#endif
-#define NULL 0
-
-#include &quot;common_def.h&quot;
-#include &quot;soc_osal.h&quot;
-#include &quot;app_init.h&quot;
-
-// 简单的 C++ 类测试
-class CppTest &#123;
-private:
-    int value;
-
-public:
-    constexpr CppTest(int v) : value(v) &#123;&#125;
-    ~CppTest() = default;
-
-    int getValue() const &#123; return value; &#125;
-    void setValue(int v) &#123; value = v; &#125;
-
-    CppTest&amp; operator+(const CppTest&amp; other) &#123;
-        value += other.value;
-        return *this;
-    &#125;
-&#125;;
-
-// 模板函数测试
-template&lt;typename T&gt;
-constexpr T add(T a, T b) &#123;
-    return a + b;
-&#125;
-
-static constexpr CppTest global_test(42);
-
-extern &quot;C&quot; void tflm_cpp_test_entry(void)
-&#123;
-    CppTest test1(10);
-    CppTest test2(20);
-
-    test1 + test2;
-    int result = add(5, 3);
-
-    osal_printk(&quot;C++ Test: global_test = %d, result = %d\r\n&quot;,
-              global_test.getValue(), result);
-    osal_printk(&quot;C++ Test: test1.getValue() = %d, test2.getValue() = %d\r\n&quot;,
-              test1.getValue(), test2.getValue());
-&#125;
-
-app_run(tflm_cpp_test_entry);
-</code></pre>
-<hr>
-<h2 id="遇到的问题与解决方案">遇到的问题与解决方案</h2>
-<h3 id="问题-1-C-特有编译选项导致错误">问题 1: C++ 特有编译选项导致错误</h3>
-<p><strong>错误</strong>:</p>
-<pre><code>cc1plus.exe: error: command line option '-Wjump-misses-init' is valid for C/ObjC but not for C++
-</code></pre>
-<p><strong>解决</strong>: 从 <code>cxxflags</code> 中移除 C 特有选项</p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>移除 <code>-Wjump-misses-init</code></p>
-</li>
-<li class="lvl-2">
-<p>移除 <code>-Wstrict-prototypes</code></p>
-</li>
-</ul>
-<h3 id="问题-2-浮点-ABI-不兼容">问题 2: 浮点 ABI 不兼容</h3>
-<p><strong>错误</strong>:</p>
-<pre><code>can't link soft-float modules with single-float modules
-failed to merge target specific data of file
-</code></pre>
-<p><strong>解决</strong>:</p>
-<ol>
-<li class="lvl-3">
-<p>为 <code>cxxflags</code> 应用 <code>fp_flags</code>（浮点选项替换）</p>
-</li>
-<li class="lvl-3">
-<p>使用 <code>pretend()</code> 方法合并配置，确保替换生效</p>
-</li>
-</ol>
-<h3 id="问题-3-函数签名不匹配">问题 3: 函数签名不匹配</h3>
-<p><strong>错误</strong>:</p>
-<pre><code>error: invalid conversion from 'int (*)()' to 'init_call_t &#123;aka void (*)()&#125;'
-</code></pre>
-<p><strong>解决</strong>: 将 <code>tflm_cpp_test_entry</code> 返回类型从 <code>int</code> 改为 <code>void</code></p>
-<h3 id="问题-4-未使用参数警告">问题 4: 未使用参数警告</h3>
-<p><strong>错误</strong>:</p>
-<pre><code>error: unused parameter 'size' [-Werror=unused-parameter]
-</code></pre>
-<p><strong>解决</strong>: 在 <code>common_cxxflags</code> 中添加 <code>-Wno-unused-parameter</code></p>
-<h3 id="问题-5-头文件找不到">问题 5: 头文件找不到</h3>
-<p><strong>错误</strong>:</p>
-<pre><code>fatal error: flatbuffers/flatbuffers.h: No such file or directory
-fatal error: fixedpoint/fixedpoint.h: No such file or directory
-</code></pre>
-<p><strong>解决</strong>: 添加 TFLM 及其依赖的头文件路径</p>
-<hr>
-<h2 id="最终配置总结">最终配置总结</h2>
-<h3 id="关键修改文件列表">关键修改文件列表</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>src/build/config/target_config/common_config.py</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">添加 <code>common_cxxflags</code></li>
-<li class="lvl-5">为所有架构添加 <code>cxxflags</code></li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>src/build/cmake/build_component.cmake</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">使用生成器表达式区分 C/C++ 编译</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>src/build/cmake/global_variable.cmake</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">初始化 <code>CXXFLAGS</code> 变量</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>src/build/config/target_config/ws63/target_config.py</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">添加 <code>cxxflags</code> 并应用浮点和优化选项</li>
-<li class="lvl-5">添加 C++ 标准库</li>
-<li class="lvl-5">添加链接器选项</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>src/build/script/enviroment.py</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">修改 <code>cxxflags</code> 使用 <code>pretend</code> 而非 <code>extend</code></li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>src/application/samples/CMakeLists.txt</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">添加 TFLM 头文件路径</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>src/application/samples/tflm_hello_world/CMakeLists.txt</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">添加测试源文件</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h2 id="验证结果">验证结果</h2>
-<h3 id="测试的-C-特性">测试的 C++ 特性</h3>
-<p>✅ 类和对象<br>
-✅ 构造函数/析构函数<br>
-✅ 成员函数<br>
-✅ 运算符重载<br>
-✅ 模板函数<br>
-✅ constexpr 变量<br>
-✅ extern “C” 链接</p>
-<hr>
-<h2 id="总结">总结</h2>
-<p>通过以上配置，WS63 SDK 现在完全支持 C++ 编译。主要成果：</p>
-<ol>
-<li class="lvl-3">
-<p>✅ 实现了 C/C++ 混合编译</p>
-</li>
-<li class="lvl-3">
-<p>✅ 解决了浮点 ABI 兼容性问题</p>
-</li>
-<li class="lvl-3">
-<p>✅ 成功编译并运行 C++ 测试程序</p>
-</li>
-<li class="lvl-3">
-<p>✅ 为集成 TFLM 或其他 C++ 库奠定了基础</p>
-</li>
-</ol>
-<hr>
-<p><strong>文档版本</strong>: 1.0<br>
-<strong>最后更新</strong>: 2025-02-08<br>
-<strong>作者</strong>: Claude (协助配置)<br>
-<strong>适用 SDK 版本</strong>: WS63 SDK 1.10.106<br>
-<strong>参考链接</strong>: <a target="_blank" rel="noopener" href="https://developers.hisilicon.com/postDetail?tid=0206204513850702020">WS63添加C++经验总结及讨论</a></p>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-Hi3863-C/" style="color: #ffa2c4">毕业设计 WS63 Hi3863 C++</a>
-        </span>
-        
-    </div>
-    
-    <a href="/2026/02/08/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-01-ws63-hi3863%E5%AE%8C%E6%88%90c%E6%94%AF%E6%8C%81%E8%BF%87%E7%A8%8B/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
     <a href="/2026/01/21/%E6%9C%80%E8%BF%91%E6%83%B3%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%9C%E8%A5%BF/">
         <h2 class="post-title">最近想实现的东西</h2>
     </a>
@@ -1106,7 +240,7 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
         
         <span class="tag">
             
-            <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #03a9f4">想法</a>
+            <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #00bcd4">想法</a>
         </span>
         
     </div>
@@ -1116,7 +250,7 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
 
 <div class="post">
     <a href="/2025/12/15/20251215%E8%AE%B0%E5%BD%95/">
-        <h2 class="post-title">20251215记录</h2>
+        <h2 class="post-title">开发板wifi连接dhcp分配问题</h2>
     </a>
     <div class="category-and-date">
         
@@ -1151,7 +285,7 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
         
         <span class="tag">
             
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-MQTT/" style="color: #ffa2c4">解决方案, MQTT</a>
+            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-MQTT/" style="color: #00bcd4">解决方案, MQTT</a>
         </span>
         
     </div>
@@ -1206,7 +340,7 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
         
         <span class="tag">
             
-            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #00bcd4">学习日记</a>
+            <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/" style="color: #00a596">学习日记</a>
         </span>
         
     </div>
@@ -1284,7 +418,7 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
         
         <span class="tag">
             
-            <a href="/tags/hi3861-%E5%8D%8E%E4%B8%BA%E4%BA%91-MQTT/" style="color: #00a596">hi3861, 华为云, MQTT</a>
+            <a href="/tags/hi3861-%E5%8D%8E%E4%B8%BA%E4%BA%91-MQTT/" style="color: #03a9f4">hi3861, 华为云, MQTT</a>
         </span>
         
     </div>
@@ -1338,7 +472,7 @@ fatal error: fixedpoint/fixedpoint.h: No such file or directory
         
         <span class="tag">
             
-            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #ffa2c4">解决方案</a>
+            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #00a596">解决方案</a>
         </span>
         
     </div>
@@ -1555,6 +689,205 @@ podman run -dt --pod mypod --name sidecar busybox sh -c “while true; do echo h
     </div>
     
     <a href="/2025/06/07/%E5%AE%89%E8%A3%85reahat%E4%B9%8B%E5%90%8E%E6%B2%A1%E6%9C%89%E4%BD%BF%E7%94%A8%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2025/06/07/windows%E6%89%93%E5%BC%80%E6%AD%A4%E7%94%B5%E8%84%91%E8%BD%AC%E5%9C%88%E6%9C%AA%E5%93%8D%E5%BA%94/">
+        <h2 class="post-title">windows打开此电脑转圈未响应</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                解决方案
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/6/7
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            
+            <p><strong>问题原因：</strong><br>
+Windows 作为客户端挂载了虚拟机的 NFS 服务，但未正常卸载，导致网络连接或挂载点残留。<br>
+<strong>解决方案：</strong><br>
+使用 <code>net use</code> 命令强制删除残留的挂载点。</p>
+<pre><code class="cmd">net use X: /delete
+</code></pre>
+<blockquote>
+<p><strong>说明：</strong></p>
+<ul class="lvl-1">
+<li class="lvl-4"><code>X:</code> 需替换为实际的挂载盘符。</li>
+<li class="lvl-4">该命令会断开指定盘符的网络连接，并删除挂载点。</li>
+</ul>
+</blockquote>
+
+            
+            
+        </div>
+    </div>
+    
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="color: #ff7d73">解决方案</a>
+        </span>
+        
+    </div>
+    
+    <a href="/2025/06/07/windows%E6%89%93%E5%BC%80%E6%AD%A4%E7%94%B5%E8%84%91%E8%BD%AC%E5%9C%88%E6%9C%AA%E5%93%8D%E5%BA%94/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2025/06/06/mit-6s081-lab02-sysinfo/">
+        <h2 class="post-title">mit-6s081-lab02-sysinfo</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                操作系统
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/6/6
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            
+            <p>像之前那样添加syscall，和$U/_sysinfotest</p>
+<h3 id="代码">代码</h3>
+<p>kernel/syscall.h</p>
+<pre><code class="c">#define SYS_sysinfo 23
+</code></pre>
+<p>kernel/syscall.c</p>
+<pre><code class="c">extern uint64 sys_sysinfo(void);
+
+[SYS_sysinfo] sys_sysinfo
+</code></pre>
+<p>kernel/sysproc.c</p>
+<pre><code class="c">#include &quot;sysinfo.h&quot;
+
+int sys_sysinfo(void) &#123;
+    struct sysinfo info;
+    uint64 addr;
+    struct proc *p = myproc();
+
+    if (argaddr(0, &amp;addr) &lt; 0)
+        return -1;
+
+    info.freemem = kfreemem();
+    info.nproc = nproc();
+
+    if (copyout(p-&gt;pagetable, addr, (char *)&amp;info, sizeof(info)) &lt; 0)
+        return -1;
+
+    return 0;
+&#125;
+</code></pre>
+<p>kernel/kalloc.c</p>
+<pre><code class="c">void *
+kalloc(void)
+&#123;
+  struct run *r;
+
+  acquire(&amp;kmem.lock);
+  r = kmem.freelist;
+  if(r)
+    kmem.freelist = r-&gt;next;
+  release(&amp;kmem.lock);
+
+  if(r)
+    memset((char*)r, 5, PGSIZE); // fill with junk
+  return (void*)r;
+&#125;
+</code></pre>
+<pre><code class="c">uint64
+kfreemem(void)
+&#123;
+struct run *r;
+uint64 pages=0;
+acquire(&amp;kmem.lock);
+for(r=kmem.freelist;r;r=r-&gt;next)
+        pages++;
+release(&amp;kmem.lock);
+
+return pages*PGSIZE;
+&#125;
+</code></pre>
+<p>kernel/proc.c</p>
+<pre><code class="c">int
+nproc(void)
+&#123;
+        int count=0;
+        struct proc* p;
+        acquire(&amp;pid_lock);
+        acquire(&amp;wait_lock);
+        for(p=proc;p&lt;&amp;proc[NPROC];p++)
+        &#123;
+                if(p-&gt;state!=UNUSED)&#123;
+                        count++;
+                &#125;
+
+        &#125;
+        release(&amp;wait_lock);
+        release(&amp;pid_lock);
+
+        return count;
+&#125;
+</code></pre>
+<p>然后输入sysinfotest</p>
+
+            
+            
+        </div>
+    </div>
+    
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/mit6-s081-labs/" style="color: #ffa2c4">mit6.s081_labs</a>
+        </span>
+        
+    </div>
+    
+    <a href="/2025/06/06/mit-6s081-lab02-sysinfo/" class="go-post">阅读全文</a>
 </div>
 
 
