@@ -198,7 +198,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/hi3861-%E5%8D%8E%E4%B8%BA%E4%BA%91-MQTT/" style="color: #ffa2c4">
+                <a href="/tags/hi3861-%E5%8D%8E%E4%B8%BA%E4%BA%91-MQTT/" style="color: #00bcd4">
                     hi3861, 华为云, MQTT
                 </a>
             </span>
@@ -282,6 +282,15 @@
         
     </div>
     <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
     
     
 <script

@@ -198,7 +198,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-ES8311-MPU6050/" style="color: #ff7d73">
+                <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-ES8311-MPU6050/" style="color: #00a596">
                     毕业设计 WS63 ES8311 MPU6050
                 </a>
             </span>
@@ -597,6 +597,15 @@ app_run(i2s_entry);
         
     </div>
     <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
     
     
 <script

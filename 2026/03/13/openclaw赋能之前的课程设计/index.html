@@ -198,7 +198,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/OpenClaw-SmartPlant/" style="color: #ff7d73">
+                <a href="/tags/OpenClaw-SmartPlant/" style="color: #03a9f4">
                     OpenClaw, SmartPlant
                 </a>
             </span>
@@ -278,6 +278,15 @@
         
     </div>
     <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
     
     
 <script

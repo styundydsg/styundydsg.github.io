@@ -198,7 +198,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #03a9f4">
+                <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #ffa2c4">
                     想法
                 </a>
             </span>
@@ -259,6 +259,15 @@
         
     </div>
     <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
     
     
 <script

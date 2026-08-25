@@ -237,7 +237,7 @@
         
         <span class="tag">
             
-            <a href="/tags/mit6-s081-labs/" style="color: #00a596">mit6.s081_labs</a>
+            <a href="/tags/mit6-s081-labs/" style="color: #ffa2c4">mit6.s081_labs</a>
         </span>
         
     </div>
@@ -293,17 +293,17 @@
         
         <span class="tag">
             
-            <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #00bcd4">想法</a>
+            <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #ff7d73">想法</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/" style="color: #ff7d73">探索自我</a>
+            <a href="/tags/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/" style="color: #ffa2c4">探索自我</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/%E5%BD%92%E5%9B%A0/" style="color: #ffa2c4">归因</a>
+            <a href="/tags/%E5%BD%92%E5%9B%A0/" style="color: #00bcd4">归因</a>
         </span>
         
     </div>
@@ -364,7 +364,7 @@
         
         <span class="tag">
             
-            <a href="/tags/Hexo/" style="color: #ff7d73">Hexo</a>
+            <a href="/tags/Hexo/" style="color: #00bcd4">Hexo</a>
         </span>
         
     </div>
@@ -458,6 +458,15 @@
         
     </div>
     <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
     
 
     <!-- 问答按钮和窗口 -->

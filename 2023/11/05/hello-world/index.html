@@ -189,7 +189,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/Hexo/" style="color: #03a9f4">
+                <a href="/tags/Hexo/" style="color: #00a596">
                     Hexo
                 </a>
             </span>
@@ -265,6 +265,15 @@
         
     </div>
     <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
     
     
 <script

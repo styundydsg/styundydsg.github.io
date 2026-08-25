@@ -198,7 +198,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-Hi3863-TFLM/" style="color: #ffa2c4">
+                <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-Hi3863-TFLM/" style="color: #00bcd4">
                     毕业设计 WS63 Hi3863 TFLM
                 </a>
             </span>
@@ -626,6 +626,15 @@ static uint8_t tensor_arena[kTensorArenaSize];
         
     </div>
     <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
     
     
 <script

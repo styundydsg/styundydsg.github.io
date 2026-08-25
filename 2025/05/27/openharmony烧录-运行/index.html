@@ -198,7 +198,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/OpenHarmony-%E7%83%A7%E5%BD%95/" style="color: #03a9f4">
+                <a href="/tags/OpenHarmony-%E7%83%A7%E5%BD%95/" style="color: #ff7d73">
                     OpenHarmony, 烧录
                 </a>
             </span>
@@ -275,6 +275,15 @@ AT指令需在特定工具（如 IPOP）下运行。</li>
         
     </div>
     <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
     
     
 <script

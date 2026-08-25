@@ -11,9 +11,14 @@ const app = Vue.createApp({
         };
     },
     created() {
-        window.addEventListener("load", () => {
+        const hideLoading = () => {
             this.loading = false;
-        });
+        };
+        if (document.readyState === "complete" || document.readyState === "interactive") {
+            hideLoading();
+        } else {
+            document.addEventListener("DOMContentLoaded", hideLoading);
+        }
     },
     mounted() {
         window.addEventListener("scroll", this.handleScroll, true);

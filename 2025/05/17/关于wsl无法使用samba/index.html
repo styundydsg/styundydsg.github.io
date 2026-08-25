@@ -198,7 +198,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/wsl/" style="color: #00bcd4">
+                <a href="/tags/wsl/" style="color: #00a596">
                     wsl
                 </a>
             </span>
@@ -273,6 +273,15 @@ Ubuntu    Running         2
         
     </div>
     <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
     
     
 <script

@@ -189,7 +189,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/Unity/" style="color: #03a9f4">
+                <a href="/tags/Unity/" style="color: #ff7d73">
                     Unity
                 </a>
             </span>
@@ -320,6 +320,15 @@ v' = 0 + 0i + 0j + 1k \Rightarrow \vec{v'} = (0, 0, 1)
         
     </div>
     <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
     
     
 <script

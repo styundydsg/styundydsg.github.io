@@ -201,7 +201,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #ffa2c4">
+                <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #03a9f4">
                     想法
                 </a>
             </span>
@@ -215,7 +215,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E8%BF%B7%E8%8C%AB/" style="color: #ffa2c4">
+                <a href="/tags/%E8%BF%B7%E8%8C%AB/" style="color: #00a596">
                     迷茫
                 </a>
             </span>
@@ -231,7 +231,7 @@
         :disabled="cryptoStatus === 'success'"
         ref="crypto"
         placeholder="文章被加密，请输入密码"
-        data-encrypted="U2FsdGVkX1/Cp88gWDEBFjQxX07YIXgiLY4JzzK5x2C9/gT/PFgCXeGxoWbohfc4WKLmIfSop0Fzb2OdwxJKwYr7T77RDxNpFHeTJSoMGW650vUQPGiFkQSscUWr6vFwQyZPQdFc0XaeTP/cx9u5KGg0Wl4qO74qLByuq+asiCWlLtd4n3y6N1idW3v1snfxsKYMQ916EKC7FX58qs5/9PPm7n7BlEI4NbPKNormicVZ6wVLqnOaNi/gVixRE+PfKp37dSV9bcliB4+NydzhgV9yGDV4UxZ/xuTj2MWz9zLlOhZrTxrQ+kg4reGHy8ziDYLiq8TbFjBYQwLj3aC6hd+5s7EkEuxzn4MkkIV92uYVHvS57WMg29Gs5Pb2s3nC3KDNo+nT2yhzQVLdBlRj6VzMs2hpM6C6eGyfj1z22sVvrTaX4To8hfHwSPxsaglnZY6bJlxmwSuQdyQzCddU5d8JZorAIUHOf32d8S279uDtR2PU7233lm6iwu/iGZkB93jn8KJ5ahfExQ5fg5eE1MNeRToK4mkWlbJ74LZAb1ex9JE8e39cL/q7EQpxKEEAuuJz1cdMlH4pqJqex3tK2YzQ4udSfapBTos2izaQVMDNNTnY1G4A8iSLqQKzCy6bPR96s3QJETQ4oWy//khU4aZPvdsqvGRRli81NaDeCTkm+j1cEnbe1NAm8IsOhMYnZzNSy2/Aai2Ocl4siIz+f8JrydzWwM9XGwS0whjnF0r6dvw9WaC0V5bEaG3C6471xJOvdHMy0cW+yoVPK7GCZ4u5TvjjNI4FQ5kJeR3uOVE="
+        data-encrypted="U2FsdGVkX19FRi/J94SUH4y3OqGpU1ZN7z+OhjcvWJgHfW4sVaIo8/5+EarbBfzfFCJGcQOBpwBKqYlnOvr0P3mmrpzr66Y/X6MtTZZAuGWQs8ndrY7RQSUXU1Hgh2Ufs8PlrdJIC9MFARujgq6r+nIElPZz8xEV9h8o32LY3yEakHx+cM49TxBepcqcFaPegV0YnUSA2nkup+Eb/96ssVaROXdnvePyH+X4phGgAD/P/QX83IgalHBkMrm52Qd1REPvdWYARghFz6VHm/6wjw7qIhhL7qgF3rARgV9xk/1y5zyzIoWEEHthF84RmYUwjZ7mARe9Vr3Ad1527ASgAZ/PglM+MIEiMZh3PpfN7RQU+S/oflU85zEkMhXAz2J8Cs0P0oEFDvKJpfBgBCcKaOdjazsp2QtBgQWKBv5btM7e1EO4sSBIgLlNN1vlNQ/GUA/ty/2zLXq4xOOGHwu5HPLp0oOAYHhgtkbZf1Fsx7Ppy6jEqv+UdC1wt/KFRCJL5xz83ckz73FwheDRmnc4g4/pFxX45+rGdO5pP4Wvr/hc1eXto4IVHR/b2eo25/i+zggRMDqHX0pEwhBfw8wjpJwoBNa/XmwDwURHAqzaHRqsrJwWcRf1lnvT30+aRp6XctkgBHjJv/iTMf5A7jyKuQrw9D75PXCrX59tkWgoyfVECUCa21+JddST2nMzp5VbWfNzwGsUtYwTlQUsmzEelbLFSO+3fF/94x5pXg1hML4LDf2qJlktBlYer7bh/iQVC2J1g13u6po9Womi330MJZeDeJohXu9CB+ZiyEApbz8="
         data-shasum="f137101c72341df927535150a96926b2f3bf7de6c2bf8b2df47edaadd0ac1aae"
         v-model="crypto"
     />
@@ -284,6 +284,15 @@
         
     </div>
     <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
     
     
 <script
