@@ -194,6 +194,97 @@
         
 
 <div class="post">
+    <a href="/2026/08/29/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84C-%E5%8F%8C%E4%BA%BA%E5%A1%94%E9%98%B2%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91-SDL%E5%AE%9E%E8%B7%B5/">
+        <h2 class="post-title">从零开始的C++双人塔防游戏开发-SDL实践</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84C-%E5%8F%8C%E4%BA%BA%E5%A1%94%E9%98%B2%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                从零开始的C++双人塔防游戏开发
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/8/29
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            
+            <h3 id="Surface-与-Texture-的区别">Surface 与 Texture 的区别</h3>
+<pre><code class="cpp">SDL_Surface* sur_img = IMG_Load(...);
+SDL_Texture* tex_img = SDL_CreateTextureFromSurface(renderer, sur_img);
+</code></pre>
+<ul class="lvl-0">
+<li class="lvl-2">Surface：存在内存（CPU 侧）的像素数据，可以读写像素，但不能直接渲染。</li>
+<li class="lvl-2">Texture：存在显存/GPU（驱动侧）的纹理，只能渲染不能读写（一般如此）。</li>
+<li class="lvl-2">两者的桥梁就是 SDL_CreateTextureFromSurface。文件 → Surface → Texture 是 SDL 加载图片的标准流程。</li>
+<li class="lvl-2">文字也一样：TTF_RenderText_Blended 产出 Surface，再转成 Texture。</li>
+</ul>
+<hr>
+<h3 id="渲染管线">渲染管线</h3>
+<pre><code class="cpp">SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // 画笔颜色
+SDL_RenderClear(renderer);                        // ① 清屏为纯黑
+SDL_RenderTexture(renderer, tex_img, nullptr, &amp;rect_img);  // ② 画图
+filledCircleRGBA(...);                            // ③ 画半透明圆
+SDL_RenderTexture(renderer, tex_text, nullptr, &amp;rect_text); // ④ 画文字
+SDL_RenderPresent(renderer);                      // ⑤ 交换缓冲，真正显示
+</code></pre>
+<ul class="lvl-0">
+<li class="lvl-2">双缓冲：所有绘制画在后台缓冲，SDL_RenderPresent 才一次性呈现，避免闪烁。</li>
+<li class="lvl-2">绘制顺序就是图层顺序：后画的盖住先画的 → 最终视觉效果是&quot;圆压在图片上、文字压在圆上&quot;。</li>
+<li class="lvl-2">SDL_RenderTexture 的第 3、4 参数：源矩形 nullptr=整张图，目标矩形 &amp;rect_img=画到哪、多大。这里图片和文字用了同一个目标位置（鼠标坐标），所以文字会叠在图片上。</li>
+<li class="lvl-2">SDL_FRect 的 w/h 直接取自 sur_img-&gt;w/h，即原图尺寸。</li>
+</ul>
+<hr>
+<h3 id="SDL3-mixer-3-0-——-全新对象模型">SDL3_mixer 3.0 —— 全新对象模型</h3>
+<p>完整链条：MIX_Mixer (混音设备)  →  MIX_Audio (音频数据)  →  MIX_Track (播放轨道)</p>
+<pre><code class="cpp">MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &amp;spec); // 1. 建混音器（绑定音频设备）
+MIX_LoadAudio(mixer, u8&quot;./assets/music.mp3&quot;, true);              // 2. 加载音频（true=允许循环）
+MIX_CreateTrack(mixer);                                          // 3. 建轨道
+MIX_SetTrackAudio(track, music);                                 // 4. 把音频挂到轨道上
+MIX_PlayTrack(track, props);                                     // 5. 用属性参数播放
+</code></pre>
+<ul class="lvl-0">
+<li class="lvl-2">MIX_Init() 在 SDL3_mixer 中不再需要参数（SDL2 要传 MIX_INIT_MP3 等 flags）。</li>
+<li class="lvl-2">MIX_LoadAudio 第三个参数是 predecode：true 表示解码后常驻内存（适合循环播放的音乐/音效），false 流式解码（省内存）。</li>
+<li class="lvl-2">MIX_PROP_PLAY_LOOPS_NUMBER = -1 表示无限循环，这是 mixer 3.0 的约定。</li>
+</ul>
+
+            
+            
+        </div>
+    </div>
+    
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/SDL/" style="color: #ffa2c4">SDL</a>
+        </span>
+        
+    </div>
+    
+    <a href="/2026/08/29/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84C-%E5%8F%8C%E4%BA%BA%E5%A1%94%E9%98%B2%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91-SDL%E5%AE%9E%E8%B7%B5/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2026/08/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6-%E5%9B%9B%E5%85%83%E6%95%B0/">
         <h2 class="post-title">计算机图形学-四元数</h2>
     </a>
@@ -354,7 +445,7 @@ v' = 0 + 0i + 0j + 1k \Rightarrow \vec{v'} = (0, 0, 1)
         
         <span class="tag">
             
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-MPU6050-INMP441-%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/" style="color: #00bcd4">毕业设计 MPU6050 INMP441 特征提取</a>
+            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-MPU6050-INMP441-%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/" style="color: #ffa2c4">毕业设计 MPU6050 INMP441 特征提取</a>
         </span>
         
     </div>
@@ -428,7 +519,7 @@ v' = 0 + 0i + 0j + 1k \Rightarrow \vec{v'} = (0, 0, 1)
         
         <span class="tag">
             
-            <a href="/tags/OpenClaw-SmartPlant/" style="color: #03a9f4">OpenClaw, SmartPlant</a>
+            <a href="/tags/OpenClaw-SmartPlant/" style="color: #00bcd4">OpenClaw, SmartPlant</a>
         </span>
         
     </div>
@@ -482,7 +573,7 @@ v' = 0 + 0i + 0j + 1k \Rightarrow \vec{v'} = (0, 0, 1)
         
         <span class="tag">
             
-            <a href="/tags/OpenClaw/" style="color: #03a9f4">OpenClaw</a>
+            <a href="/tags/OpenClaw/" style="color: #ffa2c4">OpenClaw</a>
         </span>
         
     </div>
@@ -536,7 +627,7 @@ v' = 0 + 0i + 0j + 1k \Rightarrow \vec{v'} = (0, 0, 1)
         
         <span class="tag">
             
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-I2S-%E9%80%BB%E8%BE%91%E5%88%86%E6%9E%90%E4%BB%AA/" style="color: #ffa2c4">毕业设计 I2S 逻辑分析仪</a>
+            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-I2S-%E9%80%BB%E8%BE%91%E5%88%86%E6%9E%90%E4%BB%AA/" style="color: #00a596">毕业设计 I2S 逻辑分析仪</a>
         </span>
         
     </div>
@@ -799,7 +890,7 @@ osal_printk(&quot;Accel: X=%d.%03d g, Y=%d.%03d g, Z=%d.%03d g\r\n&quot;,
         
         <span class="tag">
             
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-MPU6050-%E8%B0%83%E8%AF%95/" style="color: #03a9f4">毕业设计 MPU6050 调试</a>
+            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-MPU6050-%E8%B0%83%E8%AF%95/" style="color: #ffa2c4">毕业设计 MPU6050 调试</a>
         </span>
         
     </div>
@@ -1192,7 +1283,7 @@ app_run(i2s_entry);
         
         <span class="tag">
             
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-ES8311-MPU6050/" style="color: #03a9f4">毕业设计 WS63 ES8311 MPU6050</a>
+            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-ES8311-MPU6050/" style="color: #ff7d73">毕业设计 WS63 ES8311 MPU6050</a>
         </span>
         
     </div>
@@ -1245,434 +1336,12 @@ app_run(i2s_entry);
         
         <span class="tag">
             
-            <a href="/tags/hi3861-%E6%99%BA%E8%B0%B1AI/" style="color: #ffa2c4">hi3861 智谱AI</a>
+            <a href="/tags/hi3861-%E6%99%BA%E8%B0%B1AI/" style="color: #ff7d73">hi3861 智谱AI</a>
         </span>
         
     </div>
     
     <a href="/2026/02/24/hi3861%E4%B8%8E%E6%99%BA%E8%B0%B1ai%E7%9A%84realtime%E6%A8%A1%E5%9E%8B%E5%AF%B9%E8%AF%9D%EF%BC%88%E6%88%90%E5%8A%9F%E8%BF%94%E5%9B%9E%E6%96%87%E6%9C%AC%EF%BC%89/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-02-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863%E5%B9%B3%E5%8F%B0/">
-        <h2 class="post-title">毕业设计 (2) - 部署 TFLM hello_world demo 到 WS63 (Hi3863) 平台</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                毕业设计
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2026/2/9
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            
-            <h2 id="前置工作">前置工作</h2>
-<p>在开始部署之前，需要准备以下环境：</p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>WS63 (Hi3863) 开发环境</p>
-</li>
-<li class="lvl-2">
-<p>TensorFlow Lite Micro 源码</p>
-</li>
-<li class="lvl-2">
-<p>CMake 构建工具</p>
-</li>
-</ul>
-<h2 id="CMakeLists-配置">CMakeLists 配置</h2>
-<pre><code class="cmake">set(TFLM_SRC_PATH &quot;G:/HiSpark_SDK/fbb_ws63/tflite-micro&quot;)
-set(TFLM_CORE_PATH &quot;$&#123;TFLM_SRC_PATH&#125;/tensorflow/lite&quot;)
-set(FLATBUFFERS_DIR &quot;G:/HiSpark_SDK/fbb_ws63/tflite-micro/tensorflow/lite/micro/tools/make/downloads/flatbuffers&quot;)
-set(TFLM_COMPILER_PATH &quot;$&#123;TFLM_SRC_PATH&#125;/tensorflow/compiler&quot;)
-
-set(RUY_PATHS
-    &quot;$&#123;TFLM_SRC_PATH&#125;/tensorflow/lite/micro/tools/make/downloads/ruy&quot;
-)
-
-set(GEMMLOWP_FIXEDPOINT_PATHS
-    &quot;$&#123;TFLM_SRC_PATH&#125;/tensorflow/lite/micro/tools/make/downloads/gemmlowp&quot;
-    &quot;$&#123;TFLM_SRC_PATH&#125;/tmp/tflm-ws63/third_party/gemmlowp&quot;
-    &quot;$&#123;TFLM_SRC_PATH&#125;/third_party/gemmlowp&quot;
-)
-
-set(FOUND_GEMMLOWP FALSE)
-foreach(path $&#123;GEMMLOWP_FIXEDPOINT_PATHS&#125;)
-    if(EXISTS &quot;$&#123;path&#125;/fixedpoint/fixedpoint.h&quot;)
-        set(GEMMLOWP_PATH $&#123;path&#125;)
-        set(FOUND_GEMMLOWP TRUE)
-        message(STATUS &quot;✓ Found gemmlowp at: $&#123;path&#125;&quot;)
-        break()
-    endif()
-endforeach()
-
-unset(PUBLIC_HEADER)
-
-if(FOUND_GEMMLOWP)
-    list(APPEND PUBLIC_HEADER
-        $&#123;GEMMLOWP_PATH&#125;
-    )
-endif()
-
-# 设置 PUBLIC_HEADER 变量以包含所有需要的头文件路径
-list(APPEND PUBLIC_HEADER
-    $&#123;TFLM_SRC_PATH&#125;
-    $&#123;TFLM_SRC_PATH&#125;/tensorflow
-    $&#123;TFLM_SRC_PATH&#125;/tensorflow/lite/kernels
-    $&#123;TFLM_CORE_PATH&#125;
-    $&#123;TFLM_CORE_PATH&#125;/micro
-    $&#123;TFLM_CORE_PATH&#125;/micro/kernels
-    $&#123;TFLM_CORE_PATH&#125;/micro/memory_planner
-    $&#123;TFLM_CORE_PATH&#125;/micro/testing
-    $&#123;TFLM_CORE_PATH&#125;/schema
-    $&#123;TFLM_CORE_PATH&#125;/c
-    $&#123;TFLM_CORE_PATH&#125;/core/api
-    $&#123;FLATBUFFERS_DIR&#125;/include
-    $&#123;TFLM_CORE_PATH&#125;/micro/kernels/cmsis_nn
-    CACHE INTERNAL &quot;&quot;
-)
-
-list(APPEND PUBLIC_HEADER $&#123;RUY_PATHS&#125;)
-
-# 设置源文件
-set(CORE_API_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/core/api/flatbuffer_conversions.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/tflite_bridge/flatbuffer_conversions_bridge.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/core/api/tensor_utils.cc&quot;
-)
-
-set(SCHEMA_SOURCES
-    &quot;$&#123;TFLM_COMPILER_PATH&#125;/mlir/lite/schema/schema_utils.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/flatbuffer_utils.cc&quot;
-)
-
-set(C_API_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/core/c/common.cc&quot;
-)
-
-set(CORE_INTERPRETER_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_interpreter.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_utils.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_op_resolver.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_context.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_interpreter_context.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_interpreter_graph.cc&quot;
-)
-
-set(MEMORY_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/memory_planner/greedy_memory_planner.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/memory_planner/linear_memory_planner.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/arena_allocator/single_arena_buffer_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/arena_allocator/persistent_arena_buffer_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/arena_allocator/non_persistent_arena_buffer_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/arena_allocator/recording_single_arena_buffer_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/recording_micro_allocator.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/memory_helpers.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_allocation_info.cc&quot;
-)
-
-set(KERNEL_REGISTRY_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/kernel_runner.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/kernel_util.cc&quot;
-)
-
-set(KERNEL_COMMON_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/fully_connected_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/softmax_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/conv_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/depthwise_conv_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/pooling_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/add_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/mul_common.cc&quot;
-)
-
-set(KERNEL_IMPLEMENTATION_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/fully_connected.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/softmax.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/reshape.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/quantize.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/dequantize.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/dequantize_common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/logistic.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/add.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/mul.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/concatenation.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/kernels/pooling.cc&quot;
-)
-
-set(LOG_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_log.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/tflite_bridge/micro_error_reporter.cc&quot;
-    &quot;$&#123;TFLM_COMPILER_PATH&#125;/mlir/lite/core/api/error_reporter.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_time.cc&quot;
-)
-
-set(TENSOR_UTILS_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/kernels/internal/tensor_utils.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/kernels/internal/quantization_util.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/kernels/internal/common.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/kernels/internal/portable_tensor_utils.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/kernels/kernel_util.cc&quot;
-)
-
-set(OTHER_SOURCES
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_profiler.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/micro_resource_variable.cc&quot;
-    &quot;$&#123;TFLM_CORE_PATH&#125;/micro/test_helpers.cc&quot;
-)
-
-# 合并所有源文件
-set(ALL_TFLM_SOURCES
-    $&#123;CORE_API_SOURCES&#125;
-    $&#123;SCHEMA_SOURCES&#125;
-    $&#123;C_API_SOURCES&#125;
-    $&#123;CORE_INTERPRETER_SOURCES&#125;
-    $&#123;MEMORY_SOURCES&#125;
-    $&#123;KERNEL_REGISTRY_SOURCES&#125;
-    $&#123;KERNEL_COMMON_SOURCES&#125;
-    $&#123;KERNEL_IMPLEMENTATION_SOURCES&#125;
-    $&#123;LOG_SOURCES&#125;
-    $&#123;TENSOR_UTILS_SOURCES&#125;
-    $&#123;OTHER_SOURCES&#125;
-)
-
-set(PUBLIC_HEADER &quot;$&#123;PUBLIC_HEADER&#125;&quot; PARENT_SCOPE)
-
-set(SOURCES &quot;$&#123;SOURCES&#125;&quot;
-    $&#123;ALL_TFLM_SOURCES&#125;
-    &quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/tflm_hello_world.cc&quot;
-    &quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/hello_world_model.cc&quot;
-    &quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/tflm_debug_log.cc&quot;
-    PARENT_SCOPE)
-</code></pre>
-<h2 id="一、项目背景">一、项目背景</h2>
-<p>在 WS63 嵌入式平台上验证 TensorFlow Lite Micro (TFLM) 的功能，确保 TFLM 库能够正确编译和运行。</p>
-<h2 id="二、文件结构">二、文件结构</h2>
-<pre><code>src/application/samples/tflm_hello_world/
-├── CMakeLists.txt           # 构建配置，引用 TFLM 源码
-├── tflm_hello_world.cc      # 主验证程序 ⭐
-├── tflm_debug_log.cc        # 平台日志实现 ⭐
-├── hello_world_model.cc     # TFLite 模型数据
-├── test_cpp.cc              # C++ 编译测试
-└── models/
-    └── hello_world_model.h  # 模型头文件
-</code></pre>
-<h2 id="三、核心设计决策">三、核心设计决策</h2>
-<h3 id="1-日志系统设计（关键难点）">1. 日志系统设计（关键难点）</h3>
-<p><strong>问题</strong>：TFLM 的 <code>micro_log.cc</code> 需要平台相关的 <code>DebugLog</code> 函数。</p>
-<h4 id="初次尝试（错误）">初次尝试（错误）</h4>
-<pre><code class="cpp">// ❌ 错误：使用可变参数
-extern &quot;C&quot; void DebugLog(const char* format, ...) &#123;
-    va_list args;
-    va_start(args, format);
-    vsnprintf(buffer, sizeof(buffer), format, args);
-    osal_printk(&quot;%s&quot;, buffer);
-    va_end(args);
-&#125;
-</code></pre>
-<p><strong>问题表现</strong>：输出乱码</p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>Tensor arena size: 10534308 bytes（应该是 6000）</p>
-</li>
-<li class="lvl-2">
-<p>Status: 恖5（应该是 PASS/FAIL）</p>
-</li>
-</ul>
-<h4 id="根因分析">根因分析</h4>
-<pre><code class="cpp">// TFLM 的 micro_log.cc 调用方式
-void VMicroPrintf(const char* format, va_list args) &#123;
-  DebugLog(format, args);  // ❌ 传递的是 va_list，不是 ...
-&#125;
-</code></pre>
-<h4 id="最终方案（正确）">最终方案（正确）</h4>
-<pre><code class="cpp">// ✅ 正确：接受 va_list 参数
-extern &quot;C&quot; void DebugLog(const char* format, va_list args) &#123;
-    char buffer[512];
-    vsnprintf(buffer, sizeof(buffer), format, args);
-    osal_printk(&quot;%s&quot;, buffer);
-&#125;
-
-// TFLM 还需要这个函数
-extern &quot;C&quot; int DebugVsnprintf(char* buffer, size_t buf_size,
-                              const char* format, va_list vlist) &#123;
-    return vsnprintf(buffer, buf_size, format, vlist);
-&#125;
-</code></pre>
-<h3 id="2-主程序设计">2. 主程序设计</h3>
-<p><strong>核心流程</strong>：</p>
-<ol>
-<li class="lvl-3">
-<p>加载模型 (GetModel)</p>
-</li>
-<li class="lvl-3">
-<p>创建 OpResolver (注册 FullyConnected)</p>
-</li>
-<li class="lvl-3">
-<p>创建 Interpreter (分配 TensorArena)</p>
-</li>
-<li class="lvl-3">
-<p>分配张量 (AllocateTensors)</p>
-</li>
-<li class="lvl-3">
-<p>获取输入/输出张量</p>
-</li>
-<li class="lvl-3">
-<p>执行推理测试 (Invoke)</p>
-</li>
-<li class="lvl-3">
-<p>验证结果</p>
-</li>
-</ol>
-<p><strong>关键代码结构</strong>：</p>
-<pre><code class="cpp">// 使用 int8 量化模型
-input-&gt;data.int8[0] = golden_inputs_int8[i];
-interpreter.Invoke();
-float y_pred = (output-&gt;data.int8[0] - zero_point) * scale;
-</code></pre>
-<h3 id="3-内存管理">3. 内存管理</h3>
-<p>静态内存分配（嵌入式环境要求）：</p>
-<pre><code class="cpp">constexpr int kTensorArenaSize = 6000;
-static uint8_t tensor_arena[kTensorArenaSize];
-</code></pre>
-<p>避免使用 <code>new/delete</code>，防止动态内存分配问题。</p>
-<h2 id="四、遇到的问题与解决">四、遇到的问题与解决</h2>
-<table>
-<thead>
-<tr>
-<th>问题</th>
-<th>原因</th>
-<th>解决方案</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>undefined reference to ‘DebugLog’</td>
-<td>TFLM 需要平台日志函数</td>
-<td>实现 <code>DebugLog(const char*, va_list)</code></td>
-</tr>
-<tr>
-<td>输出乱码、数值错误</td>
-<td>函数签名不匹配（<code>...</code> vs <code>va_list</code>）</td>
-<td>修正为接受 <code>va_list</code> 参数</td>
-</tr>
-<tr>
-<td>编译时未发现源文件</td>
-<td>CMakeLists.txt 缺少文件</td>
-<td>添加 <code>tflm_debug_log.cc</code> 到 <code>SOURCES</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="五、验证结果">五、验证结果</h2>
-<p>测试 4 个输入值的 sin(x) 预测：</p>
-<table>
-<thead>
-<tr>
-<th>x (输入)</th>
-<th>sin(x) 期望值</th>
-<th>预测值</th>
-<th>误差</th>
-<th>状态</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0.77</td>
-<td>0.6961</td>
-<td>0.6964</td>
-<td>0.00031</td>
-<td>✅ PASS</td>
-</tr>
-<tr>
-<td>1.57</td>
-<td>1.0000</td>
-<td>0.9949</td>
-<td>0.00508</td>
-<td>✅ PASS</td>
-</tr>
-<tr>
-<td>2.30</td>
-<td>0.7457</td>
-<td>0.7296</td>
-<td>0.01610</td>
-<td>✅ PASS</td>
-</tr>
-<tr>
-<td>3.14</td>
-<td>0.0016</td>
-<td>-0.0083</td>
-<td>0.00988</td>
-<td>✅ PASS</td>
-</tr>
-</tbody>
-</table>
-<p>所有测试误差 &lt; 0.05（容差），验证成功！</p>
-<h2 id="六、关键经验">六、关键经验</h2>
-<ol>
-<li class="lvl-3">
-<p><strong>仔细阅读 TFLM 头文件</strong>：<code>debug_log.h</code> 明确定义了 <code>DebugLog</code> 的签名</p>
-</li>
-<li class="lvl-3">
-<p><strong>理解调用链</strong>：<code>MicroPrintf</code> → <code>VMicroPrintf</code> → <code>DebugLog(va_list)</code></p>
-</li>
-<li class="lvl-3">
-<p><strong>嵌入式适配要点</strong>：</p>
-<ul class="lvl-2">
-<li class="lvl-5">提供平台相关的 <code>DebugLog</code> 和 <code>DebugVsnprintf</code></li>
-<li class="lvl-5">使用静态内存分配</li>
-<li class="lvl-5">使用 <code>osal_printk</code> 而非 <code>printf</code></li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>量化模型处理</strong>：理解 <code>scale</code> 和 <code>zero_point</code> 的反量化公式</p>
-</li>
-</ol>
-<h2 id="参考资源">参考资源</h2>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p><a target="_blank" rel="noopener" href="https://www.tensorflow.org/lite/microcontrollers">TensorFlow Lite Micro 官方文档</a></p>
-</li>
-<li class="lvl-2">
-<p><a target="_blank" rel="noopener" href="https://developer.huawei.com/">WS63 Hi3863 开发指南</a></p>
-</li>
-</ul>
-
-            
-            
-        </div>
-    </div>
-    
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-WS63-Hi3863-TFLM/" style="color: #00bcd4">毕业设计 WS63 Hi3863 TFLM</a>
-        </span>
-        
-    </div>
-    
-    <a href="/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-02-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863%E5%B9%B3%E5%8F%B0/" class="go-post">阅读全文</a>
 </div>
 
 

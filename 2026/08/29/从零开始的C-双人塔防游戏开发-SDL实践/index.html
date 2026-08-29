@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>从零开始的C++双人塔防游戏开发-SDL实践 | zero two</title>
+    <meta name="author" content="lAn_rEd" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/anle.jpeg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&amp;family=Lexend:wght@400;500;600;700;800;900&amp;family=Noto+Sans+SC:wght@400;500;600;700;800;900&amp;display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+<script src="/js/lib/math.js"></script>
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+<canvas id="fireworks" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 32767"></canvas>
+<script src="https://s4.zstatic.net/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="/js/fireworks.min.js"></script>
+
+
+    
+    
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>ZERO TWO</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;ZERO TWO</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>从零开始的C++双人塔防游戏开发-SDL实践</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/8/29
+        </span>
+        
+        <span class="category">
+            <a href="/categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84C-%E5%8F%8C%E4%BA%BA%E5%A1%94%E9%98%B2%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                从零开始的C++双人塔防游戏开发
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/SDL/" style="color: #00bcd4">
+                    SDL
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h3 id="Surface-与-Texture-的区别">Surface 与 Texture 的区别</h3>
+<pre><code class="cpp">SDL_Surface* sur_img = IMG_Load(...);
+SDL_Texture* tex_img = SDL_CreateTextureFromSurface(renderer, sur_img);
+</code></pre>
+<ul class="lvl-0">
+<li class="lvl-2">Surface：存在内存（CPU 侧）的像素数据，可以读写像素，但不能直接渲染。</li>
+<li class="lvl-2">Texture：存在显存/GPU（驱动侧）的纹理，只能渲染不能读写（一般如此）。</li>
+<li class="lvl-2">两者的桥梁就是 SDL_CreateTextureFromSurface。文件 → Surface → Texture 是 SDL 加载图片的标准流程。</li>
+<li class="lvl-2">文字也一样：TTF_RenderText_Blended 产出 Surface，再转成 Texture。</li>
+</ul>
+<hr>
+<h3 id="渲染管线">渲染管线</h3>
+<pre><code class="cpp">SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // 画笔颜色
+SDL_RenderClear(renderer);                        // ① 清屏为纯黑
+SDL_RenderTexture(renderer, tex_img, nullptr, &amp;rect_img);  // ② 画图
+filledCircleRGBA(...);                            // ③ 画半透明圆
+SDL_RenderTexture(renderer, tex_text, nullptr, &amp;rect_text); // ④ 画文字
+SDL_RenderPresent(renderer);                      // ⑤ 交换缓冲，真正显示
+</code></pre>
+<ul class="lvl-0">
+<li class="lvl-2">双缓冲：所有绘制画在后台缓冲，SDL_RenderPresent 才一次性呈现，避免闪烁。</li>
+<li class="lvl-2">绘制顺序就是图层顺序：后画的盖住先画的 → 最终视觉效果是&quot;圆压在图片上、文字压在圆上&quot;。</li>
+<li class="lvl-2">SDL_RenderTexture 的第 3、4 参数：源矩形 nullptr=整张图，目标矩形 &amp;rect_img=画到哪、多大。这里图片和文字用了同一个目标位置（鼠标坐标），所以文字会叠在图片上。</li>
+<li class="lvl-2">SDL_FRect 的 w/h 直接取自 sur_img-&gt;w/h，即原图尺寸。</li>
+</ul>
+<hr>
+<h3 id="SDL3-mixer-3-0-——-全新对象模型">SDL3_mixer 3.0 —— 全新对象模型</h3>
+<p>完整链条：MIX_Mixer (混音设备)  →  MIX_Audio (音频数据)  →  MIX_Track (播放轨道)</p>
+<pre><code class="cpp">MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &amp;spec); // 1. 建混音器（绑定音频设备）
+MIX_LoadAudio(mixer, u8&quot;./assets/music.mp3&quot;, true);              // 2. 加载音频（true=允许循环）
+MIX_CreateTrack(mixer);                                          // 3. 建轨道
+MIX_SetTrackAudio(track, music);                                 // 4. 把音频挂到轨道上
+MIX_PlayTrack(track, props);                                     // 5. 用属性参数播放
+</code></pre>
+<ul class="lvl-0">
+<li class="lvl-2">MIX_Init() 在 SDL3_mixer 中不再需要参数（SDL2 要传 MIX_INIT_MP3 等 flags）。</li>
+<li class="lvl-2">MIX_LoadAudio 第三个参数是 predecode：true 表示解码后常驻内存（适合循环播放的音乐/音效），false 流式解码（省内存）。</li>
+<li class="lvl-2">MIX_PROP_PLAY_LOOPS_NUMBER = -1 表示无限循环，这是 mixer 3.0 的约定。</li>
+</ul>
+
+    </div>
+    
+    
+    
+    
+    <div id="comment">
+        <div id="giscus-container" class="giscus"></div>
+    </div>
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2026 zero two
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;lAn_rEd
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+
+    
+    
+
+</footer>
+
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    <script>
+        // 懒加载文章图片
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#main img").forEach((img) => {
+                img.loading = "lazy";
+                img.decoding = "async";
+            });
+        });
+    </script>
+    
+    
+<script
+    src="https://giscus.app/client.js"
+    data-repo="styundydsg/styundydsg.github.io"
+    data-repo-id="R_kgDOK0X3wA"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOK0X3wM4Cok6S"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="1"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin
+    async
+></script>
+
+
+
+
+
+    
+
+    <!-- 问答按钮和窗口 -->
+    <div id="qa-button">
+        <i class="fa-solid fa-question"></i>
+    </div>
+    <div id="qa-window">
+        <div class="qa-header">
+            <h3>问答</h3>
+            <button id="qa-close">&times;</button>
+        </div>
+        <div class="qa-content">
+            <div class="qa-input">
+                <input type="text" id="qa-question" placeholder="请输入您的问题...">
+                <button id="qa-submit">提问</button>
+            </div>
+            <div class="qa-results" id="qa-results">
+                <!-- 问答结果将在这里显示 -->
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
