@@ -23,6 +23,8 @@ const app = Vue.createApp({
     mounted() {
         window.addEventListener("scroll", this.handleScroll, true);
         this.render();
+        this.initTagExpand();
+        this.initSearch();
         // 确保DOM完全加载后再初始化QA功能
         if (document.readyState === 'complete') {
             this.initQA();
@@ -50,6 +52,128 @@ const app = Vue.createApp({
                 else wrap.style.top = "-80px";
             }
             this.scrollTop = newScrollTop;
+        },
+        initTagExpand() {
+            // 标签汇总页：点击标签展开对应文章，支持 ?tag=xxx 自动展开
+            const postsBox = document.getElementById("tag-posts");
+            if (!postsBox) return; // 仅标签汇总页 (/tags/)
+            const chips = Array.from(document.querySelectorAll(".tag-chip"));
+            const groups = Array.from(document.querySelectorAll(".tag-posts-group"));
+            const empty = document.getElementById("tag-posts-empty");
+            if (!groups.length) return;
+            const byTag = {};
+            groups.forEach((g) => (byTag[g.dataset.tagGroup] = g));
+
+            const updateUrl = (name) => {
+                const url = new URL(location.href);
+                if (name && byTag[name]) url.searchParams.set("tag", name);
+                else url.searchParams.delete("tag");
+                history.replaceState(null, "", url.pathname + url.search);
+            };
+
+            const showGroup = (name, scroll) => {
+                chips.forEach((c) => c.classList.toggle("active", c.dataset.tag === name));
+                groups.forEach((g) => {
+                    g.hidden = g.dataset.tagGroup !== name;
+                });
+                if (empty) empty.style.display = byTag[name] ? "none" : "block";
+                updateUrl(name);
+                if (scroll && byTag[name]) {
+                    setTimeout(() => {
+                        byTag[name].scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 120);
+                }
+            };
+
+            // 初始：URL 参数自动展开（如从首页点击标签跳转而来）
+            const initTag = new URLSearchParams(location.search).get("tag");
+            if (initTag && byTag[initTag]) showGroup(initTag, true);
+
+            chips.forEach((c) => {
+                c.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    const name = c.dataset.tag;
+                    if (c.classList.contains("active")) {
+                        // 再次点击当前标签：收起
+                        chips.forEach((x) => x.classList.remove("active"));
+                        groups.forEach((g) => {
+                            g.hidden = true;
+                        });
+                        if (empty) empty.style.display = "block";
+                        updateUrl("");
+                    } else {
+                        showGroup(name, true);
+                    }
+                });
+            });
+        },
+        initSearch() {
+            // 全局搜索：点击菜单放大镜弹出搜索窗口，按标题过滤全站文章
+            // 搜索窗口 DOM 位于 body 末尾，需等 DOM 解析完再绑定事件
+            const init = () => {
+                const overlay = document.getElementById("search-overlay");
+                const input = document.getElementById("search-input");
+                const results = document.getElementById("search-results");
+                const closeBtn = document.getElementById("search-close");
+                const openBtn = document.getElementById("search-open");
+                const openBtnMobile = document.getElementById("search-open-mobile");
+                if (!overlay || !input || !results) return;
+                const data = window.__SEARCH_DATA__ || [];
+
+                const escapeHtml = (s) =>
+                    s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                const render = (q) => {
+                    const kw = q.trim().toLowerCase().replace(/\s+/g, "");
+                    if (!kw) {
+                        results.innerHTML = '<div class="search-hint">输入关键词，按标题搜索文章</div>';
+                        return;
+                    }
+                    const hits = data.filter((p) =>
+                        p.title.toLowerCase().replace(/\s+/g, "").includes(kw)
+                    );
+                    if (!hits.length) {
+                        results.innerHTML = '<div class="search-empty">没有找到相关文章</div>';
+                        return;
+                    }
+                    results.innerHTML = hits
+                        .map(
+                            (p) =>
+                                `<a class="search-item" href="${p.path}">` +
+                                `<span class="search-item-title">${escapeHtml(p.title)}</span>` +
+                                `<span class="search-item-date">${escapeHtml(p.date)}</span>` +
+                                `</a>`
+                        )
+                        .join("");
+                };
+
+                const open = () => {
+                    overlay.hidden = false;
+                    render("");
+                    setTimeout(() => input.focus(), 60);
+                };
+                const close = () => {
+                    overlay.hidden = true;
+                    input.value = "";
+                    results.innerHTML = "";
+                };
+
+                if (openBtn) openBtn.addEventListener("click", open);
+                if (openBtnMobile) openBtnMobile.addEventListener("click", open);
+                if (closeBtn) closeBtn.addEventListener("click", close);
+                input.addEventListener("input", () => render(input.value));
+                overlay.addEventListener("click", (e) => {
+                    if (e.target === overlay) close();
+                });
+                document.addEventListener("keydown", (e) => {
+                    if (e.key === "Escape") close();
+                });
+            };
+            if (document.readyState === "complete" || document.readyState === "interactive") {
+                init();
+            } else {
+                document.addEventListener("DOMContentLoaded", init);
+            }
         },
         initQA() {
             // 初始化问答功能
