@@ -2,9 +2,36 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://styundydsg.github.io/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-02-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863%E5%B9%B3%E5%8F%B0/</loc>
+    
+    <lastmod>2026-09-07</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/2026/02/28/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-03-%E5%AE%8C%E6%88%90ws63%E7%9A%84es8311%E9%A9%B1%E5%8A%A8%E7%A7%BB%E6%A4%8D%E5%92%8Cmpu6050%E5%AE%9E%E7%8E%B0%E9%9F%B3%E9%A2%91%E6%92%AD%E6%94%BE%E5%92%8C%E8%BF%90%E5%8A%A8%E6%95%B0%E6%8D%AE%E6%8E%A5%E6%94%B6/</loc>
+    
+    <lastmod>2026-09-07</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://styundydsg.github.io/2026/09/06/%E6%B1%82%E7%9F%A5%E6%AC%B2/</loc>
     
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/2026/09/08/%E7%95%99%E4%B8%8Bcontent/</loc>
+    
+    <lastmod>2026-09-07</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -30,15 +57,6 @@
   
   <url>
     <loc>https://styundydsg.github.io/2025/08/05/hispark-pegasus-hi3861-%E5%8D%8E%E4%B8%BA%E4%BA%91-Mqtt/</loc>
-    
-    <lastmod>2026-09-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/2026/02/28/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-03-%E5%AE%8C%E6%88%90ws63%E7%9A%84es8311%E9%A9%B1%E5%8A%A8%E7%A7%BB%E6%A4%8D%E5%92%8Cmpu6050%E5%AE%9E%E7%8E%B0%E9%9F%B3%E9%A2%91%E6%92%AD%E6%94%BE%E5%92%8C%E8%BF%90%E5%8A%A8%E6%95%B0%E6%8D%AE%E6%8E%A5%E6%94%B6/</loc>
     
     <lastmod>2026-09-01</lastmod>
     
@@ -84,15 +102,6 @@
   
   <url>
     <loc>https://styundydsg.github.io/2026/03/12/%E7%94%A8python%E8%8E%B7%E5%8F%96inmp441%E7%9A%84%E9%9F%B3%E9%A2%91%E6%95%B0%E6%8D%AE%E6%98%BE%E7%A4%BA%E6%B3%A2%E5%BD%A2/</loc>
-    
-    <lastmod>2026-09-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/2026/02/09/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1-02-%E9%83%A8%E7%BD%B2tflm-hello-world-demo%E5%88%B0ws63-hi3863%E5%B9%B3%E5%8F%B0/</loc>
     
     <lastmod>2026-09-01</lastmod>
     
@@ -346,7 +355,7 @@
 
   <url>
     <loc>https://styundydsg.github.io/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -354,231 +363,238 @@
   
   <url>
     <loc>https://styundydsg.github.io/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/%E6%83%B3%E6%B3%95/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/Hexo/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/mit6-s081-labs/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/wsl/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/%E5%BD%92%E5%9B%A0/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/Unity/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/OpenClaw/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/SDL/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/MQTT/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0/</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/%E6%83%B3%E6%B3%95/</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/%E6%8E%A2%E7%B4%A2%E8%87%AA%E6%88%91/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/hi3861/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/%E6%99%BA%E8%B0%B1AI/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/%E5%8D%8E%E4%B8%BA%E4%BA%91/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/Hexo/</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/mit6-s081-labs/</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/%E6%99%BA%E8%B0%B1AI/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/MPU6050/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/INMP441/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/OpenHarmony/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/%E7%83%A7%E5%BD%95/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/OpenClaw/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/SmartPlant/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/SDL/</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/wsl/</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/%E5%BD%92%E5%9B%A0/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/WS63/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/Hi3863/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/C/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/ES8311/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/TFLM/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://styundydsg.github.io/tags/Windows/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <loc>https://styundydsg.github.io/tags/C/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://styundydsg.github.io/tags/%E8%B0%83%E8%AF%95/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <loc>https://styundydsg.github.io/tags/ES8311/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/Python/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://styundydsg.github.io/tags/I2S/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/tags/%E9%80%BB%E8%BE%91%E5%88%86%E6%9E%90%E4%BB%AA/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <loc>https://styundydsg.github.io/tags/ImGui/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/tags/%E6%97%A5%E8%AE%B0/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/%E8%B0%83%E8%AF%95/</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/Windows/</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/Unity/</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/I2S/</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/tags/%E9%80%BB%E8%BE%91%E5%88%86%E6%9E%90%E4%BB%AA/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -586,57 +602,57 @@
 
   
   <url>
-    <loc>https://styundydsg.github.io/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <loc>https://styundydsg.github.io/categories/%E6%97%A5%E8%AE%B0/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://styundydsg.github.io/categories/%E6%97%A5%E8%AE%B0/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <loc>https://styundydsg.github.io/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/categories/%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/categories/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/categories/OpenHarmony/</loc>
-    <lastmod>2026-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://styundydsg.github.io/categories/Linux/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://styundydsg.github.io/categories/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84C-%E5%8F%8C%E4%BA%BA%E5%A1%94%E9%98%B2%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://styundydsg.github.io/categories/Linux/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
