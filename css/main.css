@@ -1173,10 +1173,10 @@ ol li {
     }
     #home-posts .post {
         margin-bottom: 25px;
-        padding: 50px;
+        padding: 10px 40px;
     }
     #home-posts .post .description {
-        padding: 20px 0;
+        padding: 0px 0;
     }
     #home-posts-wrap {
         max-width: 1200px;
@@ -1253,10 +1253,10 @@ ol li {
     }
     #home-posts .post {
         margin-bottom: 30px;
-        padding: 20px 30px;
+        padding: 14px 30px;
     }
     #home-posts .post .description {
-        padding: 20px 0;
+        padding: 0px 0;
     }
     #home-posts .post .post-tags {
         padding-right: 69px;
