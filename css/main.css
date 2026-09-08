@@ -369,11 +369,13 @@
     padding: 10px 24px;
     position: absolute;
     right: -5px;
-    transition: box-shadow 0.25s ease-out, right 0.25s ease-out;
+    transition: box-shadow 0.25s, transform 0.25s;
+}
+#home-posts .post:hover .go-post {
+    transform: translate(5px, 5px);
 }
 #home-posts .post .go-post:hover {
     box-shadow: -2px -2px 10px 0 #9abbf77a;
-    right: -7px;
 }
 #home-posts .post .post-tags .tag {
     display: inline-block;
