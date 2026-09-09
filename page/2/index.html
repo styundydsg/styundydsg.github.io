@@ -196,7 +196,7 @@
 <div id="home-posts-wrap" ref="homePostsWrap" true
     >
     
-        <div id="home-card">
+        <div id="home-card" data-reveal="0">
             <div id="card-style">
     <div id="card-div">
         <div class="avatar">
@@ -238,7 +238,7 @@
         
     </div>
 </div>
-<div id="archive-card-style">
+<div id="archive-card-style" data-reveal="2">
     <div id="archive-card-div">
         <div class="archive-card-title">归档</div>
         <div class="archive-list">
@@ -384,7 +384,7 @@
         </div>
     </div>
 </div>
-<div id="tag-card-style">
+<div id="tag-card-style" data-reveal="3">
     <div id="tag-card-div">
         <div class="tag-card-title">标签</div>
         <div class="tag-list">
@@ -531,7 +531,7 @@
 
         </div>
         
-    <div id="home-posts">
+    <div id="home-posts" data-reveal="1">
         
 
 <div class="post">
@@ -843,7 +843,7 @@ set(GEMMLOWP_FIXEDPOINT_PATHS
 </div>
 
 
-            <footer id="footer">
+            <footer id="footer" data-reveal="20">
     <div id="footer-wrap">
         <div>
             &copy;
@@ -876,6 +876,7 @@ set(GEMMLOWP_FIXEDPOINT_PATHS
         
     </div>
     <script src="/js/main.js"></script>
+    <script src="/js/lib/progressive.js"></script>
     <script>
         // 懒加载文章图片
         document.addEventListener("DOMContentLoaded", () => {

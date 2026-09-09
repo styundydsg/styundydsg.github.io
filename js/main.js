@@ -14,6 +14,8 @@ const app = Vue.createApp({
         const hideLoading = () => {
             this.loading = false;
         };
+        // 首屏遮罩只等 DOM 解析完成，不必等到所有图片/子资源加载完，
+        // 之后的各区块由 progressive.js 逐段浮现。
         if (document.readyState === "complete" || document.readyState === "interactive") {
             hideLoading();
         } else {

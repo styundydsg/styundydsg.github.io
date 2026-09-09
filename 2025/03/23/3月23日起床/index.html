@@ -206,7 +206,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #ff7d73">
+                <a href="/tags/%E6%83%B3%E6%B3%95/" style="color: #00a596">
                     想法
                 </a>
             </span>
@@ -236,7 +236,7 @@
         :disabled="cryptoStatus === 'success'"
         ref="crypto"
         placeholder="文章被加密，请输入密码"
-        data-encrypted="U2FsdGVkX1+nR1gyNxKPf7TrJlksTB8riYLGDFOxUB95eUafqXD/xn2qNXEqBcFrrKle5ud0r493yZN8Cw+I3mbGmMOsXtJjLJHPKomkgbYc1OZaquLaESa37QxrqXQob7yhxYyCu+EPPdfoCBXxbTIHxZylHHv0wbMjk0C2jkLchAYxxjl7HjV4masXAmsQZgmu8g3TERMvxukhhqJI1Ytw5Se+ew6R+9d17HTiQkYYxstmTNi7m9N7K9uDlv1bXyJaq3incnJsVKqLHpMhLHglPgdWMjm5m2Nq1i/TybQ3C4nVEwrW1Vt9iwMYGJhfNao6PRGhJiBRLMS5budWFemS4j9nGGpRYwDObg9HPI5TFSzxa9kNRn8diYVWF84c/jJB9RQXBvj/RRhHFIi/VzVWxtZPsI3PKqK3r2DmYb3zWPaVb5vecwtqlHK/uCQjj1dBHpdlIQNdvoVt02CfcTRU6b9zjhtWiwXXuSt0nZiMgECy7BDbkByuUJt2smMEVsLcHREVInGKNov69drezoLKcME0ldg3IYkrHd/ttNxNN2pxb7R/WRjyKfK40z2fqmPx0DG4EJ6y/4+iaLEjUZTUAWcK3EkCQacqsjom1unluMTr4t8wvFfA8fPbsQAFC1u62sRaBCEtCYwfFyDSrtDMEUetKiY9au5d9ZwZ823HUjjfbQMZApi3QCEPfL8+2tZ3UwHiGM8+OO4QADITDHcjNPfSaRlPcHYH01wmQxM+iJ7wejLhOlxleJPSDSdYXSSzq7QgGxRkpq/HHl15G6+1KQDugFlZmL/52+hQaWVd75BrEsEeG8SwdbCnHsQb9nXwAhgWsLyl0kuJ5g5A4Fc23fOmifKeWGaAHA6zl4MlZJVR4tU/ikP62CQ7PqW0"
+        data-encrypted="U2FsdGVkX185pmu6LeDMt8mHeB+0rODn8ojPfmBCGqp94LvVwjzv8/ATUblXseRijrE6RATcQvr77XWq0tleprGwqhdtpJNP61bQxYScRYDleWxL6gzRaxsZOe1mcc4LFCeLyCgiYwW2yBIdOLZa3gqmoLGZOJjOAm24f2yBZWiQCTNtAr2kkF8O/8otZVccktzYKuk6/hoJXiOho6xXxseDYr0Kn1K3UrJ2SaiFfXnW0uHPeaO+17yTqoLsBFgzUdrw81oLs1qK/9BBPmwPT0ljESUiYfHf/GG9nWx6YibBB3wSjcOSHd4P/3i16Vc87LWTgRPFTzKTt+/FKwKv6GenVWbvP4euU/6LuqBIvOqbXiTHypK85Ye8QzYyvK2OLEQu77IjJ0vfBrgc4S5Qe1Hy0/JXmw1tarZ2DEBZco3gxPYhWhQPf7RqF7PasgSPgkigGvMMI8h4HNHJef/mkovOv6EqqlwYxmKxPf54THbPG2E8uJVpmIS2DRMyItUol7nLRuim4Sg0f4535Ze0iJ/2CYs1LVQDrmPltDjJF4QtY0mAIK6zyvoTy0ou3ZXLwC5SLXu+p/bVanemtCSOd2ALmHgc1OoFHCKSxPRnfS2Jls9I0WTAwZF2ZIsvN5/0redi1sivk7r+AXjws4BdfGKwExB4Dgrr1oam0Ajnk32y1/OUGsI9NSRkqm4sRVaPSjaWqmk0aLhHsI3OCKGyTmEE5n+g5rQS2X5ZIOVdM7FaCn+41W0QJCiPrTyg6WiiCJy9RbL4GmmhWuRQ5qKvdxfKbsuwcgYskfNKfgtxIXmOpKX/9urwx5q1mUlpkpHSwhvR4JnP3c7UGBje9vRhYgQLw6ToviMCvc/Hy9VIEJttx6x3WT+DLbjhJ5hXF7c+"
         data-shasum="97c81428dce053eb0287f604886bb612f364b24a21b315e95e07f129404c3e82"
         v-model="crypto"
     />
@@ -256,7 +256,7 @@
     
 </div>
 
-            <footer id="footer">
+            <footer id="footer" data-reveal="20">
     <div id="footer-wrap">
         <div>
             &copy;
@@ -289,6 +289,7 @@
         
     </div>
     <script src="/js/main.js"></script>
+    <script src="/js/lib/progressive.js"></script>
     <script>
         // 懒加载文章图片
         document.addEventListener("DOMContentLoaded", () => {

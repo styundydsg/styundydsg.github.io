@@ -530,7 +530,8 @@
     top: 0;
     width: 100vw;
     word-break: keep-all;
-    z-index: 2147483647;
+    /* 低于菜单，让导航条在遮罩淡出前就可见 */
+    z-index: 1003;
 }
 #loading h2,
 #loading p,
@@ -1013,8 +1014,28 @@ body::-webkit-scrollbar-track {
     margin-top: -300px;
     opacity: 0;
 }
+/* ===== 逐段加载（progressive reveal） =====
+   页面各区块按 data-reveal 顺序依次淡入上浮，文章卡片优先出现。
+   未标记 data-reveal 时元素保持默认可见，JS 失效也不会白屏。 */
+.progressive-item {
+    opacity: 0;
+    transform: translateY(18px);
+}
+.progressive-item.progressive-visible {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+    .progressive-item,
+    .progressive-item.progressive-visible {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
 .timeline {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     transition: margin-top 0.5s, opacity 0.3s, visibility 0.3s;
 }
 .timeline-content {
@@ -1022,7 +1043,7 @@ body::-webkit-scrollbar-track {
     border: 1px solid #0002;
     border-radius: 3px;
     margin-left: 17.5px;
-    padding: 24px;
+    padding: 12px;
     transition: box-shadow 0.5s;
 }
 .timeline-content:hover {
@@ -1036,12 +1057,12 @@ body::-webkit-scrollbar-track {
     position: absolute;
     width: 7px;
 }
-/* 归档页：年份标题（数字横向显示，其中心与圆点中心垂直对齐） */
+
 #timeline-wrap .timeline-year {
     align-self: flex-start;
     color: #5c6b72;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 500;
     left: 5.5px;
     margin: 10px 0 20px;
     position: relative;
