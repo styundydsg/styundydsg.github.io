@@ -193,8 +193,15 @@ const app = Vue.createApp({
                     if (notes && typeof notes.open === "function" && notes.hasCard) {
                         notes.open(id);
                     } else {
-                        // 当前页没有随记卡片，跳回首页并带上要展开的条目
-                        location.href = "/#note-" + id;
+                        // 当前页没有随记卡片（文章页 / 归档页 / 标签页等）。
+                        // 必须「显式跳回首页」：只改 hash 的话，若当前就在文章页，
+                        // 浏览器只更新地址栏而不会导航，而文章页并没有随记卡片和
+                        // 运行时，结果就是点了没反应。
+                        // window.__NOTES_HOME__ 由 scripts/notes.js 按 config.root 注入。
+                        const home =
+                            window.__NOTES_HOME__ ||
+                            location.pathname.replace(/[^/]*$/, "");
+                        location.href = home + "#note-" + id;
                     }
                 });
                 overlay.addEventListener("click", (e) => {
