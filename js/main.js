@@ -131,21 +131,37 @@ const app = Vue.createApp({
                         results.innerHTML = '<div class="search-hint">输入关键词，按标题搜索文章</div>';
                         return;
                     }
-                    const hits = data.filter((p) =>
-                        p.title.toLowerCase().replace(/\s+/g, "").includes(kw)
-                    );
+                    // 文章按标题匹配；随记额外匹配正文（随记常以正文首句命名）
+                    const hits = data.filter((p) => {
+                        const title = (p.title || "").toLowerCase().replace(/\s+/g, "");
+                        if (title.includes(kw)) return true;
+                        if (!p.note || !p.text) return false;
+                        return p.text.toLowerCase().replace(/\s+/g, "").includes(kw);
+                    });
                     if (!hits.length) {
                         results.innerHTML = '<div class="search-empty">没有找到相关文章</div>';
                         return;
                     }
                     results.innerHTML = hits
-                        .map(
-                            (p) =>
+                        .map((p) => {
+                            // 随记没有独立页面：不跳转，点击后在侧栏随记卡片里展开
+                            if (p.note) {
+                                return (
+                                    `<a class="search-item search-item-note" data-note-id="${p.noteId}">` +
+                                    `<span class="search-item-title">` +
+                                    `<i class="fa-solid fa-note-sticky fa-fw"></i>` +
+                                    `${escapeHtml(p.title)}</span>` +
+                                    `<span class="search-item-date">${escapeHtml(p.date)}</span>` +
+                                    `</a>`
+                                );
+                            }
+                            return (
                                 `<a class="search-item" href="${p.path}">` +
                                 `<span class="search-item-title">${escapeHtml(p.title)}</span>` +
                                 `<span class="search-item-date">${escapeHtml(p.date)}</span>` +
                                 `</a>`
-                        )
+                            );
+                        })
                         .join("");
                 };
 
@@ -164,6 +180,23 @@ const app = Vue.createApp({
                 if (openBtnMobile) openBtnMobile.addEventListener("click", open);
                 if (closeBtn) closeBtn.addEventListener("click", close);
                 input.addEventListener("input", () => render(input.value));
+                // 点击随记结果：随记没有独立页面，统一回到首页侧栏随记卡片里展开。
+                // 在首页时直接展开；在其它页面（文章页 / 归档 / 标签等）先把 noteId
+                // 记在 URL hash 上再跳回首页，由随记运行时读取并自动展开。
+                results.addEventListener("click", (e) => {
+                    const item = e.target.closest && e.target.closest(".search-item-note");
+                    if (!item) return;
+                    e.preventDefault();
+                    const id = parseInt(item.dataset.noteId, 10);
+                    close();
+                    const notes = window.__NOTES__;
+                    if (notes && typeof notes.open === "function" && notes.hasCard) {
+                        notes.open(id);
+                    } else {
+                        // 当前页没有随记卡片，跳回首页并带上要展开的条目
+                        location.href = "/#note-" + id;
+                    }
+                });
                 overlay.addEventListener("click", (e) => {
                     if (e.target === overlay) close();
                 });

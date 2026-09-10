@@ -1687,6 +1687,21 @@ ol li {
     background: #66afef22;
     color: #66afef;
 }
+#search-overlay .search-item-note {
+    cursor: pointer;
+}
+#search-overlay .search-item-note .search-item-title .fa-note-sticky {
+    color: #66afef;
+    font-size: 12px;
+    margin-right: 6px;
+}
+#search-overlay .search-item-note::after {
+    color: #66afef;
+    content: "随记";
+    font-size: 11px;
+    margin-left: 8px;
+    opacity: 0.75;
+}
 #search-overlay .search-item-date {
     color: #999;
     font-size: 13px;
