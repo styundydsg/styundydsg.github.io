@@ -856,219 +856,96 @@
 #timeline-wrap {
     display: flex;
     flex-direction: column-reverse;
-}
-* {
-    margin: 0;
-    padding: 0;
     position: relative;
-    scrollbar-color: #8ab5ff #e6efff;
-    scrollbar-width: thin;
-    word-wrap: break-word;
 }
-.article {
-    font-size: 15px;
-    margin: auto;
-    margin-top: 50px;
-    padding: 20px;
-}
-.article .content {
-    margin: 20px 0;
-}
-/* 文章标题与日期/信息行之间的间距收紧 */
-.article > div:first-child h1 {
-    margin-bottom: 8px;
-}
-.article .info .date {
-    color: #5c6b72;
-    display: inline-block;
-    margin-right: 10px;
-}
-.code-content {
-    font-size: 13px;
-    line-height: 2;
-    overflow: auto;
-    padding: 50px 30px 20px;
-    white-space: pre;
-    margin: auto;
-    overflow-wrap: normal;
-}
-.comment iframe,
-body::-webkit-scrollbar-track {
-    border-radius: 0;
-}
-.content {
-    transition: opacity 0.25s;
-}
-.content img,
-.content video,
-.content audio,
-.content iframe {
-    display: block;
-    margin: 15px auto;
-    max-width: 90%;
-}
-.copycode {
-    color: #5c6b72;
+/* 时间轴轴线：1px 浅灰，自年份徽章起贯穿到底。
+   坐标系：以 #timeline-wrap 内容左缘为 x=0。无头 Chrome 实测（1280 / 512 视口结果一致）：
+   轴线中心 x=-6、圆点中心 x=-6、年份徽章中心 x=-6，三者同轴。
+   （徽章中心由 flex 交叉轴 flex-start 上的负 margin-left 决定，与视口宽度无关，故以 -6 为基准。）
+   条目的 20px 间隙用 padding 而非 margin，相邻条目盒子因此连续，线才能不断。 */
+#timeline-wrap::before {
+    background: #dbdbdb;
+    bottom: 0;
+    content: "";
+    left: -6.5px;
+    pointer-events: none;
     position: absolute;
-    right: 0;
-    top: 0;
+    top: 10px;
+    width: 1px;
+    /* 两端各淡出 24px，避免生硬截断 */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
 }
-.copycode i {
-    padding: 15px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transition: transform 0.25s;
+/* 年份徽章：实心蓝底白字，骑在轴线上，遮住穿过它的那一段线 */
+/* column-reverse 下 DOM 末条 = 视觉首条，它与年份徽章同处顶部，需要让出徽章的高度。
+   注意不能用 :last-of-type —— 年份 .timeline-year 也是 div 且排在最后，
+   .timeline:last-of-type 永远不会匹配。倒数第二个 div 才是视觉首条。 */
+/* 首条（column-reverse 下 DOM 末条）需与年份徽章保持距离。
+   实测该条目的圆点纵向位置既不受行 padding 也不受 margin 影响（gap 恒为 +12px，
+   其余条目为 -4px），故不依赖任何包含块推算，直接用相对位移把圆点拉回基线上（按基线行实测反复标定为 0，此时首条 Δ 与其他条目同为 +10）。 */
+#timeline-wrap .timeline:nth-last-of-type(2) .timeline-tail {
+    transform: translateY(0);
 }
-.copycode.copied i {
-    transform: scale(1.25);
-}
-.copycode.copied i:first-child,
-.copycode:not(.copied) i:last-child {
-    opacity: 0;
-}
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.3s;
-}
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-.hljs-ln-code {
-    padding-left: 20px !important;
-}
-.hljs-ln-numbers {
-    border-right: 1px solid #ccc;
-    color: #ccc;
-    padding-right: 10px !important;
-    text-align: right;
-    vertical-align: top;
-}
-.icon {
-    color: #5c6b72;
-    margin-right: 5px;
-}
-.input {
-    background: #f6f8fa;
-    border: 1px solid #d0d7de;
-    border-radius: 50px;
-    box-sizing: border-box;
-    color: #000;
-    display: block;
-    font-size: 15px;
-    height: 50px;
-    text-indent: 20px;
-    transition: background 0.25s, border 0.25s, box-shadow 0.25s;
-    width: 100%;
-}
-.input:focus {
-    background: #fff;
-    border-color: #0969da;
-    box-shadow: 0 0 0 3px #0969da4d;
-    outline: none;
-}
-.input:hover {
-    background: #fff;
-}
-.into-enter-active {
-    transition: opacity 0.5s, transform 0.5s;
-}
-.into-enter-from {
-    opacity: 0;
-    transform: scale(1.1);
-}
-.katex {
-    white-space: normal !important;
-}
-.language {
-    background: linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%);
-    border-radius: 0 0 10px 10px;
-    box-shadow: 1px 1px 0.75rem #ed6ea14d;
-    color: #fff;
-    font-size: 12px;
-    font-weight: bold;
-    left: 30px;
-    padding: 10px 15px;
-    position: absolute;
-    top: 0;
-}
-.page-num,
-.icon-link a,
-.friend-link a {
-    transition: background 0.25s, color 0.25s;
-}
-.page-num:hover,
-.icon-link a:hover,
-.friend-link a:hover,
-.categories-tags a:hover,
-.go-post:hover {
-    opacity: 1;
-}
-.slide-enter-active,
-.slide-leave-active {
-    transition: margin-top 0.3s, opacity 0.3s;
-}
-.slide-enter-from,
-.slide-leave-to {
-    margin-top: -300px;
-    opacity: 0;
-}
-/* ===== 逐段加载（progressive reveal） =====
-   页面各区块按 data-reveal 顺序依次淡入上浮，文章卡片优先出现。
-   未标记 data-reveal 时元素保持默认可见，JS 失效也不会白屏。 */
-.progressive-item {
-    opacity: 0;
-    transform: translateY(18px);
-}
-.progressive-item.progressive-visible {
-    opacity: 1;
-    transform: none;
-    transition: opacity 0.45s ease, transform 0.45s ease;
-}
-@media (prefers-reduced-motion: reduce) {
-    .progressive-item,
-    .progressive-item.progressive-visible {
-        opacity: 1;
-        transform: none;
-        transition: none;
-    }
-}
-.timeline {
-    margin-bottom: 20px;
-    transition: margin-top 0.5s, opacity 0.3s, visibility 0.3s;
-}
-.timeline-content {
-    background: #fff;
-    border: 1px solid #0002;
-    border-radius: 3px;
-    margin-left: 17.5px;
-    padding: 12px;
-    transition: box-shadow 0.5s;
-}
-.timeline-content:hover {
-    box-shadow: 0 2px 8px #00000017;
-}
-.timeline-tail {
-    background: #fff;
-    border: 2px solid #a5c2f5;
-    border-radius: 50%;
-    height: 7px;
-    position: absolute;
-    width: 7px;
-}
-
 #timeline-wrap .timeline-year {
+    align-items: center;
     align-self: flex-start;
-    color: #5c6b72;
+    background: #3273dc;
+    border-radius: 6px;
+    color: #fff;
+    display: flex;
     font-size: 18px;
-    font-weight: 500;
-    left: 5.5px;
-    margin: 10px 0 20px;
+    font-weight: 600;
+    height: 30px;
+    justify-content: center;
+    left: 10px;
+    margin: 0 0 24px -16px;
     position: relative;
     transform: translateX(-50%);
     white-space: nowrap;
-    width: max-content;
+    width: 52px;
+}
+.timeline {
+    margin-bottom: 0; /* 原为 20px，改为下方 padding，避免条目间出现断口 */
+    /* 必须有定位：.timeline-tail 是 absolute，其包含块取自最近的定位祖先。
+       若此处为 static，包含块会落到 #timeline-wrap，所有圆点将叠在同一位置。 */
+    position: relative;
+    /* 间隙用 padding 而非 margin：margin 会留出空白，轴线无法贯穿。 */
+    padding-bottom: 20px;
+    transition: margin-top 0.5s, opacity 0.3s, visibility 0.3s;
+}
+.timeline-content {
+    /* 对齐参考图：轴线中心 -> 内容左缘 = 37px（圆点占 20px，再留 17px）。 */
+    margin-left: 37px;
+    padding: 0 0 14px;
+}
+/* 日期：小字浅灰 */
+#archives .timeline-content .item-time {
+    color: #8c8c8c;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+/* 标题：深灰加粗 */
+#archives .timeline-content h3 {
+    color: #363636;
+    font-size: 17px;
+    font-weight: 600;
+}
+.timeline-tail {
+    /* 实心浅灰圆点，直径 12px，圆心与轴线、年份徽章同轴（x=-6）。
+       绝对定位且未写 left，横向位置由静态位置 + margin-left 决定：
+       margin-left:-16px 时圆心实测落在内容左缘 -10px 处，比徽章中心偏左 4px；
+       改为 -12px 后圆心 = -12 + 半径 6 = -6，与轴线重合。
+       纵向：圆心需与日期行（.item-time）行盒中心齐平。无头 Chrome 实测行盒高 16px、
+       顶边与条目顶边重合（中心 = 条目顶部 +8px），故 top = 8 - 半径 6 = 2px。 */
+    background: #dbdbdb;
+    border: none;
+    border-radius: 50%;
+    height: 12px;
+    margin-left: -12px;
+    position: absolute;
+    top: 2px;
+    width: 12px;
+    z-index: 1;
 }
 ::-webkit-scrollbar {
     height: 12px;
