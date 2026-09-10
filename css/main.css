@@ -1,3 +1,16 @@
+/* 全局重置：清掉浏览器默认 margin/padding，并统一细滚动条、长词换行。
+   position: relative 是必需的——代码块右上角的语言标签（.language）与复制按钮（.copycode）
+   都是 absolute 定位，靠它把包含块钉在 <pre> 上。
+   （这段规则在一轮 main.css 改写中整体丢失，2026-09-10 从 15:31 的部署版本恢复） */
+* {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    scrollbar-color: #8ab5ff #e6efff;
+    scrollbar-width: thin;
+    word-wrap: break-word;
+}
+
 #archives {
     margin: auto;
     margin-top: 100px;
@@ -1591,4 +1604,178 @@ ol li {
     font-size: 14px;
     padding: 20px 8px;
     text-align: center;
+}
+
+/* ===== 以下规则同样在一轮 main.css 改写中丢失，2026-09-10 从 15:31 的部署版本取回 =====
+   影响面：文章页居中与标题留白（.article）、代码块外观（.code-content / .language / .hljs-ln-*）、
+   正文图片居中（.content img…）、搜索框与分页（.input / .page-num）、Vue 过渡与逐段浮现（.fade-* / .into-* / .progressive-*）。
+   未恢复项：旧版 .timeline-content:hover 的悬停阴影（新版时间轴已是扁平样式，需要可再加）。 */
+.article {
+    font-size: 15px;
+    margin: auto;
+    margin-top: 50px;
+    padding: 20px;
+}
+.article .content {
+    margin: 20px 0;
+}
+/* 文章标题与日期/信息行之间的间距收紧 */
+.article > div:first-child h1 {
+    margin-bottom: 8px;
+}
+.article .info .date {
+    color: #5c6b72;
+    display: inline-block;
+    margin-right: 10px;
+}
+.code-content {
+    font-size: 13px;
+    line-height: 2;
+    overflow: auto;
+    padding: 50px 30px 20px;
+    white-space: pre;
+    margin: auto;
+    overflow-wrap: normal;
+}
+.comment iframe,
+body::-webkit-scrollbar-track {
+    border-radius: 0;
+}
+.content {
+    transition: opacity 0.25s;
+}
+.content img,
+.content video,
+.content audio,
+.content iframe {
+    display: block;
+    margin: 15px auto;
+    max-width: 90%;
+}
+.copycode {
+    color: #5c6b72;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.copycode i {
+    padding: 15px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: transform 0.25s;
+}
+.copycode.copied i {
+    transform: scale(1.25);
+}
+.copycode.copied i:first-child,
+.copycode:not(.copied) i:last-child {
+    opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s;
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+.hljs-ln-code {
+    padding-left: 20px !important;
+}
+.hljs-ln-numbers {
+    border-right: 1px solid #ccc;
+    color: #ccc;
+    padding-right: 10px !important;
+    text-align: right;
+    vertical-align: top;
+}
+.icon {
+    color: #5c6b72;
+    margin-right: 5px;
+}
+.input {
+    background: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: 50px;
+    box-sizing: border-box;
+    color: #000;
+    display: block;
+    font-size: 15px;
+    height: 50px;
+    text-indent: 20px;
+    transition: background 0.25s, border 0.25s, box-shadow 0.25s;
+    width: 100%;
+}
+.input:focus {
+    background: #fff;
+    border-color: #0969da;
+    box-shadow: 0 0 0 3px #0969da4d;
+    outline: none;
+}
+.input:hover {
+    background: #fff;
+}
+.into-enter-active {
+    transition: opacity 0.5s, transform 0.5s;
+}
+.into-enter-from {
+    opacity: 0;
+    transform: scale(1.1);
+}
+.katex {
+    white-space: normal !important;
+}
+.language {
+    background: linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%);
+    border-radius: 0 0 10px 10px;
+    box-shadow: 1px 1px 0.75rem #ed6ea14d;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    left: 30px;
+    padding: 10px 15px;
+    position: absolute;
+    top: 0;
+}
+.page-num,
+.icon-link a,
+.friend-link a {
+    transition: background 0.25s, color 0.25s;
+}
+.page-num:hover,
+.icon-link a:hover,
+.friend-link a:hover,
+.categories-tags a:hover,
+.go-post:hover {
+    opacity: 1;
+}
+.slide-enter-active,
+.slide-leave-active {
+    transition: margin-top 0.3s, opacity 0.3s;
+}
+.slide-enter-from,
+.slide-leave-to {
+    margin-top: -300px;
+    opacity: 0;
+}
+/* ===== 逐段加载（progressive reveal） =====
+   页面各区块按 data-reveal 顺序依次淡入上浮，文章卡片优先出现。
+   未标记 data-reveal 时元素保持默认可见，JS 失效也不会白屏。 */
+.progressive-item {
+    opacity: 0;
+    transform: translateY(18px);
+}
+.progressive-item.progressive-visible {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+    .progressive-item,
+    .progressive-item.progressive-visible {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
 }
