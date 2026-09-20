@@ -510,8 +510,12 @@
 .article .info {
     line-height: 1.7;
 }
+/* 首页文章标题：原为 h2 默认 27px，而文章卡片会渲染正文内容（无 description/
+   excerpt 时渲染全文），导致文章标题反比文内标题小。
+   这里显式放大到 30px，压过正文所有标题（正文 h1 = 26px）。 */
 #home-posts .post-title {
     color: #66afef;
+    font-size: 28px;
     text-align: center;
 }
 #home-posts .post:has(.go-post:hover) {
@@ -588,9 +592,13 @@
 #menu #desktop-menu {
     height: 50px;
 }
+/* 站点标题：原规则未写 font-size，会继承 body 的 14px，比文章内所有标题
+   (h1~h6 = 15~30px) 都小，这里显式放大。顶栏高 50px，20px 可轻松容纳；
+   想更大可改此值，但超过 ~26px 建议同时加大 #menu 的 height/line-height。 */
 #menu #desktop-menu .title {
     color: #555;
     display: inline-block;
+    font-size: 20px;
     margin-left: 60px;
     margin-right: 5px;
 }
@@ -635,6 +643,7 @@
 #menu #mobile-menu .title {
     color: #555;
     cursor: pointer;
+    font-size: 20px;
     z-index: 1003;
 }
 #menu-curtain {
@@ -1050,20 +1059,22 @@ h6 {
     margin: 15px 0;
     word-break: keep-all;
 }
+/* 正文标题梯度：原 30/27/24/21/18/15 偏大，整体收紧一档。
+   约束：文章标题（首页 30px / 文章页 32px）必须大于正文 h1，层级不能倒挂。 */
 h1 {
-    font-size: 30px;
+    font-size: 26px;
 }
 h2 {
-    font-size: 27px;
+    font-size: 23px;
 }
 h3 {
-    font-size: 24px;
+    font-size: 20px;
 }
 h4 {
-    font-size: 21px;
+    font-size: 18px;
 }
 h5 {
-    font-size: 18px;
+    font-size: 16px;
 }
 h6 {
     font-size: 15px;
@@ -1619,8 +1630,10 @@ ol li {
 .article .content {
     margin: 20px 0;
 }
+/* 文章标题：放大到 30px，明确大于正文内的 */
 /* 文章标题与日期/信息行之间的间距收紧 */
 .article > div:first-child h1 {
+    font-size: 30px;
     margin-bottom: 8px;
 }
 .article .info .date {
