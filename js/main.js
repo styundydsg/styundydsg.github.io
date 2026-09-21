@@ -458,7 +458,7 @@ const app = Vue.createApp({
                 width: 400px;
                 height: 500px;
                 background: white;
-                border-radius: 15px;
+                border-radius: 8px;
                 box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
                 z-index: 1002;
                 display: flex;
@@ -565,7 +565,7 @@ const app = Vue.createApp({
             messageDiv.style.cssText = `
                 margin-bottom: 10px;
                 padding: 10px 15px;
-                border-radius: 15px;
+                border-radius: 8px;
                 max-width: 80%;
                 word-wrap: break-word;
                 ${sender === 'user' ? 
